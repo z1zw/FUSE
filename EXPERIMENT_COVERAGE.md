@@ -1,35 +1,35 @@
 # Experiment Coverage
 
-The repository supports three main evaluation layers.
+## Commands
 
-## 1. Core Benchmarking
+```bash
+python scripts/run_benchmarks.py --output-dir results --engine cpp
+python scripts/plot_paper_figures.py --input-dir results --output-dir figures
+python scripts/run_sosp_suite.py --output-dir results_sosp --engine cpp --calibration configs/calibration.json
+python scripts/plot_sosp_figures.py --input-dir results_sosp --output-dir figures_sosp
+python scripts/run_security_eval.py
+python scripts/run_case_studies.py
+python scripts/run_load_sweep.py
+python scripts/run_extended_compare.py
+python scripts/run_secure_components.py
+```
 
-The baseline benchmark flow covers latency, energy, mixed-workload behavior, memory effects, reuse behavior, scheduler behavior, and reconfiguration cost. The main entry points are:
+## Tasks
 
-- `scripts/run_benchmarks.py`
-- `scripts/plot_paper_figures.py`
+- Benchmark generation
+- Figure generation
+- Security evaluation
+- Case study runs
+- Load sweep runs
+- Comparison runs
+- Secure component runs
 
-## 2. Security And Stability Evaluation
+## Directory Layout
 
-The extended evaluation flow covers security-oriented metrics, prompt stability, trade-off studies, and secure execution modes. The main entry points are:
-
-- `scripts/run_security_eval.py`
-- `scripts/run_sosp_suite.py`
-- `scripts/run_sosp_plus_security.py`
-
-## 3. End-To-End Studies
-
-The repository also includes case studies, load sweeps, ablations, secure component breakdowns, and comparison runs. The main entry points are:
-
-- `scripts/run_case_studies.py`
-- `scripts/run_load_sweep.py`
-- `scripts/run_extended_compare.py`
-- `scripts/run_secure_components.py`
-
-## Outputs
-
-Most experiment flows produce CSV summaries first and render figures afterward. The exact output directory depends on the script arguments, but the standard pattern is:
-
-- metrics and tables in an output directory such as `results/`
-- optional raw tables in a nested `raw/` directory
-- rendered figures in a figure directory such as `figures/`
+```text
+results/        benchmark outputs
+results_sosp/   SOSP outputs
+figures/        benchmark figures
+figures_sosp/   SOSP figures
+scripts/        execution entry points
+```
