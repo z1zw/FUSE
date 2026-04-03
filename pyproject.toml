@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fuse-repro-full"
+version = "0.2.0"
+description = "FUSE reimplementation with Python front-end, C++ timing core, GPU benchmark path, and paper-oriented evaluation flow"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "OpenAI ChatGPT"}]
+dependencies = [
+  "numpy>=1.24",
+  "networkx>=3.0",
+  "pandas>=2.0",
+  "matplotlib>=3.7",
+  "Pillow>=10.0",
+  "pytest>=7.4",
+  "cryptography>=42.0"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
