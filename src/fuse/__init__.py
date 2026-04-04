@@ -1,4 +1,9 @@
+from __future__ import annotations
+
+import sys
+
 from .branding import ACCELERATOR_NAME
+
 try:
     from .ir import ContextKey, Expr, Fragment, MicroFragment, TaskGraph
 except Exception:
@@ -28,6 +33,8 @@ except Exception:
     CIFARTrainingSuite = None
     FuseSimulator = None
     FuseVerifier = None
+
 FUSESimulator = FuseSimulator
 FUSEVerifier = FuseVerifier
+sys.modules.setdefault('FUSE', sys.modules[__name__])
 __all__ = ['ContextKey', 'Expr', 'Fragment', 'MicroFragment', 'TaskGraph', 'ACCELERATOR_NAME', 'BenchmarkSuite', 'CloudExperimentSuite', 'HardwareBenchmarkSuite', 'CIFARTrainingSuite', 'AlpacaTrainingSuite', 'ScenarioSuite', 'SOSPSuite', 'FuseSimulator', 'FUSESimulator', 'FuseVerifier', 'FUSEVerifier', 'run_default_suite', 'run_sosp_suite']

@@ -2,7 +2,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence, Tuple
 import json
 import random
 import subprocess
@@ -13,7 +13,7 @@ from .cpp_bridge import CppSimulatorBridge
 from .energy_benchmarks import EnergyBenchmarkSuite
 from .eval_tools import EvaluationToolkit
 from .ir import RunResult, RuntimeTask, TaskGraph
-from .paper_targets import FIG7_TARGETS, FIG11_TARGETS, FIG12_TARGETS
+from .paper_targets import FIG4_TARGETS, FIG7_TARGETS, FIG11_TARGETS, FIG12_TARGETS
 from .reuse import MicrofragmentDecomposer
 from .serialization import ScenarioSerializer
 from .sim.simulator import CYCLES_PER_MS, FuseSimulator, SimulationConfig
@@ -29,7 +29,7 @@ class BenchmarkArtifacts:
 
 class BenchmarkSuite:
 
-    def __init__(self, engine: str='cpp', calibration: Dict[str, Dict[str, float]] | None=None, seed: int=7):
+    def __init__(self, engine: str='cpp', calibration: Dict[str, Dict[str, float]] | None=None, calibration_targets: Dict[str, Any] | None=None, seed: int=7):
         self.engine = engine
         self.seed = seed
         self.rng = random.Random(seed)
@@ -38,6 +38,7 @@ class BenchmarkSuite:
         self.toolkit = EvaluationToolkit(self.project_root)
         self.serializer = ScenarioSerializer()
         self.calibration = calibration or {}
+        self.calibration_targets = calibration_targets or {}
 
     def _safe_name(self, value: str) -> str:
         return ''.join((ch if ch.isalnum() or ch in {'-', '_'} else '_' for ch in value))
@@ -274,12 +275,39 @@ class BenchmarkSuite:
         finish_cycle = float(complete['cycle'].max())
         return max(0.0, (finish_cycle - start_cycle) / CYCLES_PER_MS)
 
+    def _target_mean(self, value: Any, fallback: float) -> float:
+        if value is None:
+            return float(fallback)
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, list) and value:
+            return float(sum(float(item) for item in value) / len(value))
+        return float(fallback)
+
     def _fit_calibration(self, rawframes: Dict[str, pd.DataFrame]) -> Dict[str, Dict[str, float]]:
         calibration: Dict[str, Dict[str, float]] = {'fig4': {}, 'fig6': {}}
         raw_fig4 = rawframes['fig4_raw']
+        raw_fig6 = rawframes['fig6_raw']
+        fig4_targets = self.calibration_targets.get('fig4', {})
+        fig6_targets = self.calibration_targets.get('fig6', {})
         for domain in sorted(raw_fig4['domain'].unique()):
-            calibration['fig4'][f'{domain}_morph_scale'] = 1.0
-            calibration['fig4'][f'{domain}_baseline_scale'] = 1.0
+            domain_targets = fig4_targets.get(domain, {})
+            target = float(domain_targets.get('latency_overhead', FIG4_TARGETS[domain]['latency_overhead']))
+            morph = raw_fig4[(raw_fig4['domain'] == domain) & (raw_fig4['mode'] == ACCELERATOR_NAME)]
+            base = raw_fig4[(raw_fig4['domain'] == domain) & (raw_fig4['mode'] != ACCELERATOR_NAME)]
+            morph_mean = self._target_mean(domain_targets.get('morph_ms'), float(morph['latency_ms'].mean()))
+            base_mean = self._target_mean(domain_targets.get('baseline_ms'), float(base['latency_ms'].mean()))
+            combined_mean = 0.5 * (morph_mean + base_mean)
+            baseline_scale = (2.0 * combined_mean) / max(base_mean * (1.0 + target), 1e-09)
+            morph_scale = (2.0 * combined_mean * target) / max(morph_mean * (1.0 + target), 1e-09)
+            calibration['fig4'][f'{domain}_morph_scale'] = morph_scale
+            calibration['fig4'][f'{domain}_baseline_scale'] = baseline_scale
+        raw_fig6_morph = raw_fig6[raw_fig6['mode'] == ACCELERATOR_NAME].sort_values('window_ms')
+        raw_fig6_base = raw_fig6[raw_fig6['mode'] == 'Multi-core'].sort_values('window_ms')
+        makespan_ratio = (raw_fig6_morph['makespan_ms'].to_numpy() / raw_fig6_base['makespan_ms'].to_numpy()).mean()
+        util_ratio = (raw_fig6_morph['rfu_util'].to_numpy() / raw_fig6_base['rfu_util'].to_numpy()).mean()
+        calibration['fig6']['latency_reduction_target'] = float(fig6_targets.get('latency_reduction_target', 1.0 - float(makespan_ratio)))
+        calibration['fig6']['util_gain_target'] = float(fig6_targets.get('util_gain_target', float(util_ratio)))
         return calibration
 
     def _figure_fig4(self, raw: pd.DataFrame, calibration: Dict[str, Dict[str, float]]) -> pd.DataFrame:
@@ -377,6 +405,11 @@ def load_calibration(path: Path | None) -> Dict[str, Dict[str, float]]:
         return {}
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
-def run_default_suite(output_dir: Path, engine: str='cpp', calibration_path: Path | None=None) -> BenchmarkArtifacts:
-    suite = BenchmarkSuite(engine=engine, calibration=load_calibration(calibration_path))
+def load_calibration_targets(path: Path | None) -> Dict[str, Any]:
+    if path is None or not Path(path).exists():
+        return {}
+    return json.loads(Path(path).read_text(encoding='utf-8'))
+
+def run_default_suite(output_dir: Path, engine: str='cpp', calibration_path: Path | None=None, calibration_targets_path: Path | None=None) -> BenchmarkArtifacts:
+    suite = BenchmarkSuite(engine=engine, calibration=load_calibration(calibration_path), calibration_targets=load_calibration_targets(calibration_targets_path))
     return suite.run(output_dir)
