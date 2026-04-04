@@ -1,7 +1,7 @@
 from __future__ import annotations
 import argparse
 from pathlib import Path
-from morphaccel.hardware import HardwareBenchmarkSuite
+from fuse.hardware import HardwareBenchmarkSuite
 
 def main() -> None:
     parser = argparse.ArgumentParser()

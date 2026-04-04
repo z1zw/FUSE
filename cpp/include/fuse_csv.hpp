@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace morphaccel {
+namespace fuse {
 
 using Row = std::unordered_map<std::string, std::string>;
 

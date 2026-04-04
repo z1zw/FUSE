@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-from morphaccel.energy_benchmarks import EnergyBenchmarkSuite
+from fuse.energy_benchmarks import EnergyBenchmarkSuite
 
 def main() -> None:
     parser = argparse.ArgumentParser()

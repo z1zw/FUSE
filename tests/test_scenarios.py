@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-import shutil
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -8,8 +7,9 @@ import matplotlib.image as mpimg
 import numpy as np
 import pandas as pd
 import pytest
-from morphaccel.hardware import HardwareBenchmarkSuite
-from morphaccel.scenarios import ScenarioSuite
+from fuse.hardware import HardwareBenchmarkSuite
+from fuse.scenarios import ScenarioSuite
+from conftest import has_cpp_toolchain
 
 def _write_png(path: Path) -> None:
     pixels = np.array([[[0.15, 0.35, 0.7], [0.25, 0.65, 0.45]], [[0.75, 0.55, 0.2], [0.55, 0.25, 0.6]]], dtype=np.float32)
@@ -27,7 +27,7 @@ def test_scenario_suite_runs_with_small_samples(tmp_path):
     _write_png(vision_dir / 'frame_001.png')
     pd.DataFrame([{'timestamp': 1, 'heart_rate': 75, 'spo2': 98}, {'timestamp': 2, 'heart_rate': 92, 'spo2': 96}, {'timestamp': 3, 'heart_rate': 88, 'spo2': 97}]).to_csv(wearable_dir / 'wearable.csv', index=False)
     output_root = tmp_path / 'results'
-    suite = ScenarioSuite(mode='morphaccel')
+    suite = ScenarioSuite(mode='fuse')
     artifacts = suite.run(data_root, output_root)
     assert set(artifacts) == {'llm_poison_defense', 'autonomous_vision', 'wearable_analytics'}
     for scene_name in artifacts:
@@ -41,8 +41,8 @@ def test_scenario_suite_runs_with_small_samples(tmp_path):
         assert {'raw_input', 'preprocessed', 'task_graph', 'execution_state', 'final_output'}.issubset(set(journey['stage']))
 
 def test_scenario_suite_cpp_contract(tmp_path):
-    if shutil.which('g++') is None:
-        pytest.skip('g++ is not available in this environment')
+    if not has_cpp_toolchain():
+        pytest.skip('no supported C++ toolchain is available in this environment')
     data_root = tmp_path / 'data' / 'scenarios'
     llm_dir = data_root / 'llm_poison_defense'
     vision_dir = data_root / 'autonomous_vision'

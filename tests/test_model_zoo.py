@@ -1,6 +1,6 @@
 from pathlib import Path
-from morphaccel.model_zoo import ModelZooExperimentSuite
-from morphaccel.workloads import build_clip_vit_b32_task
+from fuse.model_zoo import ModelZooExperimentSuite
+from fuse.workloads import build_clip_vit_b32_task
 
 def test_build_clip_task_metadata() -> None:
     task = build_clip_vit_b32_task(batch_size=2, task_id='clip_test')

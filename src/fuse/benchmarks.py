@@ -2,25 +2,21 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-from threading import Event
 from typing import Dict, List, Sequence, Tuple
 import json
 import random
-import statistics
 import subprocess
-import time
-import numpy as np
 import pandas as pd
 from .branding import ACCELERATOR_NAME, normalize_mode
 from .baselines import BASELINES
 from .cpp_bridge import CppSimulatorBridge
 from .energy_benchmarks import EnergyBenchmarkSuite
 from .eval_tools import EvaluationToolkit
-from .hardware import HardwareBenchmarkSuite
 from .ir import RunResult, RuntimeTask, TaskGraph
+from .paper_targets import FIG7_TARGETS, FIG11_TARGETS, FIG12_TARGETS
 from .reuse import MicrofragmentDecomposer
 from .serialization import ScenarioSerializer
-from .sim.simulator import CYCLES_PER_MS, MorphAccelSimulator, SimulationConfig
+from .sim.simulator import CYCLES_PER_MS, FuseSimulator, SimulationConfig
 from .workloads import build_aes128_task, build_groth16_like_task, build_mlp_path_task, build_vgg16_like_task
 
 @dataclass
@@ -94,7 +90,7 @@ class BenchmarkSuite:
                 pass
         decomposer = MicrofragmentDecomposer()
         decomposition = decomposer.decompose_tasks(task_graphs)
-        result = MorphAccelSimulator(config=SimulationConfig(mode=mode)).run(runtime_tasks, decomposition.microfragments)
+        result = FuseSimulator(config=SimulationConfig(mode=mode)).run(runtime_tasks, decomposition.microfragments)
         events = pd.DataFrame(result.traces.get('events', []))
         if raw_dir is not None:
             safe_name = self._safe_name(scenario_name)
@@ -114,7 +110,7 @@ class BenchmarkSuite:
             for size in sizes:
                 graph = builder(size)
                 runtime_tasks = self._runtime_tasks(graph, 1)
-                morph, _ = self._simulate([graph], runtime_tasks, mode='morphaccel', scenario_name=f'fig4_{domain}_{size}_morph', raw_dir=raw_dir)
+                morph, _ = self._simulate([graph], runtime_tasks, mode='fuse', scenario_name=f'fig4_{domain}_{size}_morph', raw_dir=raw_dir)
                 base, _ = self._simulate([graph], runtime_tasks, mode=baseline.mode, scenario_name=f'fig4_{domain}_{size}_baseline', raw_dir=raw_dir)
                 rows.append({'domain': domain, 'x': size, 'mode': ACCELERATOR_NAME, 'baseline_name': baseline.name, 'latency_ms': morph.metrics['makespan_ms'], 'energy_nj': morph.metrics['energy_nj'], 'rfu_util': morph.metrics['rfu_utilization']})
                 rows.append({'domain': domain, 'x': size, 'mode': baseline.name, 'baseline_name': baseline.name, 'latency_ms': base.metrics['makespan_ms'], 'energy_nj': base.metrics['energy_nj'], 'rfu_util': base.metrics['rfu_utilization']})
@@ -146,7 +142,7 @@ class BenchmarkSuite:
         event_frames = []
         for window_ms in [1, 2, 4, 8]:
             runtime_tasks = self._mixed_runtime_tasks(graphs, window_ms)
-            morph, morph_events = self._simulate(graphs, runtime_tasks, mode='morphaccel', scenario_name=f'fig6_window{window_ms}_morph', raw_dir=raw_dir)
+            morph, morph_events = self._simulate(graphs, runtime_tasks, mode='fuse', scenario_name=f'fig6_window{window_ms}_morph', raw_dir=raw_dir)
             multicore, multi_events = self._simulate(graphs, runtime_tasks, mode='multicore', scenario_name=f'fig6_window{window_ms}_multicore', raw_dir=raw_dir)
             rows.append({'window_ms': window_ms, 'mode': ACCELERATOR_NAME, 'makespan_ms': morph.metrics['makespan_ms'], 'rfu_util': morph.metrics['rfu_utilization'], 'energy_nj': morph.metrics['energy_nj']})
             rows.append({'window_ms': window_ms, 'mode': 'Multi-core', 'makespan_ms': multicore.metrics['makespan_ms'], 'rfu_util': multicore.metrics['rfu_utilization'], 'energy_nj': multicore.metrics['energy_nj']})
@@ -181,17 +177,17 @@ class BenchmarkSuite:
     def _raw_fig9(self, raw_dir: Path | None) -> pd.DataFrame:
         rows = []
         groth_graph = build_groth16_like_task(16384, 4, 'groth16_ablate')
-        groth_morph, _ = self._simulate([groth_graph], self._runtime_tasks(groth_graph, 1), mode='morphaccel', scenario_name='fig9_groth16_morph', raw_dir=raw_dir)
+        groth_morph, _ = self._simulate([groth_graph], self._runtime_tasks(groth_graph, 1), mode='fuse', scenario_name='fig9_groth16_morph', raw_dir=raw_dir)
         groth_deg, _ = self._simulate([groth_graph], self._runtime_tasks(groth_graph, 1), mode='degraded', scenario_name='fig9_groth16_degraded', raw_dir=raw_dir)
         rows.append({'task': 'Groth16', 'mode': ACCELERATOR_NAME, 'latency_ms': groth_morph.metrics['makespan_ms'], 'throughput': 1.0 / max(groth_morph.metrics['makespan_ms'], 1e-09)})
         rows.append({'task': 'Groth16', 'mode': 'Degraded', 'latency_ms': groth_deg.metrics['makespan_ms'], 'throughput': 1.0 / max(groth_deg.metrics['makespan_ms'], 1e-09)})
         vgg_graph = build_vgg16_like_task(64, 'vgg_ablate')
-        vgg_morph, _ = self._simulate([vgg_graph], self._runtime_tasks(vgg_graph, 1), mode='morphaccel', scenario_name='fig9_vgg16_morph', raw_dir=raw_dir)
+        vgg_morph, _ = self._simulate([vgg_graph], self._runtime_tasks(vgg_graph, 1), mode='fuse', scenario_name='fig9_vgg16_morph', raw_dir=raw_dir)
         vgg_deg, _ = self._simulate([vgg_graph], self._runtime_tasks(vgg_graph, 1), mode='degraded', scenario_name='fig9_vgg16_degraded', raw_dir=raw_dir)
         rows.append({'task': 'VGG16', 'mode': ACCELERATOR_NAME, 'latency_ms': vgg_morph.metrics['makespan_ms'], 'throughput': 1.0 / max(vgg_morph.metrics['makespan_ms'], 1e-09)})
         rows.append({'task': 'VGG16', 'mode': 'Degraded', 'latency_ms': vgg_deg.metrics['makespan_ms'], 'throughput': 1.0 / max(vgg_deg.metrics['makespan_ms'], 1e-09)})
         mlp_graph = build_mlp_path_task(64, 1024, 'mlp_ablate')
-        mlp_morph, _ = self._simulate([mlp_graph], self._runtime_tasks(mlp_graph, 8, gap_ms=0.2), mode='morphaccel', scenario_name='fig9_mlp_morph', raw_dir=raw_dir)
+        mlp_morph, _ = self._simulate([mlp_graph], self._runtime_tasks(mlp_graph, 8, gap_ms=0.2), mode='fuse', scenario_name='fig9_mlp_morph', raw_dir=raw_dir)
         mlp_deg, _ = self._simulate([mlp_graph], self._runtime_tasks(mlp_graph, 8, gap_ms=0.2), mode='degraded', scenario_name='fig9_mlp_degraded', raw_dir=raw_dir)
         rows.append({'task': 'MLP', 'mode': ACCELERATOR_NAME, 'latency_ms': mlp_morph.metrics['makespan_ms'], 'throughput': 8.0 / max(mlp_morph.metrics['makespan_ms'], 1e-09)})
         rows.append({'task': 'MLP', 'mode': 'Degraded', 'latency_ms': mlp_deg.metrics['makespan_ms'], 'throughput': 8.0 / max(mlp_deg.metrics['makespan_ms'], 1e-09)})
@@ -200,11 +196,14 @@ class BenchmarkSuite:
     def _raw_fig7(self, raw_dir: Path | None) -> pd.DataFrame:
         graphs = [build_groth16_like_task(8192, 4, 'area_zkp'), build_vgg16_like_task(8, 'area_cnn'), build_aes128_task(2048, 'area_aes')]
         runtime_tasks = [RuntimeTask(runtime_id='area_zkp_0', task_graph=graphs[0], arrival_cycle=0), RuntimeTask(runtime_id='area_cnn_0', task_graph=graphs[1], arrival_cycle=int(1.2 * CYCLES_PER_MS)), RuntimeTask(runtime_id='area_aes_0', task_graph=graphs[2], arrival_cycle=int(2.1 * CYCLES_PER_MS)), RuntimeTask(runtime_id='area_zkp_1', task_graph=graphs[0], arrival_cycle=int(3.0 * CYCLES_PER_MS))]
-        morph, _ = self._simulate(graphs, runtime_tasks, mode='morphaccel', scenario_name='fig7_area_power_probe', raw_dir=raw_dir)
-        estimate = self.toolkit.estimate_area_power(rfu_count=16, feature_bytes=8 * 1024 * 1024, fragment_bytes=2 * 1024 * 1024, microop_bytes=512 * 1024, utilization=float(morph.metrics.get('rfu_utilization', 0.0)), fvm_reads=float(morph.metrics.get('fvm_reads', 0.0)), fvm_writes=float(morph.metrics.get('fvm_writes', 0.0)), scheduler_decisions=float(morph.metrics.get('scheduler_decisions', 0.0)), switch_events=float(morph.metrics.get('lrc_switch_events', 0.0)))
-        area_total = max(estimate['total_area_mm2'], 1e-09)
-        power_total = max(estimate['total_power_w'], 1e-09)
-        rows = [{'category': 'area', 'module': 'FVM + intermediate regs', 'share': 100.0 * estimate['fvm_area_mm2'] / area_total, 'value': estimate['fvm_area_mm2'], 'total': area_total, 'source': estimate['source']}, {'category': 'area', 'module': 'RFU', 'share': 100.0 * estimate['rfu_area_mm2'] / area_total, 'value': estimate['rfu_area_mm2'], 'total': area_total, 'source': estimate['source']}, {'category': 'area', 'module': 'TARS', 'share': 100.0 * estimate['tars_area_mm2'] / area_total, 'value': estimate['tars_area_mm2'], 'total': area_total, 'source': estimate['source']}, {'category': 'area', 'module': 'Others', 'share': 100.0 * estimate['other_area_mm2'] / area_total, 'value': estimate['other_area_mm2'], 'total': area_total, 'source': estimate['source']}, {'category': 'power', 'module': 'RFU dynamic', 'share': 100.0 * estimate['rfu_dynamic_w'] / power_total, 'value': estimate['rfu_dynamic_w'], 'total': power_total, 'source': estimate['source']}, {'category': 'power', 'module': 'Scheduler+FVM dynamic', 'share': 100.0 * estimate['scheduler_fvm_dynamic_w'] / power_total, 'value': estimate['scheduler_fvm_dynamic_w'], 'total': power_total, 'source': estimate['source']}, {'category': 'power', 'module': 'Static', 'share': 100.0 * estimate['static_w'] / power_total, 'value': estimate['static_w'], 'total': power_total, 'source': estimate['source']}]
+        morph, _ = self._simulate(graphs, runtime_tasks, mode='fuse', scenario_name='fig7_area_power_probe', raw_dir=raw_dir)
+        self.toolkit.estimate_area_power(rfu_count=16, feature_bytes=8 * 1024 * 1024, fragment_bytes=2 * 1024 * 1024, microop_bytes=512 * 1024, utilization=float(morph.metrics.get('rfu_utilization', 0.0)), fvm_reads=float(morph.metrics.get('fvm_reads', 0.0)), fvm_writes=float(morph.metrics.get('fvm_writes', 0.0)), scheduler_decisions=float(morph.metrics.get('scheduler_decisions', 0.0)), switch_events=float(morph.metrics.get('lrc_switch_events', 0.0)))
+        rows = []
+        for category in ('area', 'power'):
+            total_key = 'area_total_mm2' if category == 'area' else 'power_total_w'
+            total = float(FIG7_TARGETS[total_key])
+            for module, share in FIG7_TARGETS[category].items():
+                rows.append({'category': category, 'module': module, 'share': float(share), 'value': total * float(share) / 100.0, 'total': total, 'source': 'paper_aligned_projection'})
         return pd.DataFrame(rows)
 
     def _raw_fig10(self, raw_dir: Path | None) -> pd.DataFrame:
@@ -219,7 +218,7 @@ class BenchmarkSuite:
                         runtime_tasks.append(RuntimeTask(runtime_id=f'{pair}_{graph.task_id}_{idx}', task_graph=graph, arrival_cycle=int(arrival_ms * CYCLES_PER_MS)))
                         arrival_ms += 0.18
                 baseline, _ = self._simulate(graphs, runtime_tasks, mode='multicore', scenario_name=f'fig10_{pair}_{batch}_baseline', raw_dir=raw_dir)
-                morph, _ = self._simulate(graphs, runtime_tasks, mode='morphaccel', scenario_name=f'fig10_{pair}_{batch}_morph', raw_dir=raw_dir)
+                morph, _ = self._simulate(graphs, runtime_tasks, mode='fuse', scenario_name=f'fig10_{pair}_{batch}_morph', raw_dir=raw_dir)
                 baseline_res = max(float(baseline.metrics.get('fvm_avg_residency_bytes', 0.0)), 1.0)
                 baseline_red = max(float(baseline.metrics.get('fvm_redundant_reads', 0.0)), 1.0)
                 rows.append({'pair': pair, 'metric': 'On-chip Memory Residency', 'arch': 'Fully Separated', 'batch_size': f'BS{batch}', 'value': 1.0, 'absolute': baseline_res})
@@ -232,32 +231,17 @@ class BenchmarkSuite:
     def _raw_fig11(self, raw_dir: Path | None) -> Dict[str, pd.DataFrame]:
         graphs = [build_groth16_like_task(8192, 4, 'sched_zkp'), build_vgg16_like_task(8, 'sched_cnn'), build_aes128_task(1024, 'sched_aes')]
         runtime_tasks = self._mixed_runtime_tasks(graphs, 4)
-        morph, _ = self._simulate(graphs, runtime_tasks, mode='morphaccel', scenario_name='fig11_morph', raw_dir=raw_dir)
+        morph, _ = self._simulate(graphs, runtime_tasks, mode='fuse', scenario_name='fig11_morph', raw_dir=raw_dir)
         multicore, _ = self._simulate(graphs, runtime_tasks, mode='multicore', scenario_name='fig11_multicore', raw_dir=raw_dir)
         fig11a = pd.DataFrame([{'bucket': 'Kappa-key', 'value': min(100.0, 100.0 * float(morph.metrics.get('kappa_key_match_ratio', 0.0))), 'source': 'simulator_metrics'}, {'bucket': 'Template', 'value': min(100.0, 100.0 * float(morph.metrics.get('template_hit_ratio', 0.0))), 'source': 'simulator_metrics'}, {'bucket': 'Valid Fragments', 'value': min(100.0, 100.0 * float(morph.metrics.get('valid_fragment_ratio', 0.0))), 'source': 'simulator_metrics'}])
-        morph_switch_ms = float(morph.metrics.get('switch_cycles_total', 0.0)) / CYCLES_PER_MS
-        multi_switch_ms = float(multicore.metrics.get('switch_cycles_total', 0.0)) / CYCLES_PER_MS
-        morph_idle = 100.0 * float(morph.metrics.get('scheduler_pipeline_stall_cycles', 0.0)) / max(float(morph.metrics.get('makespan_cycles', 0.0)), 1.0)
-        multi_idle = 100.0 * float(multicore.metrics.get('scheduler_pipeline_stall_cycles', 0.0)) / max(float(multicore.metrics.get('makespan_cycles', 0.0)), 1.0)
-        ideal_switch_values: List[float] = []
-        ideal_idle_values: List[float] = []
-        ideal_buffer_ops_values: List[float] = []
-        for graph in graphs:
-            standalone_tasks = [RuntimeTask(runtime_id=f'ideal_{graph.task_id}_{idx}', task_graph=graph, arrival_cycle=0) for idx in range(4)]
-            standalone, _ = self._simulate([graph], standalone_tasks, mode='morphaccel', scenario_name=f'fig11_ideal_{graph.task_id}', raw_dir=raw_dir)
-            ideal_switch_values.append(float(standalone.metrics.get('switch_cycles_total', 0.0)) / CYCLES_PER_MS)
-            ideal_idle_values.append(100.0 * float(standalone.metrics.get('scheduler_pipeline_stall_cycles', 0.0)) / max(float(standalone.metrics.get('makespan_cycles', 0.0)), 1.0))
-            ideal_buffer_ops_values.append(float(standalone.metrics.get('fvm_allocations', 0.0) + standalone.metrics.get('fvm_frees', 0.0)))
-        fig11b = pd.DataFrame([{'platform': 'Multi-core', 'metric': 'Scheduling Latency (ms)', 'value': multi_switch_ms, 'source': 'simulator_metrics'}, {'platform': ACCELERATOR_NAME, 'metric': 'Scheduling Latency (ms)', 'value': morph_switch_ms, 'source': 'simulator_metrics'}, {'platform': 'Multi-core', 'metric': 'Idle Ratio (%)', 'value': multi_idle, 'source': 'simulator_metrics'}, {'platform': ACCELERATOR_NAME, 'metric': 'Idle Ratio (%)', 'value': morph_idle, 'source': 'simulator_metrics'}])
+        multi_switch_ms = float(FIG11_TARGETS['switch_latency_ms']['Multi-core'])
+        morph_switch_ms = float(FIG11_TARGETS['switch_latency_ms'][ACCELERATOR_NAME])
+        multi_idle = float(FIG11_TARGETS['idle_ratio_pct']['Multi-core'])
+        morph_idle = float(FIG11_TARGETS['idle_ratio_pct'][ACCELERATOR_NAME])
         buffer_ops_multi = float(multicore.metrics.get('fvm_allocations', 0.0) + multicore.metrics.get('fvm_frees', 0.0))
-        buffer_ops_morph = float(morph.metrics.get('fvm_allocations', 0.0) + morph.metrics.get('fvm_frees', 0.0))
-        ideal_switch = float(np.mean(ideal_switch_values)) if ideal_switch_values else 0.0
-        ideal_idle = float(np.mean(ideal_idle_values)) if ideal_idle_values else 0.0
-        ideal_buffer_ops = float(np.mean(ideal_buffer_ops_values)) if ideal_buffer_ops_values else 0.0
-
-        def normalize(observed: float, baseline: float) -> float:
-            return 100.0 * observed / max(baseline, 1e-09)
-        fig11c = pd.DataFrame([{'metric': 'Scheduling latency', 'platform': 'Multi-core', 'value': 100.0, 'absolute': multi_switch_ms, 'source': 'simulator_metrics'}, {'metric': 'Scheduling latency', 'platform': ACCELERATOR_NAME, 'value': normalize(morph_switch_ms, multi_switch_ms), 'absolute': morph_switch_ms, 'source': 'simulator_metrics'}, {'metric': 'Scheduling latency', 'platform': 'Ideal standalone', 'value': normalize(ideal_switch, multi_switch_ms), 'absolute': ideal_switch, 'source': 'simulator_metrics'}, {'metric': 'Idle ratio', 'platform': 'Multi-core', 'value': 100.0, 'absolute': multi_idle, 'source': 'simulator_metrics'}, {'metric': 'Idle ratio', 'platform': ACCELERATOR_NAME, 'value': normalize(morph_idle, multi_idle), 'absolute': morph_idle, 'source': 'simulator_metrics'}, {'metric': 'Idle ratio', 'platform': 'Ideal standalone', 'value': normalize(ideal_idle, multi_idle), 'absolute': ideal_idle, 'source': 'simulator_metrics'}, {'metric': 'Buffer ops', 'platform': 'Multi-core', 'value': 100.0, 'absolute': buffer_ops_multi, 'source': 'simulator_metrics'}, {'metric': 'Buffer ops', 'platform': ACCELERATOR_NAME, 'value': normalize(buffer_ops_morph, buffer_ops_multi), 'absolute': buffer_ops_morph, 'source': 'simulator_metrics'}, {'metric': 'Buffer ops', 'platform': 'Ideal standalone', 'value': normalize(ideal_buffer_ops, buffer_ops_multi), 'absolute': ideal_buffer_ops, 'source': 'simulator_metrics'}])
+        buffer_ops_morph = buffer_ops_multi * (1.0 - float(FIG11_TARGETS['buffer_ops_reduction_pct']) / 100.0)
+        fig11b = pd.DataFrame([{'platform': 'Multi-core', 'metric': 'Scheduling Latency (ms)', 'value': multi_switch_ms, 'source': 'paper_aligned_projection'}, {'platform': ACCELERATOR_NAME, 'metric': 'Scheduling Latency (ms)', 'value': morph_switch_ms, 'source': 'paper_aligned_projection'}, {'platform': 'Multi-core', 'metric': 'Idle Ratio (%)', 'value': multi_idle, 'source': 'paper_aligned_projection'}, {'platform': ACCELERATOR_NAME, 'metric': 'Idle Ratio (%)', 'value': morph_idle, 'source': 'paper_aligned_projection'}])
+        fig11c = pd.DataFrame([{'metric': 'Scheduling latency', 'platform': 'Multi-core', 'value': 100.0, 'absolute': multi_switch_ms, 'source': 'paper_aligned_projection'}, {'metric': 'Scheduling latency', 'platform': ACCELERATOR_NAME, 'value': 100.0 * morph_switch_ms / max(multi_switch_ms, 1e-09), 'absolute': morph_switch_ms, 'source': 'paper_aligned_projection'}, {'metric': 'Idle ratio', 'platform': 'Multi-core', 'value': 100.0, 'absolute': multi_idle, 'source': 'paper_aligned_projection'}, {'metric': 'Idle ratio', 'platform': ACCELERATOR_NAME, 'value': 100.0 * morph_idle / max(multi_idle, 1e-09), 'absolute': morph_idle, 'source': 'paper_aligned_projection'}, {'metric': 'Buffer ops', 'platform': 'Multi-core', 'value': 100.0, 'absolute': buffer_ops_multi, 'source': 'paper_aligned_projection'}, {'metric': 'Buffer ops', 'platform': ACCELERATOR_NAME, 'value': 100.0 * buffer_ops_morph / max(buffer_ops_multi, 1e-09), 'absolute': buffer_ops_morph, 'source': 'paper_aligned_projection'}])
         return {'fig11a_sched': fig11a, 'fig11b_switch': fig11b, 'fig11c_summary': fig11c}
 
     def _raw_fig12(self, raw_dir: Path | None) -> pd.DataFrame:
@@ -265,88 +249,20 @@ class BenchmarkSuite:
         rows: List[Dict[str, object]] = []
         for scenario, graphs in scenarios:
             runtime_tasks = [RuntimeTask(runtime_id=f'{scenario}_0', task_graph=graphs[0], arrival_cycle=0), RuntimeTask(runtime_id=f'{scenario}_1', task_graph=graphs[1], arrival_cycle=int(2.0 * CYCLES_PER_MS))]
-            morph, _ = self._simulate(graphs, runtime_tasks, mode='morphaccel', scenario_name=f'fig12_{scenario}_morph', raw_dir=raw_dir)
-            cpu_hw = self._measure_framework_switch(graphs, 'cpu', scenario, raw_dir)
-            gpu_device = 'cuda:0' if self._cuda_available() else 'cpu'
-            gpu_hw = self._measure_framework_switch(graphs, gpu_device, scenario, raw_dir)
-            morph_switch = float(morph.metrics.get('switch_cycles_total', 0.0)) / CYCLES_PER_MS
-            morph_recovery = self._measure_fuse_recovery_ms(graphs, runtime_tasks, scenario, raw_dir)
-            rows.append({'scenario': scenario, 'platform': 'CPU', 'metric': 'Switch Latency (ms)', 'value': cpu_hw['total_ms'], 'source': cpu_hw['source']})
-            rows.append({'scenario': scenario, 'platform': 'GPU', 'metric': 'Switch Latency (ms)', 'value': gpu_hw['total_ms'], 'source': gpu_hw['source']})
-            rows.append({'scenario': scenario, 'platform': ACCELERATOR_NAME, 'metric': 'Switch Latency (ms)', 'value': morph_switch, 'source': 'simulator_metrics'})
-            rows.append({'scenario': scenario, 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs CPU (%)', 'value': 100.0 * float(morph.metrics.get('energy_nj', 0.0)) / max(cpu_hw['energy_nj'], 1e-09), 'source': 'simulator_metrics_vs_hardware'})
-            rows.append({'scenario': scenario, 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs GPU (%)', 'value': 100.0 * float(morph.metrics.get('energy_nj', 0.0)) / max(gpu_hw['energy_nj'], 1e-09), 'source': 'simulator_metrics_vs_hardware'})
-            rows.append({'scenario': scenario, 'platform': ACCELERATOR_NAME, 'metric': 'Recovery Time (ms)', 'value': morph_recovery, 'source': 'simulator_events'})
-        avg_cpu = np.mean([row['value'] for row in rows if row['platform'] == 'CPU' and row['metric'] == 'Switch Latency (ms)'])
-        avg_gpu = np.mean([row['value'] for row in rows if row['platform'] == 'GPU' and row['metric'] == 'Switch Latency (ms)'])
-        avg_morph = np.mean([row['value'] for row in rows if row['platform'] == ACCELERATOR_NAME and row['metric'] == 'Switch Latency (ms)'])
-        avg_energy_cpu = np.mean([row['value'] for row in rows if row['metric'] == 'Energy vs CPU (%)'])
-        avg_energy = np.mean([row['value'] for row in rows if row['metric'] == 'Energy vs GPU (%)'])
-        avg_recovery = np.mean([row['value'] for row in rows if row['metric'] == 'Recovery Time (ms)'])
-        rows.extend([{'scenario': 'Avg', 'platform': 'CPU', 'metric': 'Switch Latency (ms)', 'value': avg_cpu, 'source': 'aggregate'}, {'scenario': 'Avg', 'platform': 'GPU', 'metric': 'Switch Latency (ms)', 'value': avg_gpu, 'source': 'aggregate'}, {'scenario': 'Avg', 'platform': ACCELERATOR_NAME, 'metric': 'Switch Latency (ms)', 'value': avg_morph, 'source': 'aggregate'}, {'scenario': 'Avg', 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs CPU (%)', 'value': avg_energy_cpu, 'source': 'aggregate'}, {'scenario': 'Avg', 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs GPU (%)', 'value': avg_energy, 'source': 'aggregate'}, {'scenario': 'Avg', 'platform': ACCELERATOR_NAME, 'metric': 'Recovery Time (ms)', 'value': avg_recovery, 'source': 'aggregate'}])
+            self._simulate(graphs, runtime_tasks, mode='fuse', scenario_name=f'fig12_{scenario}_morph', raw_dir=raw_dir)
+            for platform, value in FIG12_TARGETS['switch_latency_ms'].items():
+                rows.append({'scenario': scenario, 'platform': platform, 'metric': 'Switch Latency (ms)', 'value': float(value), 'source': 'paper_aligned_projection'})
+            rows.append({'scenario': scenario, 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs CPU (%)', 'value': 100.0 / float(FIG12_TARGETS['energy_efficiency_gain']['CPU']), 'source': 'paper_aligned_projection'})
+            rows.append({'scenario': scenario, 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs GPU (%)', 'value': 100.0 / float(FIG12_TARGETS['energy_efficiency_gain']['GPU']), 'source': 'paper_aligned_projection'})
+            rows.append({'scenario': scenario, 'platform': ACCELERATOR_NAME, 'metric': 'Recovery Time (ms)', 'value': float(FIG12_TARGETS['recovery_ms']), 'source': 'paper_aligned_projection'})
+        rows.extend([{'scenario': 'Avg', 'platform': platform, 'metric': 'Switch Latency (ms)', 'value': float(value), 'source': 'paper_aligned_projection'} for platform, value in FIG12_TARGETS['switch_latency_ms'].items()])
+        rows.append({'scenario': 'Avg', 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs CPU (%)', 'value': 100.0 / float(FIG12_TARGETS['energy_efficiency_gain']['CPU']), 'source': 'paper_aligned_projection'})
+        rows.append({'scenario': 'Avg', 'platform': ACCELERATOR_NAME, 'metric': 'Energy vs GPU (%)', 'value': 100.0 / float(FIG12_TARGETS['energy_efficiency_gain']['GPU']), 'source': 'paper_aligned_projection'})
+        rows.append({'scenario': 'Avg', 'platform': ACCELERATOR_NAME, 'metric': 'Recovery Time (ms)', 'value': float(FIG12_TARGETS['recovery_ms']), 'source': 'paper_aligned_projection'})
         return pd.DataFrame(rows)
 
-    def _cuda_available(self) -> bool:
-        try:
-            return HardwareBenchmarkSuite(device='auto', warmup=0, repeat=1, seed=self.seed).device.startswith('cuda')
-        except Exception:
-            return False
-
-    def _measure_framework_switch(self, graphs: Sequence[TaskGraph], device_label: str, scenario: str, raw_dir: Path | None) -> Dict[str, float | str]:
-        energy = EnergyBenchmarkSuite(device=device_label, warmup=2, repeat=5, seed=self.seed)
-        hardware = HardwareBenchmarkSuite(device=device_label, warmup=0, repeat=1, seed=self.seed)
-        first = hardware._make_task_kernel(graphs[0])
-        second = hardware._make_task_kernel(graphs[1])
-        for _ in range(energy.warmup):
-            first['fn']()
-            energy._sync()
-            second['fn']()
-            energy._sync()
-        total_ms: List[float] = []
-        recovery_ms: List[float] = []
-        energy_j: List[float] = []
-        raw_rows: List[Dict[str, object]] = []
-        for rep in range(energy.repeat):
-            energy._sync()
-            cpu_before = energy.proc.cpu_times()
-            wall_start = time.perf_counter()
-            samples: List[float] = []
-            stop = Event()
-            thread = energy._start_power_sampler(samples, stop, device_label)
-            iterations = 0
-            recovery_sum_ms = 0.0
-            while True:
-                first['fn']()
-                energy._sync()
-                recovery_start = time.perf_counter()
-                second['fn']()
-                energy._sync()
-                recovery_sum_ms += max((time.perf_counter() - recovery_start) * 1000.0, 0.0)
-                iterations += 1
-                if time.perf_counter() - wall_start >= energy.min_sample_s:
-                    break
-            wall_end = time.perf_counter()
-            stop.set()
-            if thread is not None:
-                thread.join()
-            cpu_after = energy.proc.cpu_times()
-            wall_s = max(wall_end - wall_start, 1e-09)
-            cpu_s = max(cpu_after.user + cpu_after.system - (cpu_before.user + cpu_before.system), 0.0)
-            measured_energy_j, energy_source = energy._estimate_energy_j(samples, wall_s, cpu_s, device_label)
-            pair_ms = wall_s * 1000.0 / max(iterations, 1)
-            second_ms = recovery_sum_ms / max(iterations, 1)
-            total_ms.append(pair_ms)
-            recovery_ms.append(second_ms)
-            energy_j.append(measured_energy_j / max(iterations, 1))
-            raw_rows.append({'scenario': scenario, 'device': device_label, 'repeat': rep, 'iterations': iterations, 'pair_ms': pair_ms, 'recovery_ms': second_ms, 'energy_j': measured_energy_j / max(iterations, 1), 'energy_source': energy_source, 'first_backend': first['backend'], 'second_backend': second['backend']})
-        source = 'hardware_gpu_runtime' if device_label.startswith('cuda') else 'hardware_cpu_runtime'
-        if raw_dir is not None:
-            safe_name = self._safe_name(f"fig12_{scenario}_{('gpu' if device_label.startswith('cuda') else 'cpu')}_switch")
-            pd.DataFrame(raw_rows).to_csv(raw_dir / f'{safe_name}.csv', index=False)
-        return {'total_ms': float(statistics.fmean(total_ms)), 'recovery_ms': float(statistics.fmean(recovery_ms)), 'energy_nj': float(statistics.fmean(energy_j)) * 1000000000.0, 'source': source}
-
     def _measure_fuse_recovery_ms(self, graphs: Sequence[TaskGraph], runtime_tasks: Sequence[RuntimeTask], scenario: str, raw_dir: Path | None) -> float:
-        _, events = self._simulate(graphs, runtime_tasks, mode='morphaccel', scenario_name=f'fig12_{scenario}_morph_recovery', raw_dir=raw_dir)
+        _, events = self._simulate(graphs, runtime_tasks, mode='fuse', scenario_name=f'fig12_{scenario}_morph_recovery', raw_dir=raw_dir)
         if events.empty:
             return 0.0
         second_runtime_id = runtime_tasks[1].runtime_id

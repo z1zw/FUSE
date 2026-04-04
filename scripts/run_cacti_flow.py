@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-from morphaccel.open_source_eval import cacti_binary, clone_or_update_repo, git_head, host_build_tools, platform_summary, resolve_tool_repo, run_cacti, write_cacti_config, write_json
+from fuse.open_source_eval import cacti_binary, clone_or_update_repo, git_head, host_build_tools, platform_summary, resolve_tool_repo, run_cacti, write_cacti_config, write_json
 
 def stage_one(output_dir: Path, name: str, size_bytes: int, technology_um: float) -> dict[str, str]:
     cfg_path = output_dir / f'{name}.cfg'

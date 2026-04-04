@@ -79,14 +79,21 @@ class ContextKey:
     delta_t: int = 0
 
     def adapt_cost(self, other: 'ContextKey') -> Optional[int]:
+        numeric = {'int8', 'int16', 'int32', 'int64', 'uint8', 'uint16', 'uint32', 'uint64', 'field255', 'fp16', 'fp32'}
+        cost = 0
         if self.domain != other.domain:
-            return None
-        if self.dtype != other.dtype:
-            numeric = {'int8', 'int16', 'int32', 'uint8', 'uint32', 'field255', 'fp16', 'fp32'}
+            same_volume = math.prod(self.tile or (1,)) == math.prod(other.tile or (1,))
+            if not same_volume:
+                return None
+            if self.quant != other.quant:
+                return None
             if self.dtype not in numeric or other.dtype not in numeric:
                 return None
-            return 2
-        cost = 0
+            cost += 3
+        elif self.dtype != other.dtype:
+            if self.dtype not in numeric or other.dtype not in numeric:
+                return None
+            cost += 2
         if self.layout != other.layout:
             cost += 1
         if self.tile != other.tile:
@@ -134,6 +141,9 @@ class MicroFragment:
     semantic_group: Optional[str] = None
     structural_hash: str = ''
     semantic_hash: str = ''
+    path_id: str = ''
+    path_position: int = 0
+    path_reuse_count: int = 0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass

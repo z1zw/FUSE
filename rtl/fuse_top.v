@@ -1,4 +1,4 @@
-module morphaccel_top #(
+module fuse_top #(
     parameter TEMPLATE_BITS = 8,
     parameter HASH_BITS = 32,
     parameter DATA_BITS = 128,

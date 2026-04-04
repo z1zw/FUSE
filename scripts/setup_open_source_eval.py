@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-from morphaccel.open_source_eval import OPEN_SOURCE_TOOLS, clone_or_update_repo, host_build_tools, write_json
+from fuse.open_source_eval import OPEN_SOURCE_TOOLS, clone_or_update_repo, host_build_tools, write_json
 
 def main() -> None:
     parser = argparse.ArgumentParser()

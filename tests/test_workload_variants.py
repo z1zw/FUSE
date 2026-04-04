@@ -1,4 +1,4 @@
-from morphaccel.workloads import build_aes128_decrypt_task, build_aes128_encrypt_task, build_groth16_prove_like_task, build_groth16_verify_like_task
+from fuse.workloads import build_aes128_decrypt_task, build_aes128_encrypt_task, build_groth16_prove_like_task, build_groth16_verify_like_task
 
 def test_groth16_verify_workload_has_verify_metadata() -> None:
     graph = build_groth16_verify_like_task(circuit_size=2048, pairings=2, task_id='verify_case')

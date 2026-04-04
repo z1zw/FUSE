@@ -61,7 +61,7 @@ class SOSPPlusSuite(SOSPSuite):
     def run_security(self, output_dir: Path) -> Dict[str, pd.DataFrame]:
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
-        mode_specs = [('Insecure LLM', False, 'morphaccel'), ('Canonical IR', True, 'morphaccel'), ('Secure-CT', True, 'secure_ct'), ('Secure-Rand', True, 'secure_randomized'), ('Secure-Elastic', True, 'secure_elastic'), ('Multi-core', True, 'multicore'), ('GPU-Tensor', True, 'gpu_tensor')]
+        mode_specs = [('Insecure LLM', False, 'fuse'), ('Canonical IR', True, 'fuse'), ('Secure-CT', True, 'secure_ct'), ('Secure-Rand', True, 'secure_randomized'), ('Secure-Elastic', True, 'secure_elastic'), ('Multi-core', True, 'multicore'), ('GPU-Tensor', True, 'gpu_tensor')]
         feature_map = {'latency': 'latency_ms', 'reuse': 'reuse_rate', 'schedule': 'template_switches', 'fusion': None}
         trial_rows: List[Dict[str, object]] = []
         stability_rows: List[Dict[str, object]] = []
@@ -124,7 +124,7 @@ class SOSPPlusSuite(SOSPSuite):
     def run_case_studies(self, output_dir: Path) -> Dict[str, pd.DataFrame]:
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
-        modes = [(ACCELERATOR_NAME, 'morphaccel'), ('Secure-Elastic', 'secure_elastic'), ('Secure-CT', 'secure_ct'), ('Secure-Rand', 'secure_randomized'), ('Multi-core', 'multicore'), ('GPU-Tensor', 'gpu_tensor'), ('Transformer-ASIC', 'transformer_asic')]
+        modes = [(ACCELERATOR_NAME, 'fuse'), ('Secure-Elastic', 'secure_elastic'), ('Secure-CT', 'secure_ct'), ('Secure-Rand', 'secure_randomized'), ('Multi-core', 'multicore'), ('GPU-Tensor', 'gpu_tensor'), ('Transformer-ASIC', 'transformer_asic')]
         summary_rows: List[Dict[str, object]] = []
         breakdown_rows: List[Dict[str, object]] = []
         raw_rows: List[Dict[str, object]] = []
@@ -158,7 +158,7 @@ class SOSPPlusSuite(SOSPSuite):
     def run_load_sweep(self, output_dir: Path) -> Dict[str, pd.DataFrame]:
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
-        modes = [(ACCELERATOR_NAME, 'morphaccel'), ('Secure-Elastic', 'secure_elastic'), ('Secure-CT', 'secure_ct'), ('Multi-core', 'multicore'), ('GPU-Tensor', 'gpu_tensor')]
+        modes = [(ACCELERATOR_NAME, 'fuse'), ('Secure-Elastic', 'secure_elastic'), ('Secure-CT', 'secure_ct'), ('Multi-core', 'multicore'), ('GPU-Tensor', 'gpu_tensor')]
         rows: List[Dict[str, object]] = []
         for case in self.catalog.build():
             for load_factor in case.load_factors:
@@ -175,7 +175,7 @@ class SOSPPlusSuite(SOSPSuite):
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
         prompts = {'Groth16': 'compile a groth16 prover for a 4k-gate rollup circuit', 'Transformer': 'compile a transformer block for llm prefill seq 1024 hidden 3072 heads 24', 'Hybrid': 'build a hybrid agent pipeline with llm prefill seq 512 aes 512 and groth16 2048', 'RAG': 'build a private rag gateway with llm prefill seq 768 hidden 3072 heads 24 rerank mlp hidden 2048 aes 1024 groth16 2048'}
-        configs = [(f'Full {ACCELERATOR_NAME}', True, 'morphaccel'), ('- Canonical IR', False, 'morphaccel'), ('- FVM reuse', True, 'no_fvm'), ('- LRC prefetch', True, 'no_prefetch'), ('- TARS scorer', True, 'fixed_schedule'), ('Secure-Rand', True, 'secure_randomized'), ('Secure-CT', True, 'secure_ct'), ('Secure-Elastic', True, 'secure_elastic')]
+        configs = [(f'Full {ACCELERATOR_NAME}', True, 'fuse'), ('- Canonical IR', False, 'fuse'), ('- FVM reuse', True, 'no_fvm'), ('- LRC prefetch', True, 'no_prefetch'), ('- TARS scorer', True, 'fixed_schedule'), ('Secure-Rand', True, 'secure_randomized'), ('Secure-CT', True, 'secure_ct'), ('Secure-Elastic', True, 'secure_elastic')]
         rows: List[Dict[str, object]] = []
         for workload, prompt in prompts.items():
             latency_ref = None
@@ -199,7 +199,7 @@ class SOSPPlusSuite(SOSPSuite):
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
         prompts = {'Rollup': 'compile a rollup sequencer service with groth16 4096 aes 2048 transformer seq 512 hidden 2048 heads 16', 'RAG': 'build a private rag gateway with llm prefill seq 768 hidden 3072 heads 24 rerank mlp hidden 2048 aes 1024 groth16 2048', 'Edge': 'compile a confidential edge copilot with llm prefill seq 384 hidden 1536 heads 12 rerank mlp hidden 1024 aes 512 groth16 1024'}
-        configs = [('Secure-Elastic', 'secure_elastic'), ('- Bucketization', 'secure_elastic_no_bucket'), ('- Family pinning', 'secure_elastic_no_pinning'), ('- RFU masking', 'secure_elastic_no_mask'), ('- Epoch rotation', 'secure_elastic_no_epoch'), ('- Prefetch', 'secure_elastic_no_prefetch'), ('Secure-CT', 'secure_ct'), ('Secure-Rand', 'secure_randomized'), (ACCELERATOR_NAME, 'morphaccel')]
+        configs = [('Secure-Elastic', 'secure_elastic'), ('- Bucketization', 'secure_elastic_no_bucket'), ('- Family pinning', 'secure_elastic_no_pinning'), ('- RFU masking', 'secure_elastic_no_mask'), ('- Epoch rotation', 'secure_elastic_no_epoch'), ('- Prefetch', 'secure_elastic_no_prefetch'), ('Secure-CT', 'secure_ct'), ('Secure-Rand', 'secure_randomized'), (ACCELERATOR_NAME, 'fuse')]
         rows: List[Dict[str, object]] = []
         for workload, prompt in prompts.items():
             latency_ref = None
@@ -279,7 +279,7 @@ class SOSPPlusSuite(SOSPSuite):
             secure = part[part['configuration'] == 'Secure-Elastic']
             if not secure.empty:
                 secure = secure.iloc[0]
-                rows.append({'category': 'ablation', 'name': workload, 'metric': 'secure_elastic_latency_norm_vs_morphaccel', 'value': float(secure['latency_norm'])})
+                rows.append({'category': 'ablation', 'name': workload, 'metric': 'secure_elastic_latency_norm_vs_fuse', 'value': float(secure['latency_norm'])})
         fig21 = secure_component_frames['fig21_secure_components']
         for workload, part in fig21.groupby('workload'):
             best = part.sort_values('balance_score', ascending=False).iloc[0]

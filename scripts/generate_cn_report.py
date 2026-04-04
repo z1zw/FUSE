@@ -1,7 +1,7 @@
 from __future__ import annotations
 import argparse
 from pathlib import Path
-from morphaccel.report import write_cn_report
+from fuse.report import write_cn_report
 
 def main() -> None:
     parser = argparse.ArgumentParser()

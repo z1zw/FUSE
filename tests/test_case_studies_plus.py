@@ -1,4 +1,4 @@
-from morphaccel.case_studies import CaseStudyCatalog
+from fuse.case_studies import CaseStudyCatalog
 
 def test_case_catalog_builds_service_cases():
     catalog = CaseStudyCatalog()

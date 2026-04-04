@@ -1,10 +1,10 @@
-#include "morphaccel_models.hpp"
+#include "fuse_models.hpp"
 
 #include <cmath>
 #include <stdexcept>
 #include <unordered_map>
 
-namespace morphaccel {
+namespace fuse {
 
 namespace {
 
@@ -182,7 +182,7 @@ double dedicated_speedup(const std::string& mode, const std::string& task_type) 
 }
 
 double energy_scale(const std::string& mode) {
-    if (mode == "morphaccel") {
+    if (mode == "fuse") {
         return 1.0;
     }
     if (mode == "degraded") {

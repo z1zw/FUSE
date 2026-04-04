@@ -1,4 +1,4 @@
-#include "morphaccel_engine.hpp"
+#include "fuse_engine.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -8,7 +8,7 @@
 #include <set>
 #include <unordered_set>
 
-namespace morphaccel {
+namespace fuse {
 
 namespace {
 
@@ -31,6 +31,18 @@ struct CacheEntry {
     long long last_access_cycle = 0;
     long long bytes_used = 0;
     int hits = 0;
+};
+
+struct PathCacheEntry {
+    std::string domain;
+    std::string dtype;
+    std::string layout;
+    std::string tile;
+    std::string quant;
+    long long created_cycle = 0;
+    long long last_access_cycle = 0;
+    std::string template_family;
+    long long reuse_count = 0;
 };
 
 struct PathBinding {
@@ -67,11 +79,80 @@ bool cache_fresh(const CacheEntry& entry, long long cycle) {
     return cycle - entry.created_cycle <= kFreshnessWindowCycles;
 }
 
+std::vector<std::string> parse_tile(const std::string& tile) {
+    if (tile.empty()) {
+        return {};
+    }
+    return split(tile, 'x');
+}
+
+long long tile_volume(const std::string& tile) {
+    auto dims = parse_tile(tile);
+    long long volume = 1;
+    for (const auto& dim : dims) {
+        if (dim.empty()) continue;
+        volume *= std::max(1LL, std::stoll(dim));
+    }
+    return volume;
+}
+
+bool is_numeric_dtype(const std::string& dtype) {
+    static const std::unordered_set<std::string> numeric = {"int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64", "field255", "fp16", "fp32"};
+    return numeric.find(dtype) != numeric.end();
+}
+
+int context_adapt_cost(
+    const std::string& lhs_domain,
+    const std::string& lhs_dtype,
+    const std::string& lhs_layout,
+    const std::string& lhs_tile,
+    const std::string& lhs_quant,
+    const std::string& rhs_domain,
+    const std::string& rhs_dtype,
+    const std::string& rhs_layout,
+    const std::string& rhs_tile,
+    const std::string& rhs_quant
+) {
+    int cost = 0;
+    if (lhs_domain != rhs_domain) {
+        if (lhs_quant != rhs_quant) {
+            return -1;
+        }
+        if (!is_numeric_dtype(lhs_dtype) || !is_numeric_dtype(rhs_dtype)) {
+            return -1;
+        }
+        if (tile_volume(lhs_tile) != tile_volume(rhs_tile)) {
+            return -1;
+        }
+        cost += 3;
+    } else if (lhs_dtype != rhs_dtype) {
+        if (!is_numeric_dtype(lhs_dtype) || !is_numeric_dtype(rhs_dtype)) {
+            return -1;
+        }
+        cost += 2;
+    }
+    if (lhs_layout != rhs_layout) {
+        cost += 1;
+    }
+    if (lhs_tile != rhs_tile) {
+        if (tile_volume(lhs_tile) != tile_volume(rhs_tile)) {
+            return -1;
+        }
+        cost += 1;
+    }
+    if (lhs_quant != rhs_quant) {
+        return -1;
+    }
+    return cost;
+}
+
 double ready_score(
     const RuntimeNode& node,
     long long cycle,
     const std::unordered_map<std::string, CacheEntry>& fvm,
     const std::deque<std::string>& prefetch_queue,
+    const std::unordered_map<std::string, PathBinding>& path_bindings,
+    const std::unordered_map<std::string, PathCacheEntry>& path_cache,
     double& kappa_hits,
     double& template_hits,
     double& valid_hits
@@ -90,6 +171,16 @@ double ready_score(
         score += 1.0;
         kappa_hits += 1.0;
     }
+    auto binding_it = path_bindings.find(node.micro.base_micro_id);
+    if (binding_it != path_bindings.end()) {
+        auto cache_it = path_cache.find(binding_it->second.path_id);
+        if (cache_it != path_cache.end() && cycle - cache_it->second.created_cycle <= kFreshnessWindowCycles) {
+            int adapt_cost = context_adapt_cost(node.micro.domain, node.micro.dtype, node.micro.layout, node.micro.tile, node.micro.quant, cache_it->second.domain, cache_it->second.dtype, cache_it->second.layout, cache_it->second.tile, cache_it->second.quant);
+            if (adapt_cost >= 0) {
+                score += std::max(1.0, 4.0 + std::min<long long>(std::max(binding_it->second.reuse_count, 1LL), 6LL) - adapt_cost);
+            }
+        }
+    }
     if (node.ready_cycle >= 0) {
         score += 1.5 * static_cast<double>(std::max(0LL, cycle - node.ready_cycle)) / 128.0;
     }
@@ -101,7 +192,7 @@ bool mode_uses_prefetch(const std::string& mode) {
 }
 
 bool mode_allows_result_reuse(const std::string& mode) {
-    return mode == "morphaccel" || mode == "secure_ct" || mode.rfind("secure_elastic", 0) == 0;
+    return mode == "fuse" || mode == "secure_ct" || mode.rfind("secure_elastic", 0) == 0;
 }
 
 bool mode_has_fvm_lookup(const std::string& mode) {
@@ -351,6 +442,7 @@ SimulationResult run_simulation(
     }
 
     std::unordered_map<std::string, CacheEntry> fvm;
+    std::unordered_map<std::string, PathCacheEntry> path_cache;
     std::deque<std::string> fvm_order;
     std::unordered_map<std::string, long long> negative_cache;
     std::deque<std::string> prefetch_queue;
@@ -427,7 +519,7 @@ SimulationResult run_simulation(
                     double template_probe = 0.0;
                     double valid_probe = 0.0;
                     ready_probe_count += 1.0;
-                    double score = ready_score(nodes[ready[i]], clock, fvm, prefetch_queue, kappa_probe, template_probe, valid_probe);
+                    double score = ready_score(nodes[ready[i]], clock, fvm, prefetch_queue, path_bindings, path_cache, kappa_probe, template_probe, valid_probe);
                     ready_kappa += kappa_probe;
                     ready_template += template_probe;
                     ready_valid += valid_probe;
@@ -462,6 +554,11 @@ SimulationResult run_simulation(
             bool structural_reuse_counted = false;
             auto path_it = path_bindings.find(node.micro.base_micro_id);
             PathBinding path_binding = path_it != path_bindings.end() ? path_it->second : PathBinding{};
+            auto path_cache_it = (!path_binding.path_id.empty()) ? path_cache.find(path_binding.path_id) : path_cache.end();
+            int path_adapt_cost = -1;
+            if (path_cache_it != path_cache.end() && clock - path_cache_it->second.created_cycle <= kFreshnessWindowCycles) {
+                path_adapt_cost = context_adapt_cost(node.micro.domain, node.micro.dtype, node.micro.layout, node.micro.tile, node.micro.quant, path_cache_it->second.domain, path_cache_it->second.dtype, path_cache_it->second.layout, path_cache_it->second.tile, path_cache_it->second.quant);
+            }
             auto neg = negative_cache.find(node.micro.semantic_hash);
             bool blocked = neg != negative_cache.end() && neg->second >= clock;
             if (mode_has_fvm_lookup(mode) && mode != "degraded" && !blocked) {
@@ -479,7 +576,7 @@ SimulationResult run_simulation(
                     }
                     it->second.last_access_cycle = clock;
                     it->second.hits += 1;
-                    if (mode == "morphaccel") {
+                    if (mode == "fuse") {
                         base = 1;
                         mem = 1;
                     } else if (mode == "secure_ct") {
@@ -496,6 +593,12 @@ SimulationResult run_simulation(
                     redundant_reads += 1.0;
                     negative_cache[node.micro.semantic_hash] = clock + std::max(1LL, kBaseSwitchCycles / 2LL);
                 }
+            }
+            if (!reused_result && path_adapt_cost >= 0) {
+                long long reuse_bonus = std::max(1LL, std::min<long long>(std::max(path_binding.reuse_count, path_cache_it->second.reuse_count), 6LL) - path_adapt_cost + 1LL);
+                base = std::max(1LL, base - reuse_bonus);
+                mem = mem > 0 ? std::max(1LL, mem - std::max(0LL, reuse_bonus - 1LL)) : 0LL;
+                structural_reuse = true;
             }
 
             long long sw = switch_cost(mode, rfus[rfu_id].loaded_template, node.micro.template_family, prefetched, queued, template_hits, template_misses, switch_events);
@@ -551,6 +654,9 @@ SimulationResult run_simulation(
                     structural_reuse_counted = true;
                 }
             }
+            if (structural_reuse && path_adapt_cost >= 0) {
+                sw = std::min(sw, std::max(0LL, kBaseSwitchCycles / std::max(4LL, path_binding.reuse_count + 4LL) + static_cast<long long>(path_adapt_cost)));
+            }
             long long duration = std::max(1LL, base + mem + sw);
             if (prefetched) {
                 prefetch_earliness_total += static_cast<double>(kBaseSwitchCycles);
@@ -594,11 +700,16 @@ SimulationResult run_simulation(
             }
             for (const auto& item : batch) {
                 RuntimeNode& node = nodes[item.runtime_micro_id];
+                auto finish_path_it = path_bindings.find(node.micro.base_micro_id);
+                PathBinding finish_path_binding = finish_path_it != path_bindings.end() ? finish_path_it->second : PathBinding{};
                 node.running = false;
                 node.completed = true;
                 completed_nodes += 1;
                 if (mode_has_fvm_write(mode)) {
                     write_cache(node.micro, item.finish_cycle, fvm, fvm_order, current_bytes, peak_bytes, allocations, writes, residency_samples, frees);
+                }
+                if (!finish_path_binding.path_id.empty()) {
+                    path_cache[finish_path_binding.path_id] = PathCacheEntry{node.micro.domain, node.micro.dtype, node.micro.layout, node.micro.tile, node.micro.quant, item.finish_cycle, item.finish_cycle, node.micro.template_family, finish_path_binding.reuse_count};
                 }
                 for (const auto& succ_id : node.succs) {
                     RuntimeNode& succ = nodes[succ_id];

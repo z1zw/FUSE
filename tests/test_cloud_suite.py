@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 import numpy as np
 from PIL import Image
-from morphaccel.cloud_suite import CloudExperimentSuite
+from fuse.cloud_suite import CloudExperimentSuite
 
 def test_cloud_suite_smoke(tmp_path):
     data_root = tmp_path / 'data'

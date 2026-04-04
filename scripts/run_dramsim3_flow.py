@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-from morphaccel.open_source_eval import clone_or_update_repo, dramsim3_binary, git_head, host_build_tools, platform_summary, resolve_tool_repo, run_dramsim3, write_dramsim3_trace, write_json
+from fuse.open_source_eval import clone_or_update_repo, dramsim3_binary, git_head, host_build_tools, platform_summary, resolve_tool_repo, run_dramsim3, write_dramsim3_trace, write_json
 
 def main() -> None:
     parser = argparse.ArgumentParser()

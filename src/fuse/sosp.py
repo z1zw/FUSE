@@ -85,7 +85,7 @@ class SOSPSuite:
     def run_security(self, output_dir: Path) -> Dict[str, pd.DataFrame]:
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
-        mode_specs = [('Insecure LLM', False, 'morphaccel'), ('Canonical IR', True, 'morphaccel'), ('Secure-CT', True, 'secure_ct'), ('Secure-Rand', True, 'secure_randomized'), ('Multi-core', True, 'multicore')]
+        mode_specs = [('Insecure LLM', False, 'fuse'), ('Canonical IR', True, 'fuse'), ('Secure-CT', True, 'secure_ct'), ('Secure-Rand', True, 'secure_randomized'), ('Multi-core', True, 'multicore')]
         trial_rows: List[Dict[str, object]] = []
         stability_rows: List[Dict[str, object]] = []
         variant_catalog = self.frontend.variant_prompts()
@@ -131,7 +131,7 @@ class SOSPSuite:
     def run_case_studies(self, output_dir: Path) -> Dict[str, pd.DataFrame]:
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
-        modes = [(ACCELERATOR_NAME, 'morphaccel'), ('Secure-CT', 'secure_ct'), ('Secure-Rand', 'secure_randomized'), ('Multi-core', 'multicore'), ('GPU-Tensor', 'gpu_tensor')]
+        modes = [(ACCELERATOR_NAME, 'fuse'), ('Secure-CT', 'secure_ct'), ('Secure-Rand', 'secure_randomized'), ('Multi-core', 'multicore'), ('GPU-Tensor', 'gpu_tensor')]
         case_defs = self._case_definitions()
         summary_rows: List[Dict[str, object]] = []
         raw_rows: List[Dict[str, object]] = []
@@ -158,7 +158,7 @@ class SOSPSuite:
         raw_dir = Path(output_dir) / 'raw'
         raw_dir.mkdir(parents=True, exist_ok=True)
         workloads = {'Groth16': self.frontend.compile_prompt('compile a groth16 prover for a 4k-gate rollup circuit', secure=True, task_prefix='ablate_groth').graphs, 'Transformer': self.frontend.compile_prompt('compile a transformer block for llm prefill seq 1024 hidden 3072 heads 24', secure=True, task_prefix='ablate_llm').graphs, 'Hybrid': self.frontend.compile_prompt('build a hybrid agent pipeline with llm prefill seq 512 aes 512 and groth16 2048', secure=True, task_prefix='ablate_hybrid').graphs}
-        configs = [(f'Full {ACCELERATOR_NAME}', True, 'morphaccel'), ('- Canonical IR', False, 'morphaccel'), ('- FVM reuse', True, 'no_fvm'), ('- LRC prefetch', True, 'no_prefetch'), ('- TARS scorer', True, 'fixed_schedule'), ('- Cross-task reuse', True, 'multicore'), ('Secure-Rand', True, 'secure_randomized'), ('Secure-CT', True, 'secure_ct')]
+        configs = [(f'Full {ACCELERATOR_NAME}', True, 'fuse'), ('- Canonical IR', False, 'fuse'), ('- FVM reuse', True, 'no_fvm'), ('- LRC prefetch', True, 'no_prefetch'), ('- TARS scorer', True, 'fixed_schedule'), ('- Cross-task reuse', True, 'multicore'), ('Secure-Rand', True, 'secure_randomized'), ('Secure-CT', True, 'secure_ct')]
         rows: List[Dict[str, object]] = []
         for workload, base_graphs in workloads.items():
             prompt_map = {'Groth16': 'compile a groth16 prover for a 4k-gate rollup circuit', 'Transformer': 'compile a transformer block for llm prefill seq 1024 hidden 3072 heads 24', 'Hybrid': 'build a hybrid agent pipeline with llm prefill seq 512 aes 512 and groth16 2048'}

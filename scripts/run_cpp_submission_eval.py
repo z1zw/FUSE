@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 import pandas as pd
-from morphaccel.benchmarks import run_default_suite
+from fuse.benchmarks import run_default_suite
 
 def _now() -> str:
     return datetime.now().isoformat(timespec='seconds')

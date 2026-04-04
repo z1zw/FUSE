@@ -46,7 +46,7 @@ class Normalizer:
             return self.normalize_expr(arg, structural=structural)
         if isinstance(arg, InputRef):
             if structural:
-                return InputRef(name='_', shape=arg.shape, dtype=arg.dtype)
+                return InputRef(name='_', shape=arg.shape, dtype=self._structural_dtype(arg.dtype))
             return arg
         if isinstance(arg, Const):
             if structural:
@@ -120,3 +120,9 @@ class Normalizer:
         if isinstance(value, (list, tuple)):
             return tuple((self._freeze(v) for v in value))
         return value
+
+    def _structural_dtype(self, dtype: str) -> str:
+        numeric = {'int8', 'int16', 'int32', 'int64', 'uint8', 'uint16', 'uint32', 'uint64', 'field255', 'fp16', 'fp32'}
+        if dtype in numeric:
+            return 'numeric'
+        return dtype

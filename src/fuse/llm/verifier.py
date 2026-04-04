@@ -10,7 +10,7 @@ class VerificationResult:
     checks: List[str]
     canonical_hash: str
 
-class MorphAccelVerifier:
+class FuseVerifier:
 
     def __init__(self):
         self.canonicalizer = CanonicalTaskCanonicalizer()
@@ -38,4 +38,4 @@ class MorphAccelVerifier:
 
     def equivalent(self, lhs: Sequence[TaskGraph], rhs: Sequence[TaskGraph]) -> bool:
         return self.canonicalizer.canonical_hash(lhs) == self.canonicalizer.canonical_hash(rhs)
-FUSEVerifier = MorphAccelVerifier
+FUSEVerifier = FuseVerifier

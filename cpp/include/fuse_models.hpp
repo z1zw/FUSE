@@ -4,9 +4,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "morphaccel_csv.hpp"
+#include "fuse_csv.hpp"
 
-namespace morphaccel {
+namespace fuse {
 
 struct TaskRow {
     std::string runtime_id;

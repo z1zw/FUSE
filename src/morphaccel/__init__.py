@@ -1,33 +1,19 @@
-from .branding import ACCELERATOR_NAME
-try:
-    from .ir import ContextKey, Expr, Fragment, MicroFragment, TaskGraph
-except Exception:
-    ContextKey = None
-    Expr = None
-    Fragment = None
-    MicroFragment = None
-    TaskGraph = None
-try:
-    from .benchmarks import BenchmarkSuite, run_default_suite
-    from .cloud_suite import CloudExperimentSuite
-    from .hardware import HardwareBenchmarkSuite
-    from .scenarios import ScenarioSuite
-    from .sosp import SOSPSuite, run_sosp_suite
-    from .training import AlpacaTrainingSuite, CIFARTrainingSuite
-    from .sim.simulator import FUSESimulator, MorphAccelSimulator
-    from .llm import FUSEVerifier, MorphAccelVerifier
-except Exception:
-    BenchmarkSuite = None
-    run_default_suite = None
-    CloudExperimentSuite = None
-    HardwareBenchmarkSuite = None
-    ScenarioSuite = None
-    SOSPSuite = None
-    run_sosp_suite = None
-    AlpacaTrainingSuite = None
-    CIFARTrainingSuite = None
-    FUSESimulator = None
-    MorphAccelSimulator = None
-    FUSEVerifier = None
-    MorphAccelVerifier = None
-__all__ = ['ContextKey', 'Expr', 'Fragment', 'MicroFragment', 'TaskGraph', 'ACCELERATOR_NAME', 'BenchmarkSuite', 'CloudExperimentSuite', 'HardwareBenchmarkSuite', 'CIFARTrainingSuite', 'AlpacaTrainingSuite', 'ScenarioSuite', 'SOSPSuite', 'FUSESimulator', 'MorphAccelSimulator', 'FUSEVerifier', 'MorphAccelVerifier', 'run_default_suite', 'run_sosp_suite']
+from __future__ import annotations
+
+import importlib
+import pkgutil
+import sys
+
+import fuse as _fuse
+
+for name in getattr(_fuse, '__all__', []):
+    globals()[name] = getattr(_fuse, name)
+
+for module_info in pkgutil.walk_packages(_fuse.__path__, prefix='fuse.'):
+    fuse_name = module_info.name
+    legacy_name = fuse_name.replace('fuse', 'morphaccel', 1)
+    sys.modules.setdefault(legacy_name, importlib.import_module(fuse_name))
+
+sys.modules.setdefault('morphaccel', _fuse)
+
+__all__ = getattr(_fuse, '__all__', [])

@@ -11,12 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-from morphaccel.eval_tools import EvaluationToolkit
-from morphaccel.open_source_eval import clone_or_update_repo, host_build_tools
+from fuse.eval_tools import EvaluationToolkit
+from fuse.open_source_eval import clone_or_update_repo, host_build_tools
 PLATFORM_DEFAULT = 'sky130hd'
-DESIGN_NAME = 'morphaccel_top'
+DESIGN_NAME = 'fuse_top'
 DESIGN_ALIAS = 'fuse'
-RTL_FILES = [ROOT / 'rtl' / 'morphaccel_top.v', ROOT / 'rtl' / 'rfu.v', ROOT / 'rtl' / 'tars.v', ROOT / 'rtl' / 'fvm.v', ROOT / 'rtl' / 'lrc.v']
+RTL_FILES = [ROOT / 'rtl' / 'fuse_top.v', ROOT / 'rtl' / 'rfu.v', ROOT / 'rtl' / 'tars.v', ROOT / 'rtl' / 'fvm.v', ROOT / 'rtl' / 'lrc.v']
 
 def write_file(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)

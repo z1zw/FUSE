@@ -1,8 +1,8 @@
 from __future__ import annotations
 import argparse
 from pathlib import Path
-from morphaccel.benchmarks import load_calibration
-from morphaccel.sosp_plus import SOSPPlusSuite
+from fuse.benchmarks import load_calibration
+from fuse.sosp_plus import SOSPPlusSuite
 
 def main() -> None:
     parser = argparse.ArgumentParser()

@@ -1,9 +1,9 @@
 from pathlib import Path
-from morphaccel.benchmarks import load_calibration
-from morphaccel.llm import HeuristicLLMFrontend, MorphAccelVerifier
-from morphaccel.sosp import SOSPSuite
-from morphaccel.sosp_plus import SOSPPlusSuite
-from morphaccel.workloads import build_transformer_block_task
+from fuse.benchmarks import load_calibration
+from fuse.llm import HeuristicLLMFrontend, FuseVerifier
+from fuse.sosp import SOSPSuite
+from fuse.sosp_plus import SOSPPlusSuite
+from fuse.workloads import build_transformer_block_task
 
 def test_transformer_workload_is_dag():
     task = build_transformer_block_task(seq_len=512, hidden_dim=1024, heads=16, task_id='tfm_test')
@@ -12,7 +12,7 @@ def test_transformer_workload_is_dag():
 
 def test_llm_canonicalization_stabilizes_variants():
     frontend = HeuristicLLMFrontend()
-    verifier = MorphAccelVerifier()
+    verifier = FuseVerifier()
     prompt_a = 'compile a transformer block for llm prefill seq 2048 hidden 4096 heads 32'
     prompt_b = 'generate an llm attention block with sequence 2048 hidden 4096 32 heads'
     insecure_a = frontend.compile_prompt(prompt_a, secure=False, task_prefix='a')

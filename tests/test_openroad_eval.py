@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 from pathlib import Path
-from morphaccel.eval_tools import EvaluationToolkit
+from fuse.eval_tools import EvaluationToolkit
 
 def test_parse_openroad_metrics_json(tmp_path: Path) -> None:
     metrics_path = tmp_path / 'fuse_metrics.json'

@@ -36,11 +36,24 @@ class CppSimulatorBridge:
             newest_source = max((source.stat().st_mtime for source in sources))
             if binary_mtime >= newest_source:
                 return self.binary
-        cmd = [shutil.which('g++') or 'g++', '-std=c++17', '-O3', '-I', str(self.cpp_dir / 'include'), *[str(s) for s in sources], '-o', str(self.binary)]
-        subprocess.run(cmd, check=True)
+        gxx = shutil.which('g++')
+        cl = shutil.which('cl')
+        if gxx is not None:
+            cmd = [gxx, '-std=c++17', '-O3', '-I', str(self.cpp_dir / 'include'), *[str(s) for s in sources], '-o', str(self.binary)]
+            subprocess.run(cmd, check=True)
+            return self.binary
+        if sys.platform.startswith('win') and cl is not None:
+            obj_dir = self.build_dir / 'obj'
+            obj_dir.mkdir(parents=True, exist_ok=True)
+            cmd = [cl, '/std:c++17', '/O2', '/EHsc', f'/I{self.cpp_dir / "include"}', *[str(s) for s in sources], f'/Fe:{self.binary}']
+            subprocess.run(cmd, check=True, cwd=self.build_dir)
+            for artifact in obj_dir.glob('*'):
+                artifact.unlink()
+            return self.binary
+        raise FileNotFoundError('no supported C++ compiler found; expected g++ or cl')
         return self.binary
 
-    def run(self, task_graphs: Sequence[TaskGraph], runtime_tasks: Sequence[RuntimeTask], *, mode: str='morphaccel', scenario_name: str='scenario', out_dir: Path | None=None) -> CppRunArtifacts:
+    def run(self, task_graphs: Sequence[TaskGraph], runtime_tasks: Sequence[RuntimeTask], *, mode: str='fuse', scenario_name: str='scenario', out_dir: Path | None=None) -> CppRunArtifacts:
         mode = normalize_mode(mode)
         binary = self.build()
         owned_tmp = None
@@ -65,7 +78,7 @@ class CppSimulatorBridge:
             owned_tmp.cleanup()
         return artifact
 
-    def run_result(self, task_graphs: Sequence[TaskGraph], runtime_tasks: Sequence[RuntimeTask], *, mode: str='morphaccel', scenario_name: str='scenario', out_dir: Path | None=None) -> RunResult:
+    def run_result(self, task_graphs: Sequence[TaskGraph], runtime_tasks: Sequence[RuntimeTask], *, mode: str='fuse', scenario_name: str='scenario', out_dir: Path | None=None) -> RunResult:
         artifact = self.run(task_graphs, runtime_tasks, mode=mode, scenario_name=scenario_name, out_dir=out_dir)
         traces = {'events': artifact.events.to_dict(orient='records')}
         return RunResult(metrics=artifact.metrics, traces=traces, tables={})

@@ -1,10 +1,10 @@
-#include "morphaccel_csv.hpp"
+#include "fuse_csv.hpp"
 
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
 
-namespace morphaccel {
+namespace fuse {
 
 std::vector<std::string> split(const std::string& value, char delim) {
     std::vector<std::string> out;

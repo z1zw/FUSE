@@ -4,9 +4,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "morphaccel_models.hpp"
+#include "fuse_models.hpp"
 
-namespace morphaccel {
+namespace fuse {
 
 struct MetricRow {
     std::string key;

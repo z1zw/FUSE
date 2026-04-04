@@ -1,6 +1,6 @@
 import pandas as pd
-from morphaccel.branding import ACCELERATOR_NAME
-from morphaccel.energy_benchmarks import EnergyBenchmarkSuite
+from fuse.branding import ACCELERATOR_NAME
+from fuse.energy_benchmarks import EnergyBenchmarkSuite
 
 def test_normalize_aggregates_encrypt_and_decrypt_rows() -> None:
     suite = EnergyBenchmarkSuite(device='cpu', warmup=0, repeat=1, seed=7)

@@ -1,6 +1,6 @@
-#include "morphaccel_engine.hpp"
-#include "morphaccel_csv.hpp"
-#include "morphaccel_models.hpp"
+#include "fuse_engine.hpp"
+#include "fuse_csv.hpp"
+#include "fuse_models.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -28,10 +28,10 @@ int main(int argc, char** argv) {
         std::string mode = args.at("--mode");
         std::string metrics_out = args.at("--metrics-out");
         std::string events_out = args.at("--events-out");
-        auto tasks = morphaccel::load_tasks(tasks_path);
-        auto microfragments = morphaccel::load_microfragments(micro_path);
-        auto paths = morphaccel::load_paths(paths_path);
-        auto result = morphaccel::run_simulation(tasks, microfragments, paths, mode);
+        auto tasks = fuse::load_tasks(tasks_path);
+        auto microfragments = fuse::load_microfragments(micro_path);
+        auto paths = fuse::load_paths(paths_path);
+        auto result = fuse::run_simulation(tasks, microfragments, paths, mode);
         std::vector<std::vector<std::string>> metric_rows;
         for (const auto& metric : result.metrics) {
             if (metric.key == "mode") {
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
                 metric_rows.push_back({metric.key, std::to_string(metric.value)});
             }
         }
-        morphaccel::write_csv(metrics_out, {"key", "value"}, metric_rows);
+        fuse::write_csv(metrics_out, {"key", "value"}, metric_rows);
         std::vector<std::string> event_header = {
             "event", "cycle", "finish_cycle", "runtime_micro_id", "task_runtime_id", "task_type",
             "template_family", "reused_result", "structural_reuse", "template_prefetched",
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
             }
             event_rows.push_back(std::move(row));
         }
-        morphaccel::write_csv(events_out, event_header, event_rows);
+        fuse::write_csv(events_out, event_header, event_rows);
         return 0;
     } catch (const std::exception& exc) {
         std::cerr << exc.what() << std::endl;

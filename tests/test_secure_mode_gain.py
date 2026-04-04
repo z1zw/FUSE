@@ -1,6 +1,6 @@
 from pathlib import Path
-from morphaccel.benchmarks import load_calibration
-from morphaccel.sosp_plus import SOSPPlusSuite
+from fuse.benchmarks import load_calibration
+from fuse.sosp_plus import SOSPPlusSuite
 
 def test_secure_elastic_improves_over_secure_ct(tmp_path):
     suite = SOSPPlusSuite(engine='cpp', calibration=load_calibration(Path(__file__).resolve().parents[1] / 'configs' / 'calibration.json'))

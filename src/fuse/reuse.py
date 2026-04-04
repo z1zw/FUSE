@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections import Counter, defaultdict
+from dataclasses import replace
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Sequence, Tuple
 from .ir import Fragment, MicroFragment, RepresentativePath, TaskGraph
@@ -40,6 +41,7 @@ class MicrofragmentDecomposer:
             self._bind_fragment_dependencies(task, all_microfragments)
             task_to_sequence[task.task_id] = sequence
         representative_paths = self._build_representative_paths(all_microfragments, task_to_sequence)
+        all_microfragments = self._annotate_path_bindings(all_microfragments, representative_paths)
         return DecompositionResult(microfragments=all_microfragments, representative_paths=representative_paths, task_to_micro_sequences=task_to_sequence, structural_clusters=dict(structural_clusters))
 
     def _micro_ops_for_fragment(self, fragment: Fragment) -> List[str]:
@@ -95,6 +97,7 @@ class MicrofragmentDecomposer:
         for micro in all_microfragments:
             by_structural[micro.structural_hash].append(micro)
         sequences = {task_id: [lookup[m].structural_hash for m in micro_ids] for task_id, micro_ids in task_to_sequence.items()}
+        micro_sequences = {task_id: list(micro_ids) for task_id, micro_ids in task_to_sequence.items()}
         ngrams: Counter[Tuple[str, ...]] = Counter()
         for seq in sequences.values():
             max_n = min(4, len(seq))
@@ -109,12 +112,23 @@ class MicrofragmentDecomposer:
             if signature in assigned_prefixes:
                 continue
             members: List[str] = []
-            families: List[str] = []
-            for micro in all_microfragments:
-                if micro.structural_hash == signature[0]:
-                    members.append(micro.micro_id)
-                    families.append(micro.template_family)
-            representative_paths[f'RP{idx:03d}'] = RepresentativePath(path_id=f'RP{idx:03d}', members=members, structural_signature=signature, template_families=tuple(families[:len(signature)] or [lookup[members[0]].template_family]), reuse_count=ngrams[signature])
+            template_families: Tuple[str, ...] | None = None
+            seen_members = set()
+            for task_id, seq in sequences.items():
+                micro_ids = micro_sequences[task_id]
+                for i in range(0, len(seq) - len(signature) + 1):
+                    if tuple(seq[i:i + len(signature)]) != signature:
+                        continue
+                    window = micro_ids[i:i + len(signature)]
+                    if template_families is None:
+                        template_families = tuple((lookup[m].template_family for m in window))
+                    for member in window:
+                        if member not in seen_members:
+                            seen_members.add(member)
+                            members.append(member)
+            if not members:
+                continue
+            representative_paths[f'RP{idx:03d}'] = RepresentativePath(path_id=f'RP{idx:03d}', members=members, structural_signature=signature, template_families=template_families or (lookup[members[0]].template_family,), reuse_count=ngrams[signature])
             assigned_prefixes.add(signature)
         for idx, (structural_hash, items) in enumerate(sorted(by_structural.items())):
             if any((structural_hash in rp.structural_signature for rp in representative_paths.values())):
@@ -123,6 +137,26 @@ class MicrofragmentDecomposer:
             pid = f'SINGLE{idx:03d}'
             representative_paths[pid] = RepresentativePath(path_id=pid, members=[m.micro_id for m in items], structural_signature=(structural_hash,), template_families=(micro.template_family,), reuse_count=len(items))
         return representative_paths
+
+    def _annotate_path_bindings(self, all_microfragments: Sequence[MicroFragment], representative_paths: Dict[str, RepresentativePath]) -> List[MicroFragment]:
+        best_binding: Dict[str, Tuple[int, int, str, int]] = {}
+        for path in representative_paths.values():
+            member_to_position = {member: idx for idx, member in enumerate(path.members)}
+            score = (len(path.structural_signature), path.reuse_count)
+            for member, position in member_to_position.items():
+                incumbent = best_binding.get(member)
+                if incumbent is not None and incumbent[:2] >= score:
+                    continue
+                best_binding[member] = (score[0], score[1], path.path_id, position)
+        annotated: List[MicroFragment] = []
+        for micro in all_microfragments:
+            binding = best_binding.get(micro.micro_id)
+            if binding is None:
+                annotated.append(micro)
+                continue
+            _, reuse_count, path_id, position = binding
+            annotated.append(replace(micro, path_id=path_id, path_position=position, path_reuse_count=reuse_count))
+        return annotated
 
 def estimate_latency_cycles(micro: MicroFragment) -> int:
     base = DEFAULT_OP_LATENCY.get(micro.op, DEFAULT_OP_LATENCY.get(micro.template_family, 1))

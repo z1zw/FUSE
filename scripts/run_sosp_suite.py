@@ -1,7 +1,7 @@
 from __future__ import annotations
 import argparse
 from pathlib import Path
-from morphaccel.sosp import run_sosp_suite
+from fuse.sosp import run_sosp_suite
 
 def main() -> None:
     parser = argparse.ArgumentParser()

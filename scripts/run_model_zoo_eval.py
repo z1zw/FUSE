@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-from morphaccel.model_zoo import DEFAULT_CIFAR_ROOT, DEFAULT_COCO_ROOT, ModelZooExperimentSuite
+from fuse.model_zoo import DEFAULT_CIFAR_ROOT, DEFAULT_COCO_ROOT, ModelZooExperimentSuite
 
 def main() -> None:
     parser = argparse.ArgumentParser()

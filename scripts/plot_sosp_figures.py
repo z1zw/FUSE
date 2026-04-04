@@ -3,8 +3,8 @@ import argparse
 import json
 from pathlib import Path
 import pandas as pd
-from morphaccel.sosp_viz import plot_fig13, plot_fig14, plot_fig15, plot_fig16, plot_fig17
-from morphaccel.viz import figure_audit_rows, plot_fig10, plot_fig11, plot_fig12, plot_fig4, plot_fig5, plot_fig6, plot_fig7, plot_fig8, plot_fig9
+from fuse.sosp_viz import plot_fig13, plot_fig14, plot_fig15, plot_fig16, plot_fig17
+from fuse.viz import figure_audit_rows, plot_fig10, plot_fig11, plot_fig12, plot_fig4, plot_fig5, plot_fig6, plot_fig7, plot_fig8, plot_fig9
 
 def main() -> None:
     parser = argparse.ArgumentParser()

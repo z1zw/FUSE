@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
-from morphaccel.viz import figure_audit_rows, plot_fig10, plot_fig11, plot_fig12, plot_fig4, plot_fig5, plot_fig6, plot_fig7, plot_fig8, plot_fig9
+from fuse.viz import figure_audit_rows, plot_fig10, plot_fig11, plot_fig12, plot_fig4, plot_fig5, plot_fig6, plot_fig7, plot_fig8, plot_fig9
 
 def main() -> None:
     parser = argparse.ArgumentParser()

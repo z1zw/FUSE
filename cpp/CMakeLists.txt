@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
-project(morphaccel_cpp LANGUAGES CXX)
+project(fuse_cpp LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(include)
-add_executable(morphaccel_cpp src/csv.cpp src/models.cpp src/engine.cpp src/main.cpp)
+add_executable(fuse_cpp src/csv.cpp src/models.cpp src/engine.cpp src/main.cpp)

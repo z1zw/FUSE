@@ -1,7 +1,7 @@
 from __future__ import annotations
 import argparse
 from pathlib import Path
-from morphaccel.eval_tools import write_eval_tool_template
+from fuse.eval_tools import write_eval_tool_template
 
 def main() -> None:
     parser = argparse.ArgumentParser()

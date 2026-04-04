@@ -15,7 +15,7 @@ from .cpp_bridge import CppSimulatorBridge
 from .hardware import HardwareBenchmarkSuite
 from .ir import RuntimeTask, TaskGraph
 from .serialization import ScenarioSerializer
-from .sim.simulator import CYCLES_PER_MS, MorphAccelSimulator, SimulationConfig
+from .sim.simulator import CYCLES_PER_MS, FuseSimulator, SimulationConfig
 from .workloads import build_aes128_task, build_mlp_path_task, build_resnet_task, build_transformer_block_task, build_vgg16_like_task
 STAGE_ORDER = {'raw_input': 0, 'preprocessed': 1, 'task_graph': 2, 'execution_state': 3, 'final_output': 4}
 SCENARIO_ALIASES = {'llm_poison_defense': {'llm_poison_defense', 'llm_training_defense', 'poison_defense', 'training_poisoning', 'large_model_poison_defense', 'llm_small_dataset', 'llm_training_small', 'open_model_training'}, 'autonomous_vision': {'autonomous_vision', 'vision_detection', 'autonomous_driving', 'auto_driving', 'driving_vision', 'image_dataset', 'cifar10', 'imagenette', 'vision_eval'}, 'wearable_analytics': {'wearable_analytics', 'smart_wearable', 'wearable', 'wearable_data_analysis', 'medical_csv', 'medical_tabular', 'tabular_medical'}}
@@ -57,7 +57,7 @@ class BaseScenario:
             runtime_tasks.append(RuntimeTask(runtime_id=f'{graph.task_id}_rt', task_graph=graph, arrival_cycle=int(idx * 0.15 * CYCLES_PER_MS)))
         return runtime_tasks
 
-    def run(self, scene_dir: Path, output_dir: Path, mode: str='morphaccel', engine: str='py', cpp: CppSimulatorBridge | None=None) -> ScenarioArtifacts:
+    def run(self, scene_dir: Path, output_dir: Path, mode: str='fuse', engine: str='py', cpp: CppSimulatorBridge | None=None) -> ScenarioArtifacts:
         mode = normalize_mode(mode)
         samples = self.discover(scene_dir)
         if not samples:
@@ -88,7 +88,7 @@ class BaseScenario:
             device = 'cuda:0'
             suite = HardwareBenchmarkSuite(device=device, warmup=2, repeat=6)
             return suite.run_task_graphs(graphs, runtime_tasks, output_dir=output_dir / 'gpu_artifacts')
-        result = MorphAccelSimulator(config=SimulationConfig(mode=mode)).run(runtime_tasks, microfragments)
+        result = FuseSimulator(config=SimulationConfig(mode=mode)).run(runtime_tasks, microfragments)
         return (result, pd.DataFrame(result.traces.get('events', [])))
 
     def _build_journey(self, samples: Sequence[ScenarioSample], preprocessed: pd.DataFrame, tables, metrics: Dict[str, Any], outputs: pd.DataFrame) -> pd.DataFrame:
@@ -354,7 +354,7 @@ class WearableAnalyticsScenario(BaseScenario):
 
 class ScenarioSuite:
 
-    def __init__(self, mode: str='morphaccel', engine: str='py'):
+    def __init__(self, mode: str='fuse', engine: str='py'):
         self.mode = normalize_mode(mode)
         self.engine = engine
         self.project_root = Path(__file__).resolve().parents[2]

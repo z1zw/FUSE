@@ -13,6 +13,15 @@ from .scheduler import RuntimeMicro, TaskAwareRuntimeScheduler
 CYCLES_PER_MS = 1000000
 
 @dataclass
+class PathCacheEntry:
+    path_id: str
+    context: object
+    created_cycle: int
+    last_access_cycle: int
+    template_family: str
+    reuse_count: int
+
+@dataclass
 class SimulationConfig:
     rfu_count: int = 16
     fvm_capacity_bytes: int = 8 * 1024 * 1024
@@ -22,10 +31,10 @@ class SimulationConfig:
     base_switch_cycles: int = 2300
     freshness_window_cycles: int = 5000000
     memory_bandwidth_bytes_per_cycle: int = 64
-    mode: str = 'morphaccel'
+    mode: str = 'fuse'
     task_specific_speedup: Dict[str, float] = field(default_factory=lambda: {'ZKP': 1.0, 'CNN': 1.0, 'AES': 1.0})
 
-class MorphAccelSimulator:
+class FuseSimulator:
 
     def __init__(self, config: SimulationConfig | None=None):
         self.config = config or SimulationConfig()
@@ -35,9 +44,10 @@ class MorphAccelSimulator:
         self.lrc = LightweightReconfigurationController(prefetch_depth=self.config.prefetch_depth, base_switch_cycles=self.config.base_switch_cycles)
         self.scheduler = TaskAwareRuntimeScheduler()
         self.trace_events: List[Dict[str, Any]] = []
+        self.path_cache: Dict[str, PathCacheEntry] = {}
 
     def _reuse_enabled(self) -> bool:
-        return self.config.mode in {'morphaccel', 'secure_ct'} or self.config.mode.startswith('secure_elastic')
+        return self.config.mode in {'fuse', 'secure_ct'} or self.config.mode.startswith('secure_elastic')
 
     def _baseline_speed_factor(self, task_type: str) -> float:
         factors = {'static_zkp': {'ZKP': 1.05, 'CNN': 0.92, 'AES': 0.92}, 'eyeriss': {'ZKP': 0.9, 'CNN': 1.08, 'AES': 0.9}, 'openaes': {'ZKP': 0.94, 'CNN': 0.94, 'AES': 1.03}, 'gpu_tensor': {'ZKP': 0.96, 'CNN': 1.12, 'AES': 0.97}, 'multicore': {'ZKP': 0.98, 'CNN': 0.98, 'AES': 0.98}}
@@ -74,7 +84,7 @@ class MorphAccelSimulator:
                 node.template_prefetched = meta['template_prefetched']
                 finish = rfu.assign(node.base_micro, clock, duration)
                 heappush(running_heap, (finish, runtime_micro_id, rfu.rfu_id))
-                self.trace_events.append({'event': 'dispatch', 'cycle': clock, 'finish_cycle': finish, 'runtime_micro_id': runtime_micro_id, 'task_runtime_id': node.task_runtime_id, 'task_type': node.base_micro.task_type, 'template_family': node.base_micro.template_family, 'reused_result': meta['reused_result'], 'structural_reuse': meta['structural_reuse'], 'switch_cycles': meta['switch_cycles'], 'rfu_id': rfu.rfu_id})
+                self.trace_events.append({'event': 'dispatch', 'cycle': clock, 'finish_cycle': finish, 'runtime_micro_id': runtime_micro_id, 'task_runtime_id': node.task_runtime_id, 'task_type': node.base_micro.task_type, 'template_family': node.base_micro.template_family, 'reused_result': meta['reused_result'], 'structural_reuse': meta['structural_reuse'], 'switch_cycles': meta['switch_cycles'], 'path_id': node.base_micro.path_id, 'path_reuse_count': node.base_micro.path_reuse_count, 'rfu_id': rfu.rfu_id})
                 if node.template_prefetched:
                     self.scheduler.prefetch_earliness_cycles.append(self.config.base_switch_cycles)
             if running_heap:
@@ -87,12 +97,14 @@ class MorphAccelSimulator:
                     node = self.scheduler.runtime_micros[runtime_micro_id]
                     self.scheduler.finish(runtime_micro_id, finish_cycle)
                     self.fvm.write(node.base_micro, finish_cycle)
+                    if node.base_micro.path_id:
+                        self.path_cache[node.base_micro.path_id] = PathCacheEntry(path_id=node.base_micro.path_id, context=node.base_micro.context, created_cycle=finish_cycle, last_access_cycle=finish_cycle, template_family=node.base_micro.template_family, reuse_count=node.base_micro.path_reuse_count)
                     for succ_id in node.succs:
                         succ = self.scheduler.runtime_micros[succ_id]
                         self.lrc.prefetch(succ.base_micro.template_family)
                     if self.scheduler.completed_for_task(node.task_runtime_id):
                         completed_tasks[node.task_runtime_id] = self.scheduler.task_finish_cycle(node.task_runtime_id)
-                    self.trace_events.append({'event': 'complete', 'cycle': finish_cycle, 'runtime_micro_id': runtime_micro_id, 'task_runtime_id': node.task_runtime_id, 'task_type': node.base_micro.task_type, 'rfu_id': rfu_id})
+                    self.trace_events.append({'event': 'complete', 'cycle': finish_cycle, 'runtime_micro_id': runtime_micro_id, 'task_runtime_id': node.task_runtime_id, 'task_type': node.base_micro.task_type, 'path_id': node.base_micro.path_id, 'path_reuse_count': node.base_micro.path_reuse_count, 'rfu_id': rfu_id})
             else:
                 next_arrival = arrivals[arrival_index].arrival_cycle if arrival_index < len(arrivals) else None
                 if next_arrival is None:
@@ -131,6 +143,12 @@ class MorphAccelSimulator:
         if micro.context.layout in {'tile', 'block', 'state4x4', 'nchw'}:
             score += 1.0
             self.scheduler.ready_match_stats['kappa_key'] += 1
+        if micro.path_id:
+            path_entry = self.path_cache.get(micro.path_id)
+            if path_entry is not None and cycle - path_entry.created_cycle <= self.config.freshness_window_cycles:
+                adapt_cost = micro.context.adapt_cost(path_entry.context)
+                if adapt_cost is not None:
+                    score += max(1.0, 4.0 + min(max(micro.path_reuse_count, 1), 6) - adapt_cost)
         return score
 
     def _execution_duration(self, node: RuntimeMicro, rfu, cycle: int) -> Tuple[int, Dict[str, bool]]:
@@ -143,6 +161,10 @@ class MorphAccelSimulator:
         structural_reuse = False
         template_prefetched = micro.template_family in self.lrc.prefetch_queue and self.config.mode != 'secure_elastic_no_prefetch'
         cache_entry = None
+        path_entry = self.path_cache.get(micro.path_id) if micro.path_id else None
+        path_adapt_cost = None
+        if path_entry is not None and cycle - path_entry.created_cycle <= self.config.freshness_window_cycles:
+            path_adapt_cost = micro.context.adapt_cost(path_entry.context)
         if self.config.mode != 'degraded' and (not self.lrc.blocked(micro.semantic_hash, cycle)):
             cache_entry = self.fvm.lookup(micro.semantic_hash, cycle, self.config.freshness_window_cycles)
         allow_result_reuse = self._reuse_enabled()
@@ -150,7 +172,7 @@ class MorphAccelSimulator:
             allow_result_reuse = False
         if cache_entry is not None and allow_result_reuse:
             reused_result = self.config.mode != 'secure_ct'
-            if self.config.mode == 'morphaccel':
+            if self.config.mode == 'fuse':
                 base_cycles = 1
                 mem_cycles = 1
             elif self.config.mode == 'secure_ct':
@@ -164,6 +186,11 @@ class MorphAccelSimulator:
                 mem_cycles = max(2, mem_cycles // 3 + 1)
         else:
             self.lrc.negative_probe(micro.semantic_hash, cycle + max(1, self.config.base_switch_cycles // 2))
+        if (not reused_result) and path_entry is not None and path_adapt_cost is not None:
+            reuse_bonus = max(1, min(max(micro.path_reuse_count, path_entry.reuse_count, 1), 6) - path_adapt_cost + 1)
+            base_cycles = max(1, base_cycles - reuse_bonus)
+            mem_cycles = max(1, mem_cycles - max(0, reuse_bonus - 1)) if mem_cycles else 0
+            structural_reuse = True
         if self.config.mode == 'degraded':
             switch_cycles = self.config.base_switch_cycles
         elif self.config.mode == 'task_specific':
@@ -190,6 +217,8 @@ class MorphAccelSimulator:
             switch_cycles = self.lrc.switch_cost(rfu.loaded_template, micro.template_family, prefetched=template_prefetched)
             if switch_cycles == 0 and rfu.loaded_template == micro.template_family:
                 structural_reuse = True
+        if structural_reuse and path_entry is not None and path_adapt_cost is not None:
+            switch_cycles = min(switch_cycles, max(0, self.config.base_switch_cycles // max(4, micro.path_reuse_count + 4) + path_adapt_cost))
         if self.config.mode in secure_elastic_modes:
             switch_cycles = max(1, switch_cycles // 2) if switch_cycles else 0
             if self.config.mode == 'secure_elastic_no_pinning':
@@ -226,6 +255,9 @@ class MorphAccelSimulator:
         utilization = self.rfus.utilization(makespan)
         energy = self._estimate_energy(makespan)
         metrics = {'mode': self.config.mode, 'makespan_cycles': makespan, 'makespan_ms': makespan / CYCLES_PER_MS, 'dispatches': dispatches, 'result_reuse_hits': result_reuse, 'structural_reuse_hits': structural_reuse, 'result_reuse_rate': result_reuse / dispatches if dispatches else 0.0, 'structural_reuse_rate': structural_reuse / dispatches if dispatches else 0.0, 'switch_cycles_total': switch_cycles_total, 'task_latency_ms': per_task_latencies_ms, 'task_type_mean_latency_ms': task_type_mean_latency_ms, 'rfu_utilization': utilization, 'energy_nj': energy}
+        path_events = [e for e in events if e['event'] == 'dispatch' and e.get('path_id')]
+        metrics['representative_path_count'] = float(len({e['path_id'] for e in path_events})) if path_events else 0.0
+        metrics['representative_path_reuse_rate'] = sum((1 for e in path_events if float(e.get('path_reuse_count', 0) or 0) > 1)) / len(path_events) if path_events else 0.0
         metrics.update(self.fvm.stats())
         metrics.update(self.lrc.stats())
         metrics.update(self.scheduler.stats())
@@ -261,4 +293,4 @@ class MorphAccelSimulator:
         scheduling_nj = self.scheduler.schedule_decisions * scheduling_coeff + self.lrc.switch_events * switch_coeff
         static_nj = makespan * static_coeff * self.config.rfu_count
         return compute_nj + fvm_nj + scheduling_nj + static_nj
-FUSESimulator = MorphAccelSimulator
+FUSESimulator = FuseSimulator

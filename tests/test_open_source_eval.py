@@ -1,5 +1,5 @@
 from pathlib import Path
-from morphaccel.open_source_eval import write_cacti_config, write_dramsim3_trace
+from fuse.open_source_eval import write_cacti_config, write_dramsim3_trace
 
 def test_write_dramsim3_trace(tmp_path: Path) -> None:
     trace_path = tmp_path / 'probe.trace'

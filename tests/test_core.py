@@ -1,17 +1,18 @@
 from pathlib import Path
 import json
-import shutil
 import pytest
-from morphaccel.branding import ACCELERATOR_NAME
-from morphaccel.benchmarks import BenchmarkSuite
-from morphaccel.energy_benchmarks import EnergyBenchmarkSuite
-from morphaccel.eval_tools import EvaluationToolkit
-from morphaccel.hardware import HardwareBenchmarkSuite
-from morphaccel.cpp_bridge import CppSimulatorBridge
-from morphaccel.normalization import Normalizer
-from morphaccel.ir import ContextKey, Expr, Fragment, InputRef
-from morphaccel.reuse import MicrofragmentDecomposer
-from morphaccel.workloads import build_aes128_task, build_aes256_task, build_groth16_like_task, build_resnet_task, build_vgg16_like_task
+from fuse.branding import ACCELERATOR_NAME
+from fuse.benchmarks import BenchmarkSuite
+from fuse.energy_benchmarks import EnergyBenchmarkSuite
+from fuse.eval_tools import EvaluationToolkit
+from fuse.hardware import HardwareBenchmarkSuite
+from fuse.cpp_bridge import CppSimulatorBridge
+from fuse.sim.simulator import FuseSimulator, SimulationConfig
+from fuse.normalization import Normalizer
+from fuse.ir import ContextKey, Expr, Fragment, InputRef, RuntimeTask, TaskGraph
+from fuse.reuse import MicrofragmentDecomposer
+from fuse.workloads import build_aes128_task, build_aes256_task, build_groth16_like_task, build_resnet_task, build_vgg16_like_task
+from conftest import has_cpp_toolchain
 
 def _assert_frame_numeric_alignment(py_df, cpp_df, keys, numeric_cols, *, rel=0.35, abs_tol=1e-06):
     py_view = py_df.sort_values(keys).reset_index(drop=True)
@@ -34,26 +35,50 @@ def test_decompose_produces_microfragments():
     result = MicrofragmentDecomposer().decompose_tasks(tasks)
     assert len(result.microfragments) > 0
     assert len(result.representative_paths) > 0
+    assert any((micro.path_id for micro in result.microfragments))
 
 def test_workload_graphs_are_dags():
     for task in [build_groth16_like_task(2048, 2, 'zkp2'), build_vgg16_like_task(1, 'cnn2'), build_resnet_task('resnet101', 1, 'resnet2'), build_aes128_task(1024, 'aes2'), build_aes256_task(1024, 'aes256_2')]:
         task.validate()
 
+def test_context_key_allows_cross_domain_structural_adaptation():
+    lhs = ContextKey('R', 'fp16', 'tile', tile=(16, 16))
+    rhs = ContextKey('Zp', 'field255', 'tile', tile=(16, 16))
+    assert lhs.adapt_cost(rhs) is not None
+
+def test_simulator_consumes_representative_paths_for_cross_domain_reuse():
+    task_a = TaskGraph('task_a', 'CNN', 'R')
+    frag_a = Fragment('frag_a', 'CNN', 'IT', Expr.build('matmul_tile', InputRef('x_a', shape=(16, 16), dtype='fp16'), InputRef('w_a', shape=(16, 16), dtype='fp16'), template_family='linear_map'), ContextKey('R', 'fp16', 'tile', tile=(16, 16)), estimated_ops=256, estimated_bytes=512, template_family='linear_map', metadata={'micro_ops': ['matmul_tile']})
+    task_a.add_fragment(frag_a)
+    task_a.set_outputs(['frag_a'])
+    task_b = TaskGraph('task_b', 'ZKP', 'Zp')
+    frag_b = Fragment('frag_b', 'ZKP', 'IT', Expr.build('matmul_tile', InputRef('x_b', shape=(16, 16), dtype='field255'), InputRef('w_b', shape=(16, 16), dtype='field255'), template_family='linear_map'), ContextKey('Zp', 'field255', 'tile', tile=(16, 16)), estimated_ops=256, estimated_bytes=512, template_family='linear_map', metadata={'micro_ops': ['matmul_tile']})
+    task_b.add_fragment(frag_b)
+    task_b.set_outputs(['frag_b'])
+    decomposition = MicrofragmentDecomposer().decompose_tasks([task_a, task_b])
+    assert {micro.path_reuse_count for micro in decomposition.microfragments if micro.path_id}
+    runtime_tasks = [RuntimeTask(runtime_id='task_a_rt', task_graph=task_a, arrival_cycle=0), RuntimeTask(runtime_id='task_b_rt', task_graph=task_b, arrival_cycle=100)]
+    result = FuseSimulator(config=SimulationConfig(mode='fuse')).run(runtime_tasks, decomposition.microfragments)
+    dispatches = [event for event in result.traces['events'] if event['event'] == 'dispatch']
+    assert any((event.get('path_id') for event in dispatches))
+    assert any((event.get('structural_reuse') and not event.get('reused_result') for event in dispatches))
+    assert float(result.metrics['representative_path_reuse_rate']) > 0.0
+
 def test_cpp_bridge_smoke(tmp_path):
-    if shutil.which('g++') is None:
-        pytest.skip('g++ is not available in this environment')
+    if not has_cpp_toolchain():
+        pytest.skip('no supported C++ toolchain is available in this environment')
     root = Path(__file__).resolve().parents[1]
     bridge = CppSimulatorBridge(root)
     graph = build_aes128_task(1024, 'aes_cpp')
     runtime_tasks = BenchmarkSuite(engine='cpp')._runtime_tasks(graph, 1)
-    result = bridge.run([graph], runtime_tasks, mode='morphaccel', scenario_name='smoke', out_dir=tmp_path)
+    result = bridge.run([graph], runtime_tasks, mode='fuse', scenario_name='smoke', out_dir=tmp_path)
     assert float(result.metrics['makespan_ms']) > 0.0
     assert result.events.shape[0] > 0
 
-@pytest.mark.parametrize('mode', ['morphaccel', 'secure_ct', 'secure_elastic', 'secure_elastic_no_bucket', 'secure_elastic_no_pinning', 'secure_elastic_no_mask', 'secure_elastic_no_epoch', 'secure_elastic_no_prefetch', 'multicore'])
+@pytest.mark.parametrize('mode', ['fuse', 'secure_ct', 'secure_elastic', 'secure_elastic_no_bucket', 'secure_elastic_no_pinning', 'secure_elastic_no_mask', 'secure_elastic_no_epoch', 'secure_elastic_no_prefetch', 'multicore'])
 def test_cpp_bridge_aligns_with_python_contract(tmp_path, mode):
-    if shutil.which('g++') is None:
-        pytest.skip('g++ is not available in this environment')
+    if not has_cpp_toolchain():
+        pytest.skip('no supported C++ toolchain is available in this environment')
     root = Path(__file__).resolve().parents[1]
     graph = build_aes128_task(1024, 'aes_cpp_contract')
     runtime_tasks = BenchmarkSuite(engine='py')._runtime_tasks(graph, 1)
@@ -76,8 +101,8 @@ def test_benchmark_suite_smoke(tmp_path):
     assert not artifacts.dataframes['fig4_latency'].empty
 
 def test_benchmark_suite_cpp_run_smoke(tmp_path):
-    if shutil.which('g++') is None:
-        pytest.skip('g++ is not available in this environment')
+    if not has_cpp_toolchain():
+        pytest.skip('no supported C++ toolchain is available in this environment')
     suite = BenchmarkSuite(engine='cpp')
     artifacts = suite.run(tmp_path)
     assert (tmp_path / 'fig6_mixed.csv').exists()
@@ -91,8 +116,8 @@ def test_benchmark_suite_cpp_run_smoke(tmp_path):
     assert 'FPGA' not in set(artifacts.dataframes['fig12_reconfig']['platform'].astype(str))
 
 def test_benchmark_suite_cpp_mixed_trace_aligns_with_python(tmp_path):
-    if shutil.which('g++') is None:
-        pytest.skip('g++ is not available in this environment')
+    if not has_cpp_toolchain():
+        pytest.skip('no supported C++ toolchain is available in this environment')
     py_suite = BenchmarkSuite(engine='py')
     cpp_suite = BenchmarkSuite(engine='cpp')
     py_raw_dir = tmp_path / 'py_raw'

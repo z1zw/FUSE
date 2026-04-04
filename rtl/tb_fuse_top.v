@@ -1,4 +1,4 @@
-module tb_morphaccel_top;
+module tb_fuse_top;
 reg clk;
 reg rst;
 reg task_valid;
@@ -9,7 +9,7 @@ reg [31:0] task_hash;
 reg [127:0] task_data;
 wire task_ready;
 wire done;
-morphaccel_top dut(
+fuse_top dut(
     .clk(clk),
     .rst(rst),
     .task_valid(task_valid),
