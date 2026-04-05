@@ -33,4 +33,4 @@ pytest -q
 
 ## Review and Reproduction Notes
 
-To facilitate paper review and code reproduction, we additionally provide evaluation results collected on an NVIDIA RTX 4090 and a 16-vCPU Intel(R) Xeon(R) Gold 6430 platform. This repository is available at [z1zw/FUSE](https://github.com/z1zw/FUSE). The released artifacts also rely on open-source infrastructure, including [DRAMSim3](https://github.com/umd-memsys/DRAMsim3) for memory-system evaluation and [OpenROAD-flow-scripts](https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts) for physical-design-oriented reporting and implementation analysis.
+To facilitate paper review and code reproduction, we additionally provide evaluation results collected on an NVIDIA RTX 4090 and a 16-vCPU Intel(R) Xeon(R) Gold 6430 platform. The released artifacts also rely on open-source infrastructure, including [DRAMSim3](https://github.com/umd-memsys/DRAMsim3) for memory-system evaluation and [OpenROAD-flow-scripts](https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts) for physical-design-oriented reporting and implementation analysis.
