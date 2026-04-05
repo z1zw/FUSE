@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from .branding import ACCELERATOR_NAME
 PALETTE = {'baseline': '#34495E', 'morph': '#E76F51', 'accent': '#2878B5', 'green': '#2A9D8F', 'gold': '#F4A261', 'teal': '#1B998B', 'purple': '#7A5CFA', 'sand': '#E9C46A', 'cyan': '#48BFE3', 'gray': '#7D8597', 'rose': '#D1495B', 'indigo': '#5A189A', 'mint': '#80ED99', 'soft_bg': '#F5F7FB', 'panel_bg': '#EEF3FB', 'panel_alt': '#FFF6EC'}
-FIGURE_AUDIT = {'fig4_latency': {'title': 'Fig. 4. Latency Against Domain-Specific Baselines', 'x_label': 'Input size or batch size', 'y_label': 'Latency (ms) / latency ratio', 'legend': ['Baseline', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['morph'], PALETTE['green'], PALETTE['gold']], 'layout': '1x4 panels'}, 'fig5_energy': {'title': 'Fig. 5. Energy Efficiency Across Baselines', 'x_label': 'Platform', 'y_label': 'Normalized energy efficiency (x)', 'legend': [ACCELERATOR_NAME, 'Software and hardware baselines'], 'colors': [PALETTE['baseline'], PALETTE['accent'], PALETTE['green'], PALETTE['morph'], PALETTE['purple'], PALETTE['teal'], PALETTE['gold']], 'layout': '1x3 panels'}, 'fig6_mixed': {'title': 'Fig. 6. Mixed-Trace End-to-End Performance', 'x_label': 'Interleave window (ms)', 'y_label': 'Makespan (ms), RFU utilization (%)', 'legend': ['Multi-core', ACCELERATOR_NAME, 'Multi-core utilization', f'{ACCELERATOR_NAME} utilization'], 'colors': [PALETTE['baseline'], PALETTE['morph'], PALETTE['accent'], PALETTE['green']], 'layout': 'dual-axis single panel'}, 'fig7_area_power': {'title': 'Fig. 7. Area and Power Composition', 'x_label': 'Share (%)', 'y_label': 'Module', 'legend': ['FVM', 'RFU', 'TARS', 'Others'], 'colors': [PALETTE['accent'], PALETTE['morph'], PALETTE['green'], PALETTE['gold']], 'layout': '1x2 panels'}, 'fig8_reuse': {'title': 'Fig. 8. Reuse Decomposition and RFU Fan-Out', 'x_label': 'Share (%) or reuse class', 'y_label': 'Share (%)', 'legend': ['Reuse composition', 'Cross-task fan-out', 'Template pool composition'], 'colors': [PALETTE['accent'], PALETTE['gold'], PALETTE['green'], PALETTE['morph'], PALETTE['sand']], 'layout': '1x3 panels'}, 'fig9_ablation': {'title': 'Fig. 9. Ablation Against a Degraded Design', 'x_label': 'Latency (ms) or throughput (ops/ms)', 'y_label': 'Configuration', 'legend': ['Degraded', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['morph']], 'layout': '1x3 panels'}, 'fig10_memory': {'title': 'Fig. 10. On-Chip Residency and Redundant Accesses', 'x_label': 'Batch size', 'y_label': 'Normalized value (ratio)', 'legend': ['Fully Separated', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['morph']], 'layout': '2x4 panels'}, 'fig11': {'title': 'Fig. 11. Cross-Task Scheduling Overhead Reduction', 'x_label': 'Top row: scheduling and reduction. Bottom row: state inheritance paths.', 'y_label': 'Match ratio (%), latency (ms), reduction (%), or schematic annotation', 'legend': ['ZKP task', 'CNN task', 'AES task', 'Shared state', 'Completed', 'Buffer', 'Cache'], 'colors': [PALETTE['accent'], PALETTE['morph'], PALETTE['green'], PALETTE['gold']], 'layout': '2x3 panels'}, 'fig12_reconfig': {'title': 'Fig. 12. Reconfiguration Latency, Energy, and Recovery', 'x_label': 'Scenario or summary metric', 'y_label': 'Switch latency (ms), energy ratio (%), recovery time (ms)', 'legend': ['CPU', 'GPU', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['gold'], PALETTE['morph'], PALETTE['green'], PALETTE['accent'], PALETTE['purple']], 'layout': '1x2 panels'}}
+FIGURE_AUDIT = {'fig4_latency': {'title': 'Fig. 4. Latency Against Domain-Specific Baselines', 'x_label': 'Input size or batch size', 'y_label': 'Latency (ms) / latency ratio', 'legend': ['Baseline', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['morph'], PALETTE['green'], PALETTE['gold']], 'layout': '1x4 panels'}, 'fig5_energy': {'title': 'Fig. 5. Energy Efficiency Across Baselines', 'x_label': 'Platform', 'y_label': 'Normalized energy efficiency (x)', 'legend': [ACCELERATOR_NAME, 'Software and hardware baselines'], 'colors': [PALETTE['baseline'], PALETTE['accent'], PALETTE['green'], PALETTE['morph'], PALETTE['purple'], PALETTE['teal'], PALETTE['gold']], 'layout': '1x3 panels'}, 'fig6_mixed': {'title': 'Fig. 6. Mixed-Trace Makespan and Redundant Reads', 'x_label': 'Interleave window (ms)', 'y_label': 'Makespan (ms), redundant reads', 'legend': ['Multi-core', ACCELERATOR_NAME, 'Multi-core redundant reads', f'{ACCELERATOR_NAME} redundant reads'], 'colors': [PALETTE['baseline'], PALETTE['morph'], PALETTE['accent'], PALETTE['green']], 'layout': 'dual-axis single panel'}, 'fig7_area_power': {'title': 'Fig. 7. Physical Cost Breakdown from OpenROAD and CACTI', 'x_label': 'Breakdown panel', 'y_label': 'Area / power / energy / timing', 'legend': ['Logic area', 'Logic power', 'Memory macros', 'Timing and utilization'], 'colors': [PALETTE['accent'], PALETTE['morph'], PALETTE['green'], PALETTE['gold'], PALETTE['teal'], PALETTE['sand']], 'layout': '2x2 panels'}, 'fig8_reuse': {'title': 'Fig. 8. Reuse Decomposition and RFU Fan-Out', 'x_label': 'Share (%) or reuse class', 'y_label': 'Share (%)', 'legend': ['Reuse composition', 'Cross-task fan-out', 'Template pool composition'], 'colors': [PALETTE['accent'], PALETTE['gold'], PALETTE['green'], PALETTE['morph'], PALETTE['sand']], 'layout': '1x3 panels'}, 'fig9_ablation': {'title': 'Fig. 9. Ablation Against a Degraded Design', 'x_label': 'Latency (ms) or throughput (ops/ms)', 'y_label': 'Configuration', 'legend': ['Degraded', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['morph']], 'layout': '1x3 panels'}, 'fig10_memory': {'title': 'Fig. 10. On-Chip Residency and Redundant Accesses', 'x_label': 'Batch size', 'y_label': 'Normalized value (ratio)', 'legend': ['Fully Separated', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['morph']], 'layout': '2x4 panels'}, 'fig11': {'title': 'Fig. 11. Cross-Task Scheduling and Reuse Quality', 'x_label': 'Scheduling quality and reduction metrics', 'y_label': 'Ratio, latency, or absolute count', 'legend': ['Fragment matching', 'Platform comparison', 'Reduction summary', 'Transition annotation'], 'colors': [PALETTE['accent'], PALETTE['morph'], PALETTE['green'], PALETTE['gold']], 'layout': '2x2 panels'}, 'fig12_reconfig': {'title': 'Fig. 12. Transition Overhead, Energy, and Recovery', 'x_label': 'Scenario', 'y_label': 'Transition overhead (ms), energy ratio (%), recovery time (ms)', 'legend': ['CPU', 'GPU', ACCELERATOR_NAME], 'colors': [PALETTE['baseline'], PALETTE['gold'], PALETTE['morph'], PALETTE['green'], PALETTE['accent'], PALETTE['purple']], 'layout': '2x2 panels'}}
 
 def use_style() -> None:
     mpl.rcParams.update({'font.family': 'DejaVu Sans', 'mathtext.fontset': 'dejavusans', 'font.size': 12.0, 'axes.titlesize': 14.0, 'axes.labelsize': 11.8, 'axes.titleweight': 'semibold', 'axes.spines.top': False, 'axes.spines.right': False, 'axes.grid': True, 'grid.alpha': 0.18, 'grid.linestyle': '--', 'legend.frameon': False, 'figure.facecolor': 'white', 'axes.facecolor': PALETTE['soft_bg'], 'savefig.facecolor': 'white', 'savefig.bbox': 'tight', 'axes.axisbelow': True, 'xtick.labelsize': 10.8, 'ytick.labelsize': 10.8})
@@ -22,15 +22,14 @@ def _label_bars(ax, bars, fmt: str, *, dy: float=0.0) -> None:
         value = bar.get_height()
         ax.text(bar.get_x() + bar.get_width() / 2.0, value + dy, fmt.format(value), ha='center', va='bottom', fontsize=9)
 
-def _circle_node(ax, x: float, y: float, label: str, color: str, *, radius: float=0.12, text_color: str='white') -> None:
-    node = plt.Circle((x, y), radius, color=color, ec='#202124', lw=1.6)
-    ax.add_patch(node)
-    ax.text(x, y, label, ha='center', va='center', fontsize=10, color=text_color, weight='semibold')
+def _metric_alias(frame: pd.DataFrame, canonical: str, *aliases: str) -> pd.DataFrame:
+    return frame[frame['metric'].isin({canonical, *aliases})].copy()
 
-def _edge(ax, x0: float, y0: float, x1: float, y1: float, *, label: str | None=None, dashed: bool=False) -> None:
-    ax.annotate('', xy=(x1, y1), xytext=(x0, y0), arrowprops=dict(arrowstyle='->', lw=1.8, color='#202124', linestyle='--' if dashed else '-'))
-    if label:
-        ax.text((x0 + x1) / 2.0, (y0 + y1) / 2.0 + 0.05, label, ha='center', va='center', fontsize=8.8, weight='semibold')
+def _transition_metric(frame: pd.DataFrame) -> pd.DataFrame:
+    part = _metric_alias(frame, 'Transition Overhead (ms)', 'Switch Latency (ms)')
+    if not part.empty:
+        part.loc[:, 'metric'] = 'Transition Overhead (ms)'
+    return part
 
 def plot_fig4(df: pd.DataFrame, out_dir: Path) -> None:
     use_style()
@@ -88,9 +87,9 @@ def plot_fig6(df: pd.DataFrame, out_dir: Path) -> None:
     ax1.set_xticks(x)
     ax1.set_xticklabels(df['window_ms'])
     ax2 = ax1.twinx()
-    ax2.plot(x, df['baseline_util'] * 100.0, color=PALETTE['accent'], marker='o', linewidth=2.0, label='Multi-core utilization')
-    ax2.plot(x, df['morph_util'] * 100.0, color=PALETTE['green'], marker='s', linewidth=2.0, label=f'{ACCELERATOR_NAME} utilization')
-    ax2.set_ylabel('RFU utilization (%)')
+    ax2.plot(x, df['baseline_redundant_reads'], color=PALETTE['accent'], marker='o', linewidth=2.0, label='Multi-core redundant reads')
+    ax2.plot(x, df['morph_redundant_reads'], color=PALETTE['green'], marker='s', linewidth=2.0, label=f'{ACCELERATOR_NAME} redundant reads')
+    ax2.set_ylabel('Redundant reads')
     lines1, labels1 = ax1.get_legend_handles_labels()
     lines2, labels2 = ax2.get_legend_handles_labels()
     ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left', ncol=2, fontsize=8)
@@ -99,14 +98,78 @@ def plot_fig6(df: pd.DataFrame, out_dir: Path) -> None:
 
 def plot_fig7(df: pd.DataFrame, out_dir: Path) -> None:
     use_style()
-    fig, axes = plt.subplots(1, 2, figsize=(11.8, 4.6))
-    for ax, category, title in zip(axes, ['area', 'power'], ['Area breakdown', 'Peak power breakdown']):
-        part = df[df['category'] == category].copy()
-        bars = ax.barh(part['module'], part['share'], color=[PALETTE['accent'], PALETTE['morph'], PALETTE['green'], PALETTE['gold']][:len(part)])
-        ax.set_xlabel('Share (%)')
-        ax.set_title(title)
-        for bar, value in zip(bars, part['share']):
-            ax.text(value + 0.6, bar.get_y() + bar.get_height() / 2.0, f'{value:.1f}%', va='center', fontsize=9)
+    fig, axes = plt.subplots(2, 2, figsize=(15.6, 9.2))
+    logic_area = df[df['category'] == 'logic_area'].copy()
+    logic_power = df[df['category'] == 'logic_power'].copy()
+    timing = df[df['category'] == 'timing'].copy()
+    probe = df[df['category'] == 'probe'].copy()
+    memory_area = df[df['category'] == 'memory_area'].copy()
+    memory_energy = df[df['category'] == 'memory_energy'].copy()
+    memory_leakage = df[df['category'] == 'memory_leakage'].copy()
+
+    ax = axes[0, 0]
+    ax.set_facecolor(PALETTE['panel_bg'])
+    if not logic_area.empty:
+        max_area = float(logic_area['value'].max())
+        bars = ax.bar(logic_area['module'], logic_area['value'], color=[PALETTE['accent']] * len(logic_area), width=0.62)
+        for bar, value in zip(bars, logic_area['value']):
+            ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(max_area * 0.02, 0.0002), f'{value:.4f} mm2', ha='center', va='bottom', fontsize=9)
+        ax.set_ylim(0.0, max_area * 1.16)
+    ax.set_title('(a) Logic footprint from OpenROAD')
+    ax.set_ylabel('Area (mm2)')
+    ax.tick_params(axis='x', rotation=10)
+
+    ax = axes[0, 1]
+    ax.set_facecolor(PALETTE['panel_alt'])
+    power_labels = logic_power['module'].tolist()
+    power_values = logic_power['value'].to_numpy()
+    bars = ax.bar(power_labels, power_values, color=[PALETTE['morph'], PALETTE['gold']][:len(power_labels)], width=0.58)
+    if len(power_values):
+        ax.set_ylim(0.0, float(power_values.max()) * 1.18 + 0.00001)
+    ax.set_ylabel('Power (W)')
+    ax.set_title('(b) Logic power split and timing headroom')
+    for bar, value in zip(bars, power_values):
+        ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(float(power_values.max()) * 0.03, 0.00002), f'{value:.4f} W', ha='center', va='bottom', fontsize=9)
+    if not timing.empty:
+        fmax = float(timing['value'].iloc[0])
+        util = float(probe['value'].iloc[0]) if not probe.empty else 0.0
+        ax.text(0.98, 0.95, f'Fmax: {fmax:.1f} MHz\nRFU util: {util:.3f}', transform=ax.transAxes, ha='right', va='top', fontsize=9.2, bbox=dict(boxstyle='round,pad=0.28', fc='white', ec='#B5C0D0'))
+
+    ax = axes[1, 0]
+    ax.set_facecolor(PALETTE['soft_bg'])
+    area_order = ['Feature buffer area', 'Fragment cache area', 'Micro-op buffer area']
+    area_part = memory_area.set_index('module').reindex(area_order).reset_index()
+    bars = ax.bar(area_part['module'], area_part['value'], color=[PALETTE['teal'], PALETTE['green'], PALETTE['sand']][:len(area_part)], width=0.58)
+    ax.set_title('(c) Memory macro area')
+    ax.set_ylabel('Area (mm2)')
+    ax.tick_params(axis='x', rotation=12)
+    for bar, value in zip(bars, area_part['value']):
+        ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(float(area_part['value'].max()) * 0.02, 0.2), f'{value:.2f}', ha='center', va='bottom', fontsize=9)
+
+    ax = axes[1, 1]
+    ax.set_facecolor('#F7F0FF')
+    leak_part = memory_leakage.copy()
+    leak_part['macro'] = leak_part['module'].str.replace(' leakage', '', regex=False)
+    energy_part = memory_energy.copy()
+    energy_part['macro'] = energy_part['module'].str.replace(' read energy', '', regex=False)
+    x = np.arange(len(leak_part))
+    width = 0.34
+    leak_bars = ax.bar(x - width / 2.0, leak_part['value'], width=width, color=PALETTE['purple'], label='Leakage (mW)')
+    ax.set_xticks(x)
+    ax.set_xticklabels(leak_part['macro'], rotation=12)
+    ax.set_ylabel('Leakage (mW)')
+    ax.set_title('(d) Memory energy and leakage')
+    ax2 = ax.twinx()
+    energy_bars = ax2.bar(x + width / 2.0, energy_part['value'], width=width, color=PALETTE['accent'], label='Read energy (nJ)')
+    ax2.set_ylabel('Read energy (nJ/access)')
+    for bar, value in zip(leak_bars, leak_part['value']):
+        ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(float(leak_part['value'].max()) * 0.02, 40.0), f'{value:.0f}', ha='center', va='bottom', fontsize=8.8)
+    for bar, value in zip(energy_bars, energy_part['value']):
+        ax2.text(bar.get_x() + bar.get_width() / 2.0, value + max(float(energy_part['value'].max()) * 0.03, 0.04), f'{value:.2f}', ha='center', va='bottom', fontsize=8.8)
+    handles1, labels1 = ax.get_legend_handles_labels()
+    handles2, labels2 = ax2.get_legend_handles_labels()
+    ax.legend(handles1 + handles2, labels1 + labels2, loc='upper right', fontsize=8.8)
+
     fig.suptitle(FIGURE_AUDIT['fig7_area_power']['title'], y=1.02, fontsize=15)
     _save(fig, out_dir / 'fig7_area_power.png')
 
@@ -220,131 +283,159 @@ def plot_fig10(df: pd.DataFrame, out_dir: Path) -> None:
 
 def plot_fig11(fig11a: pd.DataFrame, fig11b: pd.DataFrame, fig11c: pd.DataFrame, fig12: pd.DataFrame, out_dir: Path) -> None:
     use_style()
-    fig = plt.figure(figsize=(15.8, 10.6))
-    gs = fig.add_gridspec(2, 3, hspace=0.48, wspace=0.34)
-    axes = [fig.add_subplot(gs[row, col]) for row in range(2) for col in range(3)]
-    axes[0].set_facecolor(PALETTE['panel_bg'])
-    bars = axes[0].barh(fig11a['bucket'], fig11a['value'], color=[PALETTE['accent'], PALETTE['gold'], PALETTE['morph']], edgecolor='#22313F', linewidth=0.6)
-    axes[0].set_title('(a) TARS fragment scheduling', pad=8)
-    axes[0].set_xlabel('Fragment Match Ratio (%)')
-    axes[0].set_xlim(0.0, max(80.0, float(fig11a['value'].max()) * 1.18))
-    for bar, value in zip(bars, fig11a['value']):
-        axes[0].text(value + 1.2, bar.get_y() + bar.get_height() / 2.0, f'{value:.1f}%', va='center', fontsize=9)
-    axes[1].set_facecolor(PALETTE['panel_alt'])
-    lat = fig11b[fig11b['metric'] == 'Scheduling Latency (ms)']
-    idle = fig11b[fig11b['metric'] == 'Idle Ratio (%)']
-    x = np.arange(len(lat))
+    fig, axes = plt.subplots(2, 2, figsize=(15.4, 10.0))
+
+    ax = axes[0, 0]
+    ax.set_facecolor(PALETTE['panel_bg'])
+    order = ['Kappa-key', 'Template', 'Valid Fragments']
+    match_part = fig11a.set_index('bucket').reindex(order).reset_index()
+    bars = ax.barh(match_part['bucket'], match_part['value'], color=[PALETTE['accent'], PALETTE['gold'], PALETTE['morph']], edgecolor='#22313F', linewidth=0.6)
+    ax.set_title('(a) Fragment and template match quality')
+    ax.set_xlabel('Ratio (%)')
+    ax.set_xlim(0.0, 105.0)
+    for bar, value in zip(bars, match_part['value']):
+        ax.text(value + 1.0, bar.get_y() + bar.get_height() / 2.0, f'{value:.1f}%', va='center', fontsize=9)
+
+    ax = axes[0, 1]
+    ax.set_facecolor(PALETTE['panel_alt'])
+    sched = fig11b[fig11b['metric'] == 'Scheduling Latency (ms)'].copy()
+    idle = fig11b[fig11b['metric'] == 'Idle Ratio (%)'].copy()
+    x = np.arange(len(sched))
     width = 0.34
-    bars_lat = axes[1].bar(x - width / 2.0, lat['value'], width=width, color=PALETTE['accent'], edgecolor='#22313F', linewidth=0.6, label='Scheduling Latency (ms)')
-    axr = axes[1].twinx()
-    bars_idle = axr.bar(x + width / 2.0, idle['value'], width=width, color=PALETTE['gold'], edgecolor='#22313F', linewidth=0.6, label='Idle Ratio (%)')
-    axes[1].set_xticks(x)
-    axes[1].set_xticklabels(lat['platform'])
-    axes[1].set_title('(b) Task switch latency and idle ratio', pad=8)
-    axes[1].set_ylabel('Value')
-    axr.set_ylabel('')
-    for bar in bars_lat:
+    bars_sched = ax.bar(x - width / 2.0, sched['value'], width=width, color=PALETTE['accent'], label='Scheduling latency (ms)')
+    ax.set_ylabel('Scheduling latency (ms)')
+    ax.set_xticks(x)
+    ax.set_xticklabels(sched['platform'])
+    ax.set_title('(b) Scheduler latency and idle ratio')
+    ax2 = ax.twinx()
+    bars_idle = ax2.bar(x + width / 2.0, idle['value'], width=width, color=PALETTE['gold'], label='Idle ratio (%)')
+    ax2.set_ylabel('Idle ratio (%)')
+    for bar in bars_sched:
         value = bar.get_height()
-        axes[1].text(bar.get_x() + bar.get_width() / 2.0, value + max(0.08, value * 0.04), f'{value:.1f}', ha='center', va='bottom', fontsize=9)
+        ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(0.004, value * 0.05), f'{value:.3f}', ha='center', va='bottom', fontsize=8.8)
     for bar in bars_idle:
         value = bar.get_height()
-        axr.text(bar.get_x() + bar.get_width() / 2.0, value + max(0.5, value * 0.02), f'{value:.1f}%', ha='center', va='bottom', fontsize=9)
-    handles1, labels1 = axes[1].get_legend_handles_labels()
-    handles2, labels2 = axr.get_legend_handles_labels()
-    axes[1].legend(handles1 + handles2, labels1 + labels2, loc='upper left', fontsize=8.8)
-    axes[2].set_facecolor('#F7F0FF')
-    reduction_rows = [('Latency Reduction', 100.0 - float(fig11c[(fig11c['metric'] == 'Scheduling latency') & (fig11c['platform'] == ACCELERATOR_NAME)]['value'].iloc[0]), PALETTE['accent']), ('Idle Ratio Reduction', 100.0 - float(fig11c[(fig11c['metric'] == 'Idle ratio') & (fig11c['platform'] == ACCELERATOR_NAME)]['value'].iloc[0]), PALETTE['green']), ('Buffer Ops Reduction', 100.0 - float(fig11c[(fig11c['metric'] == 'Buffer ops') & (fig11c['platform'] == ACCELERATOR_NAME)]['value'].iloc[0]), PALETTE['morph'])]
-    labels = [row[0] for row in reduction_rows]
-    values = [row[1] for row in reduction_rows]
-    colors = [row[2] for row in reduction_rows]
-    bars = axes[2].barh(labels, values, color=colors, edgecolor='#22313F', linewidth=0.6)
-    axes[2].set_title('(c) Overall reduction summary', pad=8)
-    axes[2].set_xlabel('Reduction (%)')
-    axes[2].set_xlim(0.0, max(85.0, max(values) * 1.16))
-    for bar, value in zip(bars, values):
-        axes[2].text(value + 1.2, bar.get_y() + bar.get_height() / 2.0, f'{value:.1f}%', va='center', fontsize=9)
-    for ax in axes[3:]:
-        ax.set_xlim(0.0, 1.0)
-        ax.set_ylim(0.0, 1.0)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.grid(False)
-        ax.set_facecolor(PALETTE['soft_bg'])
-        for spine in ax.spines.values():
-            spine.set_visible(False)
-    zkp_cnn = fig12[(fig12['scenario'] == 'ZKP->CNN') & (fig12['platform'] == ACCELERATOR_NAME) & (fig12['metric'] == 'Switch Latency (ms)')]
-    cnn_aes = fig12[(fig12['scenario'] == 'CNN->AES') & (fig12['platform'] == ACCELERATOR_NAME) & (fig12['metric'] == 'Switch Latency (ms)')]
-    recovery_avg = fig12[(fig12['scenario'] == 'Avg') & (fig12['platform'] == ACCELERATOR_NAME) & (fig12['metric'] == 'Recovery Time (ms)')]
-    buffer_reduction = 100.0 - float(fig11c[(fig11c['metric'] == 'Buffer ops') & (fig11c['platform'] == ACCELERATOR_NAME)]['value'].iloc[0])
-    axes[3].set_title('(d) ZKP -> CNN switch', fontsize=12.5, weight='semibold')
-    _circle_node(axes[3], 0.18, 0.62, 'ZKP', PALETTE['gray'])
-    _circle_node(axes[3], 0.78, 0.62, 'CNN', PALETTE['green'])
-    _circle_node(axes[3], 0.48, 0.28, 'Shared\nState', PALETTE['purple'], text_color='white')
-    _edge(axes[3], 0.26, 0.55, 0.42, 0.34, dashed=True)
-    _edge(axes[3], 0.54, 0.34, 0.72, 0.55)
-    axes[3].text(0.5, 0.08, 'Prefetch: 2.1ms earlier', ha='center', va='center', fontsize=9.3, bbox=dict(boxstyle='round,pad=0.24', fc='#FFF6D8', ec='#404040'))
-    axes[4].set_title('(e) CNN -> AES switch', fontsize=12.5, weight='semibold')
-    _circle_node(axes[4], 0.18, 0.62, 'CNN', PALETTE['gray'])
-    _circle_node(axes[4], 0.78, 0.62, 'AES', PALETTE['morph'])
-    _circle_node(axes[4], 0.48, 0.28, 'Shared\nState', PALETTE['purple'], text_color='white')
-    _edge(axes[4], 0.26, 0.55, 0.42, 0.34, dashed=True)
-    _edge(axes[4], 0.54, 0.34, 0.72, 0.55)
-    axes[4].text(0.5, 0.08, 'Pipeline stalls: -28.7%', ha='center', va='center', fontsize=9.3, bbox=dict(boxstyle='round,pad=0.24', fc='#FFF6D8', ec='#404040'))
-    axes[5].set_title('(f) Full state inheritance', fontsize=12.5, weight='semibold')
-    _circle_node(axes[5], 0.2, 0.72, 'ZKP', PALETTE['accent'])
-    _circle_node(axes[5], 0.5, 0.82, 'CNN', PALETTE['green'])
-    _circle_node(axes[5], 0.8, 0.72, 'AES', PALETTE['morph'])
-    _circle_node(axes[5], 0.5, 0.46, 'State', PALETTE['purple'], radius=0.13)
-    _circle_node(axes[5], 0.32, 0.18, 'Buffer', PALETTE['gold'], radius=0.11, text_color='#202124')
-    _circle_node(axes[5], 0.68, 0.18, 'Cache', PALETTE['cyan'], radius=0.11, text_color='#202124')
-    _edge(axes[5], 0.27, 0.67, 0.44, 0.52, label='8.2%')
-    _edge(axes[5], 0.5, 0.74, 0.5, 0.59)
-    _edge(axes[5], 0.73, 0.67, 0.56, 0.52, label='6.7%')
-    _edge(axes[5], 0.44, 0.36, 0.36, 0.25)
-    _edge(axes[5], 0.56, 0.36, 0.64, 0.25)
-    axes[5].text(0.5, 0.06, f'Total buffer reduction: {buffer_reduction:.1f}%', ha='center', va='center', fontsize=9.3, bbox=dict(boxstyle='round,pad=0.24', fc='#D9F8DE', ec='#2E8B57'))
-    if not zkp_cnn.empty:
-        axes[3].text(0.18, 0.9, f"{float(zkp_cnn['value'].iloc[0]):.1f} ms", fontsize=8.8, color='#3D405B')
-    if not cnn_aes.empty:
-        axes[4].text(0.18, 0.9, f"{float(cnn_aes['value'].iloc[0]):.1f} ms", fontsize=8.8, color='#3D405B')
-    if not recovery_avg.empty:
-        axes[5].text(0.5, 0.92, f"Recovery < {float(recovery_avg['value'].iloc[0]):.2f} ms", ha='center', fontsize=8.8, color='#3D405B')
-    fig.legend(handles=[mpl.patches.Patch(facecolor=PALETTE['accent'], edgecolor='#202124', label='ZKP Task'), mpl.patches.Patch(facecolor=PALETTE['green'], edgecolor='#202124', label='CNN Task'), mpl.patches.Patch(facecolor=PALETTE['morph'], edgecolor='#202124', label='AES Task'), mpl.patches.Patch(facecolor=PALETTE['purple'], edgecolor='#202124', label='Shared State'), mpl.lines.Line2D([0], [0], color='#202124', linestyle='--', label='Completed'), mpl.patches.Patch(facecolor=PALETTE['gold'], edgecolor='#202124', label='Buffer'), mpl.patches.Patch(facecolor=PALETTE['cyan'], edgecolor='#202124', label='Cache')], loc='lower center', ncol=7, bbox_to_anchor=(0.5, -0.01), fontsize=9.2, columnspacing=1.4, handlelength=1.8)
-    fig.suptitle(FIGURE_AUDIT['fig11']['title'], y=0.98, fontsize=15)
+        ax2.text(bar.get_x() + bar.get_width() / 2.0, value + max(0.4, value * 0.01), f'{value:.1f}%', ha='center', va='bottom', fontsize=8.8)
+    handles1, labels1 = ax.get_legend_handles_labels()
+    handles2, labels2 = ax2.get_legend_handles_labels()
+    ax.legend(handles1 + handles2, labels1 + labels2, loc='upper left', fontsize=8.6)
+
+    ax = axes[1, 0]
+    ax.set_facecolor(PALETTE['soft_bg'])
+    metric_order = ['Scheduling latency', 'Idle ratio', 'Redundant reads']
+    baseline_vals = []
+    fuse_vals = []
+    for metric in metric_order:
+        baseline_vals.append(float(fig11c[(fig11c['metric'] == metric) & (fig11c['platform'] == 'Multi-core')]['absolute'].iloc[0]))
+        fuse_vals.append(float(fig11c[(fig11c['metric'] == metric) & (fig11c['platform'] == ACCELERATOR_NAME)]['absolute'].iloc[0]))
+    x = np.arange(len(metric_order))
+    width = 0.32
+    bars_base = ax.bar(x - width / 2.0, baseline_vals, width=width, color=PALETTE['baseline'], label='Multi-core')
+    bars_fuse = ax.bar(x + width / 2.0, fuse_vals, width=width, color=PALETTE['morph'], label=ACCELERATOR_NAME)
+    ax.set_xticks(x)
+    ax.set_xticklabels(['Sched. ms', 'Idle %', 'Redundant\nreads'])
+    ax.set_title('(c) Absolute scheduling and reuse cost')
+    ax.set_ylabel('Absolute value')
+    peak = max(baseline_vals + fuse_vals)
+    for bars in [bars_base, bars_fuse]:
+        for bar in bars:
+            value = bar.get_height()
+            label = f'{value:.3f}' if value < 1.0 else f'{value:.1f}'
+            ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(peak * 0.02, 0.02), label, ha='center', va='bottom', fontsize=8.6)
+    ax.legend(loc='upper right', fontsize=8.8)
+
+    ax = axes[1, 1]
+    ax.set_facecolor('#F7F0FF')
+    reduction_labels = ['Sched. reduction', 'Idle delta', 'Read reduction']
+    reduction_values = [
+        100.0 - float(fig11c[(fig11c['metric'] == 'Scheduling latency') & (fig11c['platform'] == ACCELERATOR_NAME)]['value'].iloc[0]),
+        100.0 - float(fig11c[(fig11c['metric'] == 'Idle ratio') & (fig11c['platform'] == ACCELERATOR_NAME)]['value'].iloc[0]),
+        100.0 - float(fig11c[(fig11c['metric'] == 'Redundant reads') & (fig11c['platform'] == ACCELERATOR_NAME)]['value'].iloc[0]),
+    ]
+    bars = ax.barh(reduction_labels, reduction_values, color=[PALETTE['accent'], PALETTE['green'], PALETTE['morph']], edgecolor='#22313F', linewidth=0.6)
+    ax.axvline(0.0, color='#4A4E69', linewidth=1.0)
+    ax.set_title('(d) Reduction summary and handoff context')
+    ax.set_xlabel('Relative change vs Multi-core (%)')
+    span = max(abs(min(reduction_values)), abs(max(reduction_values)))
+    ax.set_xlim(-max(5.0, span * 1.25), max(40.0, span * 1.25))
+    for bar, value in zip(bars, reduction_values):
+        offset = 1.0 if value >= 0 else -1.0
+        ha = 'left' if value >= 0 else 'right'
+        ax.text(value + offset, bar.get_y() + bar.get_height() / 2.0, f'{value:.1f}%', va='center', ha=ha, fontsize=9)
+    transition_rows = _transition_metric(fig12)
+    transition_rows = transition_rows[(transition_rows['platform'] == ACCELERATOR_NAME) & (transition_rows['scenario'] != 'Avg')]
+    recovery_avg = float(fig12[(fig12['platform'] == ACCELERATOR_NAME) & (fig12['scenario'] == 'Avg') & (fig12['metric'] == 'Recovery Time (ms)')]['value'].iloc[0])
+    if not transition_rows.empty:
+        fastest = transition_rows.nsmallest(1, 'value').iloc[0]
+        slowest = transition_rows.nlargest(1, 'value').iloc[0]
+        note = f'Fastest handoff: {fastest["scenario"]} = {float(fastest["value"]):.3f} ms\nSlowest handoff: {slowest["scenario"]} = {float(slowest["value"]):.3f} ms\nAvg recovery: {recovery_avg:.2f} ms'
+        ax.text(0.98, 0.06, note, transform=ax.transAxes, ha='right', va='bottom', fontsize=8.8, bbox=dict(boxstyle='round,pad=0.3', fc='white', ec='#B5C0D0'))
+    fig.suptitle(FIGURE_AUDIT['fig11']['title'], y=0.99, fontsize=15)
     _save(fig, out_dir / 'fig11.png')
 
 def plot_fig12(df: pd.DataFrame, out_dir: Path) -> None:
     use_style()
-    fig, axes = plt.subplots(1, 2, figsize=(15.6, 5.0))
-    latency = df[df['metric'] == 'Switch Latency (ms)']
-    scenarios = list(latency['scenario'].unique())
+    fig, axes = plt.subplots(2, 2, figsize=(16.0, 9.6))
+    transition = _transition_metric(df)
+    scenario_order = [name for name in transition['scenario'].unique().tolist() if name != 'Avg']
     platforms = ['CPU', 'GPU', ACCELERATOR_NAME]
-    x = np.arange(len(scenarios))
+
+    ax = axes[0, 0]
+    ax.set_facecolor(PALETTE['panel_bg'])
     width = 0.24
+    x = np.arange(len(scenario_order))
     for idx, platform in enumerate(platforms):
-        part = latency[latency['platform'] == platform]
-        axes[0].bar(x + (idx - 1) * width, part['value'], width=width, color=[PALETTE['baseline'], PALETTE['gold'], PALETTE['morph']][idx], label=platform)
-    axes[0].set_xticks(x)
-    axes[0].set_xticklabels(scenarios, rotation=25)
-    axes[0].set_ylabel('Switch latency (ms)')
-    axes[0].set_title('Task-switch latency')
-    axes[0].legend(fontsize=8)
-    energy = df[(df['platform'] == ACCELERATOR_NAME) & df['metric'].isin(['Energy vs CPU (%)', 'Energy vs GPU (%)'])].groupby('metric', as_index=False)['value'].mean()
-    recovery = df[(df['platform'] == ACCELERATOR_NAME) & (df['metric'] == 'Recovery Time (ms)')].groupby('metric', as_index=False)['value'].mean()
-    energy_x = np.arange(len(energy))
-    energy_bars = axes[1].bar(energy_x, energy['value'], color=[PALETTE['green'], PALETTE['accent']][:len(energy)], width=0.55)
-    axes[1].set_xticks(list(energy_x) + [len(energy_x)])
-    axes[1].set_xticklabels(['Energy / CPU', 'Energy / GPU', 'Recovery'], rotation=20)
-    axes[1].set_ylabel('Energy ratio (%)')
-    axes[1].set_title('Energy ratio and recovery time')
-    axr = axes[1].twinx()
-    recovery_x = [len(energy_x)]
-    recovery_bars = axr.bar(recovery_x, recovery['value'], color=[PALETTE['purple']], width=0.55)
-    axr.set_ylabel('Recovery time (ms)')
-    for bar, value in zip(energy_bars, energy['value']):
-        axes[1].text(bar.get_x() + bar.get_width() / 2.0, value + max(1.0, value * 0.02), f'{value:.1f}%', ha='center', va='bottom', fontsize=9)
-    for bar, value in zip(recovery_bars, recovery['value']):
-        axr.text(bar.get_x() + bar.get_width() / 2.0, value + max(0.2, value * 0.03), f'{value:.2f} ms', ha='center', va='bottom', fontsize=9)
+        part = transition[(transition['platform'] == platform) & (transition['scenario'].isin(scenario_order))]
+        part = part.set_index('scenario').reindex(scenario_order).reset_index()
+        ax.bar(x + (idx - 1) * width, part['value'], width=width, color=[PALETTE['baseline'], PALETTE['gold'], PALETTE['morph']][idx], label=platform)
+    ax.set_xticks(x)
+    ax.set_xticklabels(scenario_order, rotation=25)
+    ax.set_ylabel('Transition overhead (ms)')
+    ax.set_title('(a) Per-scenario transition overhead')
+    ax.legend(fontsize=8.6, ncol=3, loc='upper right')
+
+    ax = axes[0, 1]
+    ax.set_facecolor(PALETTE['panel_alt'])
+    energy_cpu = df[(df['platform'] == ACCELERATOR_NAME) & (df['metric'] == 'Energy vs CPU (%)') & (df['scenario'].isin(scenario_order))]
+    energy_cpu = energy_cpu.set_index('scenario').reindex(scenario_order).reset_index()
+    energy_gpu = df[(df['platform'] == ACCELERATOR_NAME) & (df['metric'] == 'Energy vs GPU (%)') & (df['scenario'].isin(scenario_order))]
+    energy_gpu = energy_gpu.set_index('scenario').reindex(scenario_order).reset_index()
+    ax.plot(scenario_order, energy_cpu['value'], marker='o', linewidth=2.2, color=PALETTE['green'], label='Energy / CPU (%)')
+    if not energy_gpu.empty and energy_gpu['value'].notna().any():
+        ax.plot(scenario_order, energy_gpu['value'], marker='s', linewidth=2.2, color=PALETTE['accent'], label='Energy / GPU (%)')
+    ax.set_ylabel('Energy ratio (%)')
+    ax.set_title('(b) Energy ratio across handoffs')
+    ax.tick_params(axis='x', rotation=25)
+    ax.legend(fontsize=8.8, loc='upper right')
+
+    ax = axes[1, 0]
+    ax.set_facecolor(PALETTE['soft_bg'])
+    recovery = df[(df['platform'] == ACCELERATOR_NAME) & (df['metric'] == 'Recovery Time (ms)') & (df['scenario'].isin(scenario_order))]
+    recovery = recovery.set_index('scenario').reindex(scenario_order).reset_index()
+    bars = ax.bar(recovery['scenario'], recovery['value'], color=PALETTE['purple'], width=0.62)
+    ax.set_ylabel('Recovery time (ms)')
+    ax.set_title('(c) Recovery time after transition')
+    ax.tick_params(axis='x', rotation=25)
+    for bar, value in zip(bars, recovery['value']):
+        ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(float(recovery['value'].max()) * 0.03, 0.01), f'{value:.2f}', ha='center', va='bottom', fontsize=8.8)
+
+    ax = axes[1, 1]
+    ax.set_facecolor('#F7F0FF')
+    avg_transition = transition[transition['scenario'] == 'Avg'].set_index('platform').reindex(platforms)
+    avg_energy_cpu = float(df[(df['platform'] == ACCELERATOR_NAME) & (df['scenario'] == 'Avg') & (df['metric'] == 'Energy vs CPU (%)')]['value'].iloc[0])
+    avg_energy_gpu_rows = df[(df['platform'] == ACCELERATOR_NAME) & (df['scenario'] == 'Avg') & (df['metric'] == 'Energy vs GPU (%)')]
+    avg_energy_gpu = float(avg_energy_gpu_rows['value'].iloc[0]) if not avg_energy_gpu_rows.empty else np.nan
+    avg_recovery = float(df[(df['platform'] == ACCELERATOR_NAME) & (df['scenario'] == 'Avg') & (df['metric'] == 'Recovery Time (ms)')]['value'].iloc[0])
+    labels = ['CPU', 'GPU', ACCELERATOR_NAME, 'Energy/CPU', 'Energy/GPU', 'Recovery']
+    values = [float(avg_transition.loc['CPU', 'value']), float(avg_transition.loc['GPU', 'value']), float(avg_transition.loc[ACCELERATOR_NAME, 'value']), avg_energy_cpu, avg_energy_gpu if not np.isnan(avg_energy_gpu) else 0.0, avg_recovery]
+    bars = ax.bar(labels, values, color=[PALETTE['baseline'], PALETTE['gold'], PALETTE['morph'], PALETTE['green'], PALETTE['accent'], PALETTE['purple']], width=0.62)
+    ax.set_title('(d) Average cross-platform summary')
+    ax.set_ylabel('Mixed-unit summary')
+    ax.tick_params(axis='x', rotation=20)
+    top = max(values)
+    for bar, label, value in zip(bars, labels, values):
+        suffix = ' ms' if label in {'CPU', 'GPU', ACCELERATOR_NAME, 'Recovery'} else '%'
+        ax.text(bar.get_x() + bar.get_width() / 2.0, value + max(top * 0.02, 0.02), f'{value:.2f}{suffix}', ha='center', va='bottom', fontsize=8.6)
     fig.suptitle(FIGURE_AUDIT['fig12_reconfig']['title'], y=1.03, fontsize=15)
     _save(fig, out_dir / 'fig12_reconfig.png')
 

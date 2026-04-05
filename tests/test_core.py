@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
 import pytest
+import pandas as pd
 from fuse.branding import ACCELERATOR_NAME
 from fuse.benchmarks import BenchmarkSuite
 from fuse.energy_benchmarks import EnergyBenchmarkSuite
@@ -11,8 +12,24 @@ from fuse.sim.simulator import FuseSimulator, SimulationConfig
 from fuse.normalization import Normalizer
 from fuse.ir import ContextKey, Expr, Fragment, InputRef, RuntimeTask, TaskGraph
 from fuse.reuse import MicrofragmentDecomposer
+from fuse.viz import plot_fig11, plot_fig12, plot_fig7
 from fuse.workloads import build_aes128_task, build_aes256_task, build_groth16_like_task, build_resnet_task, build_vgg16_like_task
 from conftest import has_cpp_toolchain
+
+def _write_eval_reports(tmp_path: Path) -> EvaluationToolkit:
+    reports = tmp_path / 'reports'
+    openroad = reports / 'openroad'
+    openroad.mkdir(parents=True)
+    (reports / 'dramsim3.txt').write_text('avg latency: 63.5 ns\nsustained bw: 71.2\n', encoding='utf-8')
+    (reports / 'cacti_feature.txt').write_text('Area (mm2): 3.2\nAccess time: 1.8 ns\nDynamic read energy: 0.9 nJ\n', encoding='utf-8')
+    (reports / 'cacti_fragment.txt').write_text('Area (mm2): 0.7\nAccess time: 1.1 ns\nDynamic read energy: 0.3 nJ\n', encoding='utf-8')
+    (reports / 'cacti_microop.txt').write_text('Area (mm2): 0.2\nAccess time: 0.6 ns\nDynamic read energy: 0.1 nJ\n', encoding='utf-8')
+    (openroad / 'fuse_area.rpt').write_text('design_area = 245000.0\nutilization = 51.2\n', encoding='utf-8')
+    (openroad / 'fuse_power.rpt').write_text('Total Power = 184.0 mW\nLeakage Power = 21.0 mW\nInternal Power = 103.0 mW\n', encoding='utf-8')
+    (openroad / 'fuse_timing.rpt').write_text('clock period = 20.0 ns\nworst negative slack = -1.5\n', encoding='utf-8')
+    config_path = tmp_path / 'eval_tools.json'
+    config_path.write_text(json.dumps({'dramsim3_report': 'reports/dramsim3.txt', 'cacti_feature_report': 'reports/cacti_feature.txt', 'cacti_fragment_report': 'reports/cacti_fragment.txt', 'cacti_microop_report': 'reports/cacti_microop.txt', 'openroad_area_report': 'reports/openroad/fuse_area.rpt', 'openroad_power_report': 'reports/openroad/fuse_power.rpt', 'openroad_timing_report': 'reports/openroad/fuse_timing.rpt'}), encoding='utf-8')
+    return EvaluationToolkit(tmp_path, config_path=config_path)
 
 def _assert_frame_numeric_alignment(py_df, cpp_df, keys, numeric_cols, *, rel=0.35, abs_tol=1e-06):
     py_view = py_df.sort_values(keys).reset_index(drop=True)
@@ -95,6 +112,7 @@ def test_cpp_bridge_aligns_with_python_contract(tmp_path, mode):
 
 def test_benchmark_suite_smoke(tmp_path):
     suite = BenchmarkSuite(engine='py')
+    suite.toolkit = _write_eval_reports(tmp_path / 'eval')
     artifacts = suite.run(tmp_path)
     assert (tmp_path / 'fig4_latency.csv').exists()
     assert (tmp_path / 'raw' / 'fig4_raw.csv').exists()
@@ -104,6 +122,7 @@ def test_benchmark_suite_cpp_run_smoke(tmp_path):
     if not has_cpp_toolchain():
         pytest.skip('no supported C++ toolchain is available in this environment')
     suite = BenchmarkSuite(engine='cpp')
+    suite.toolkit = _write_eval_reports(tmp_path / 'eval')
     artifacts = suite.run(tmp_path)
     assert (tmp_path / 'fig6_mixed.csv').exists()
     assert (tmp_path / 'fig11a_sched.csv').exists()
@@ -120,6 +139,8 @@ def test_benchmark_suite_cpp_mixed_trace_aligns_with_python(tmp_path):
         pytest.skip('no supported C++ toolchain is available in this environment')
     py_suite = BenchmarkSuite(engine='py')
     cpp_suite = BenchmarkSuite(engine='cpp')
+    py_suite.toolkit = _write_eval_reports(tmp_path / 'py_eval')
+    cpp_suite.toolkit = _write_eval_reports(tmp_path / 'cpp_eval')
     py_raw_dir = tmp_path / 'py_raw'
     cpp_raw_dir = tmp_path / 'cpp_raw'
     py_raw_dir.mkdir()
@@ -147,12 +168,12 @@ def test_benchmark_suite_cpp_mixed_trace_aligns_with_python(tmp_path):
     cpp_fig12 = cpp_suite._raw_fig12(cpp_fig12_dir)
     _assert_frame_numeric_alignment(py_fig12, cpp_fig12, ['scenario', 'platform', 'metric'], ['value'], rel=0.35, abs_tol=1e-06)
 
-def test_eval_toolkit_has_fallback_estimates():
+def test_eval_toolkit_requires_real_reports():
     toolkit = EvaluationToolkit(Path(__file__).resolve().parents[1])
-    estimate = toolkit.estimate_area_power(rfu_count=16, feature_bytes=8 * 1024 * 1024, fragment_bytes=2 * 1024 * 1024, microop_bytes=512 * 1024, utilization=0.6, fvm_reads=100, fvm_writes=50, scheduler_decisions=200, switch_events=40)
-    assert estimate['total_area_mm2'] > 0.0
-    assert estimate['total_power_w'] > 0.0
-    assert estimate['source'] in {'analytic_fallback', 'dc_ptpx_reports'}
+    with pytest.raises(FileNotFoundError):
+        toolkit.estimate_area_power(rfu_count=16, feature_bytes=8 * 1024 * 1024, fragment_bytes=2 * 1024 * 1024, microop_bytes=512 * 1024, utilization=0.6, fvm_reads=100, fvm_writes=50, scheduler_decisions=200, switch_events=40)
+    with pytest.raises(FileNotFoundError):
+        toolkit.estimate_dram(1024.0)
 
 def test_eval_toolkit_parses_external_reports(tmp_path):
     reports = tmp_path / 'reports'
@@ -174,14 +195,7 @@ def test_eval_toolkit_parses_external_reports(tmp_path):
     assert estimate['total_power_w'] == pytest.approx(8.27)
 
 def test_eval_toolkit_parses_openroad_reports(tmp_path):
-    reports = tmp_path / 'reports' / 'openroad'
-    reports.mkdir(parents=True)
-    (reports / 'fuse_area.rpt').write_text('design_area = 245000.0\nutilization = 51.2\n', encoding='utf-8')
-    (reports / 'fuse_power.rpt').write_text('Total Power = 184.0 mW\nLeakage Power = 21.0 mW\nInternal Power = 103.0 mW\n', encoding='utf-8')
-    (reports / 'fuse_timing.rpt').write_text('clock period = 20.0 ns\nworst negative slack = -1.5\n', encoding='utf-8')
-    config_path = tmp_path / 'openroad_eval.json'
-    config_path.write_text(json.dumps({'openroad_area_report': 'reports/openroad/fuse_area.rpt', 'openroad_power_report': 'reports/openroad/fuse_power.rpt', 'openroad_timing_report': 'reports/openroad/fuse_timing.rpt'}), encoding='utf-8')
-    toolkit = EvaluationToolkit(tmp_path, config_path=config_path)
+    toolkit = _write_eval_reports(tmp_path)
     parsed = toolkit.parse_openroad()
     estimate = toolkit.estimate_area_power(rfu_count=16, feature_bytes=8 * 1024 * 1024, fragment_bytes=2 * 1024 * 1024, microop_bytes=512 * 1024, utilization=0.5, fvm_reads=100, fvm_writes=50, scheduler_decisions=200, switch_events=40)
     assert parsed is not None
@@ -225,3 +239,19 @@ def test_energy_benchmark_suite_smoke(tmp_path):
     assert {'ZKP (Groth16)', 'CNN (VGG16)', 'Crypto (AES-128)'}.issubset(set(artifacts.summary['task']))
     assert {ACCELERATOR_NAME, f'{ACCELERATOR_NAME}-SW'}.issubset(set(artifacts.summary['platform']))
     assert set(artifacts.summary['energy_source']).issubset({'cpu_process_proxy', 'gpu_nvml'})
+
+def test_repo_results_plot_contract(tmp_path):
+    root = Path(__file__).resolve().parents[1]
+    results_dir = root / 'results'
+    plot_fig7(pd.read_csv(results_dir / 'fig7_area_power.csv'), tmp_path)
+    plot_fig11(
+        pd.read_csv(results_dir / 'fig11a_sched.csv'),
+        pd.read_csv(results_dir / 'fig11b_switch.csv'),
+        pd.read_csv(results_dir / 'fig11c_summary.csv'),
+        pd.read_csv(results_dir / 'fig12_reconfig.csv'),
+        tmp_path,
+    )
+    plot_fig12(pd.read_csv(results_dir / 'fig12_reconfig.csv'), tmp_path)
+    assert (tmp_path / 'fig7_area_power.png').exists()
+    assert (tmp_path / 'fig11.png').exists()
+    assert (tmp_path / 'fig12_reconfig.png').exists()
