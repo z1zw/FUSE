@@ -1,0 +1,18 @@
+# Copyright 2024-2026 keplertech.io
+# SPDX-License-Identifier: GPL-3.0-only
+
+cmake_minimum_required(VERSION 3.10)
+project(formal_structures_lib)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Create a static library target
+add_library(formal_structures STATIC
+    BoolExpr.cpp
+    BoolExprCache.cpp
+    BoolExprCnfWriter.cpp
+)
+
+# Make headers accessible to other targets
+target_include_directories(formal_structures PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

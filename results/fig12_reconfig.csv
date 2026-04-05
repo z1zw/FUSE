@@ -1,0 +1,43 @@
+scenario,platform,metric,value,source
+ZKP->CNN,FUSE,Transition Overhead (ms),0.190461,simulator_trace
+ZKP->CNN,CPU,Transition Overhead (ms),7.827104,hardware_timer
+ZKP->CNN,GPU,Transition Overhead (ms),6.945134,hardware_timer
+ZKP->CNN,FUSE,Energy vs GPU (%),16.70344539050873,measured_ratio
+ZKP->CNN,FUSE,Energy vs CPU (%),55.88189707301428,measured_ratio
+ZKP->CNN,FUSE,Recovery Time (ms),56.359507,simulator_trace
+CNN->AES,FUSE,Transition Overhead (ms),0.0,simulator_trace
+CNN->AES,CPU,Transition Overhead (ms),0.024542,hardware_timer
+CNN->AES,GPU,Transition Overhead (ms),0.032093,hardware_timer
+CNN->AES,FUSE,Energy vs GPU (%),17.4704105953581,measured_ratio
+CNN->AES,FUSE,Energy vs CPU (%),44.51128008409547,measured_ratio
+CNN->AES,FUSE,Recovery Time (ms),0.012197,simulator_trace
+AES->ZKP,FUSE,Transition Overhead (ms),0.000118,simulator_trace
+AES->ZKP,CPU,Transition Overhead (ms),0.110964,hardware_timer
+AES->ZKP,GPU,Transition Overhead (ms),0.054095,hardware_timer
+AES->ZKP,FUSE,Energy vs GPU (%),1.3736320529688426,measured_ratio
+AES->ZKP,FUSE,Energy vs CPU (%),4.515627937684215,measured_ratio
+AES->ZKP,FUSE,Recovery Time (ms),0.006609,simulator_trace
+ZKP->AES,FUSE,Transition Overhead (ms),5e-06,simulator_trace
+ZKP->AES,CPU,Transition Overhead (ms),0.021822,hardware_timer
+ZKP->AES,GPU,Transition Overhead (ms),0.031123,hardware_timer
+ZKP->AES,FUSE,Energy vs GPU (%),1.5955111021317998,measured_ratio
+ZKP->AES,FUSE,Energy vs CPU (%),6.132833497390329,measured_ratio
+ZKP->AES,FUSE,Recovery Time (ms),0.011477,simulator_trace
+CNN->ZKP,FUSE,Transition Overhead (ms),0.0,simulator_trace
+CNN->ZKP,CPU,Transition Overhead (ms),0.099402,hardware_timer
+CNN->ZKP,GPU,Transition Overhead (ms),0.051904,hardware_timer
+CNN->ZKP,FUSE,Energy vs GPU (%),17.4173172835533,measured_ratio
+CNN->ZKP,FUSE,Energy vs CPU (%),44.53907529525791,measured_ratio
+CNN->ZKP,FUSE,Recovery Time (ms),0.007104,simulator_trace
+AES->CNN,FUSE,Transition Overhead (ms),0.188161,simulator_trace
+AES->CNN,CPU,Transition Overhead (ms),7.961201,hardware_timer
+AES->CNN,GPU,Transition Overhead (ms),6.926549,hardware_timer
+AES->CNN,FUSE,Energy vs GPU (%),16.761444439100032,measured_ratio
+AES->CNN,FUSE,Energy vs CPU (%),55.030624575196775,measured_ratio
+AES->CNN,FUSE,Recovery Time (ms),56.357207,simulator_trace
+Avg,CPU,Transition Overhead (ms),2.6741724999999996,hardware_timer
+Avg,GPU,Transition Overhead (ms),2.3401496666666666,hardware_timer
+Avg,FUSE,Transition Overhead (ms),0.06312416666666666,simulator_trace
+Avg,FUSE,Energy vs CPU (%),35.101889743773164,measured_ratio
+Avg,FUSE,Energy vs GPU (%),11.886960143936799,measured_ratio
+Avg,FUSE,Recovery Time (ms),18.79235016666667,simulator_trace

@@ -1,0 +1,5 @@
+platform,metric,value,source
+Multi-core,Scheduling Latency (ms),0.16582,simulator_trace
+FUSE,Scheduling Latency (ms),0.04751309090909091,simulator_trace
+Multi-core,Idle Ratio (%),75.8836,simulator_metrics
+FUSE,Idle Ratio (%),75.94460000000001,simulator_metrics

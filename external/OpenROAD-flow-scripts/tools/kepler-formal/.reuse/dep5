@@ -1,0 +1,28 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: naja 
+Upstream-Contact: Christophe Alexandre <contact@keplertech.io>
+Source: https://github.com/keplertech/kepler-formal
+
+Files: src/*
+Copyright: 2025 keplertech.io
+License: GPL-3.0-only
+
+Files: example/* .github/workflows/* .gitmodules README.md docs/*
+Copyright: 2025 keplertech.io
+License: Apache-2.0
+
+Files: test/*
+Copyright: 2025 keplertech.io
+License: GPL-3.0-only
+
+Files: BUILD.bazel MODULE.bazel .bazelrc .bazelversion .bazelignore .gitignore
+Copyright: 2025 keplertech.io
+License: GPL-3.0-only
+
+Files: bazel/*
+Copyright: 2025 keplertech.io
+License: GPL-3.0-only
+
+Files: tools/*
+Copyright: 2025 keplertech.io
+License: GPL-3.0-only

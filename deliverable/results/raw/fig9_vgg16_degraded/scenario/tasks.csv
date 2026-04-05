@@ -1,0 +1,2 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+vgg_ablate_rt0,vgg_ablate,CNN,R,0

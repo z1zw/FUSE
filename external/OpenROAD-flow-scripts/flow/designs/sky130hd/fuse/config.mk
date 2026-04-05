@@ -1,0 +1,12 @@
+export DESIGN_NAME = fuse_top
+export PLATFORM = sky130hd
+export VERILOG_FILES = /root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/src/fuse_top.v /root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/src/rfu.v /root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/src/tars.v /root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/src/fvm.v /root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/src/lrc.v
+export SDC_FILE = /root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/constraint.sdc
+export DIE_AREA = 0 0 1600 1600
+export CORE_AREA = 20 20 1580 1580
+export CLOCK_PORT = clk
+export CLOCK_PERIOD = 20.000
+export PLACE_DENSITY = 0.550
+export MAX_FANOUT_CONSTRAINT = 12
+export MAX_TRANSITION_CONSTRAINT = 0.75
+export MAX_CAPACITANCE_CONSTRAINT = 0.20

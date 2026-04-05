@@ -1,0 +1,35 @@
+{
+  "mode": "hardware_cpu",
+  "backend": "torch_cpu",
+  "device": "cpu",
+  "makespan_cycles": 10234301,
+  "makespan_ms": 10.234301,
+  "dispatches": 2,
+  "result_reuse_hits": 0,
+  "structural_reuse_hits": 0,
+  "result_reuse_rate": 0.0,
+  "structural_reuse_rate": 0.0,
+  "switch_cycles_total": 0.0,
+  "rfu_utilization": 1.0,
+  "energy_nj": 122811612.0,
+  "task_latency_ms": {
+    "CNN->ZKP_0": 10.134899,
+    "CNN->ZKP_1": 9.884301
+  },
+  "task_type_mean_latency_ms": {
+    "CNN": 10.134899,
+    "ZKP": 9.884301
+  },
+  "fvm_reads": 0.0,
+  "fvm_writes": 0.0,
+  "fvm_allocations": 0.0,
+  "fvm_frees": 0.0,
+  "fvm_avg_residency_bytes": 0.0,
+  "fvm_redundant_reads": 0.0,
+  "lrc_switch_events": 0.0,
+  "scheduler_decisions": 2.0,
+  "scheduler_pipeline_stall_cycles": 0.0,
+  "kappa_key_match_ratio": 0.0,
+  "template_hit_ratio": 0.0,
+  "valid_fragment_ratio": 0.0
+}

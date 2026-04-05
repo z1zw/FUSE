@@ -1,0 +1,43 @@
+scenario,platform,metric,value,source
+ZKP->CNN,FUSE,Switch Latency (ms),0.0,simulator_trace
+ZKP->CNN,CPU,Switch Latency (ms),0.0,hardware_timer
+ZKP->CNN,GPU,Switch Latency (ms),0.0,hardware_timer
+ZKP->CNN,FUSE,Energy vs GPU (%),11.95822192825647,measured_ratio
+ZKP->CNN,FUSE,Energy vs CPU (%),30.226505694220094,measured_ratio
+ZKP->CNN,FUSE,Recovery Time (ms),28.184327,simulator_trace
+CNN->AES,FUSE,Switch Latency (ms),0.0942775,simulator_trace
+CNN->AES,CPU,Switch Latency (ms),1.502768,hardware_timer
+CNN->AES,GPU,Switch Latency (ms),0.607957,hardware_timer
+CNN->AES,FUSE,Energy vs GPU (%),18.74144562553803,measured_ratio
+CNN->AES,FUSE,Energy vs CPU (%),45.39278798776156,measured_ratio
+CNN->AES,FUSE,Recovery Time (ms),0.012081,simulator_trace
+AES->ZKP,FUSE,Switch Latency (ms),0.0,simulator_trace
+AES->ZKP,CPU,Switch Latency (ms),0.0,hardware_timer
+AES->ZKP,GPU,Switch Latency (ms),0.0,hardware_timer
+AES->ZKP,FUSE,Energy vs GPU (%),0.7392846310631773,measured_ratio
+AES->ZKP,FUSE,Energy vs CPU (%),2.7704596311612764,measured_ratio
+AES->ZKP,FUSE,Recovery Time (ms),0.004988,simulator_trace
+ZKP->AES,FUSE,Switch Latency (ms),0.0,simulator_trace
+ZKP->AES,CPU,Switch Latency (ms),0.0,hardware_timer
+ZKP->AES,GPU,Switch Latency (ms),0.0,hardware_timer
+ZKP->AES,FUSE,Energy vs GPU (%),0.7577705365548827,measured_ratio
+ZKP->AES,FUSE,Energy vs CPU (%),2.8571475163605866,measured_ratio
+ZKP->AES,FUSE,Recovery Time (ms),0.009321,simulator_trace
+CNN->ZKP,FUSE,Switch Latency (ms),0.0942775,simulator_trace
+CNN->ZKP,CPU,Switch Latency (ms),1.5162475,hardware_timer
+CNN->ZKP,GPU,Switch Latency (ms),0.5976265,hardware_timer
+CNN->ZKP,FUSE,Energy vs GPU (%),18.684763016114943,measured_ratio
+CNN->ZKP,FUSE,Energy vs CPU (%),44.71829721927117,measured_ratio
+CNN->ZKP,FUSE,Recovery Time (ms),0.005014,simulator_trace
+AES->CNN,FUSE,Switch Latency (ms),0.0,simulator_trace
+AES->CNN,CPU,Switch Latency (ms),0.0,hardware_timer
+AES->CNN,GPU,Switch Latency (ms),0.0,hardware_timer
+AES->CNN,FUSE,Energy vs GPU (%),11.97498144184686,measured_ratio
+AES->CNN,FUSE,Energy vs CPU (%),34.08654096301353,measured_ratio
+AES->CNN,FUSE,Recovery Time (ms),28.182027,simulator_trace
+Avg,CPU,Switch Latency (ms),0.50316925,hardware_timer
+Avg,GPU,Switch Latency (ms),0.20093058333333333,hardware_timer
+Avg,FUSE,Switch Latency (ms),0.03142583333333333,simulator_trace
+Avg,FUSE,Energy vs CPU (%),26.675289835298035,measured_ratio
+Avg,FUSE,Energy vs GPU (%),10.47607786322906,measured_ratio
+Avg,FUSE,Recovery Time (ms),9.399626333333334,simulator_trace

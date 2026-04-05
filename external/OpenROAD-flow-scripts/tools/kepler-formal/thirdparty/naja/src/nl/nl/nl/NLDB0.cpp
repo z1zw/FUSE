@@ -1,0 +1,823 @@
+// SPDX-FileCopyrightText: 2023 The Naja authors <https://github.com/najaeda/naja/blob/main/AUTHORS>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+#include "NLDB0.h"
+
+#include "NLUniverse.h"
+#include "NLException.h"
+
+#include "SNLScalarTerm.h"
+#include "SNLBusTerm.h"
+#include "SNLScalarNet.h"
+#include "SNLDesignModeling.h"
+
+#include <cstdint>
+#if defined(_MSC_VER)
+  #include <intrin.h>
+#endif
+namespace {
+  inline bool parity64(uint64_t x) {
+#if defined(_MSC_VER)
+    return (__popcnt64(x) & 1) != 0;
+#else
+    return __builtin_parityll(x);
+#endif
+  }
+
+  void createAssignPrimitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto assign = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive);
+    auto assignInput = SNLScalarTerm::create(assign, SNLTerm::Direction::Input);
+    auto assignOutput = SNLScalarTerm::create(assign, SNLTerm::Direction::Output);
+
+    auto assignFT = SNLScalarNet::create(assign);
+    assignInput->setNet(assignFT);
+    assignOutput->setNet(assignFT);
+    SNLDesignModeling::addCombinatorialArcs({assignInput}, {assignOutput});
+  }
+
+  void createFAPrimitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto fa = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive, NLName("naja_fa"));
+    auto inA  = SNLScalarTerm::create(fa, SNLTerm::Direction::Input,  NLName("A"));
+    auto inB  = SNLScalarTerm::create(fa, SNLTerm::Direction::Input,  NLName("B"));
+    auto inCI = SNLScalarTerm::create(fa, SNLTerm::Direction::Input,  NLName("CI"));
+    auto outS = SNLScalarTerm::create(fa, SNLTerm::Direction::Output, NLName("S"));
+    auto outCO= SNLScalarTerm::create(fa, SNLTerm::Direction::Output, NLName("CO"));
+    SNLDesignModeling::addCombinatorialArcs({inA, inB, inCI}, {outS, outCO});
+  }
+
+  void createDFFPrimitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto dff = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive, NLName("naja_dff"));
+    auto dffClock = SNLScalarTerm::create(dff, SNLTerm::Direction::Input, NLName("C"));
+    auto dffData = SNLScalarTerm::create(dff, SNLTerm::Direction::Input, NLName("D"));
+    auto dffOutput = SNLScalarTerm::create(dff, SNLTerm::Direction::Output, NLName("Q"));
+    SNLDesignModeling::addClockToOutputsArcs(dffClock, {dffOutput});
+    SNLDesignModeling::addInputsToClockArcs({dffData}, dffClock);
+  }
+
+  void createDFFRNPrimitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto dffrn = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive, NLName("naja_dffrn"));
+    auto dffrnClock = SNLScalarTerm::create(dffrn, SNLTerm::Direction::Input, NLName("C"));
+    auto dffrnData = SNLScalarTerm::create(dffrn, SNLTerm::Direction::Input, NLName("D"));
+    auto dffrnResetN = SNLScalarTerm::create(dffrn, SNLTerm::Direction::Input, NLName("RN"));
+    auto dffrnOutput = SNLScalarTerm::create(dffrn, SNLTerm::Direction::Output, NLName("Q"));
+    SNLDesignModeling::addClockToOutputsArcs(dffrnClock, {dffrnOutput});
+    SNLDesignModeling::addInputsToClockArcs({dffrnData, dffrnResetN}, dffrnClock);
+  }
+
+  void createDFFEPrimitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto dffe = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive, NLName("naja_dffe"));
+    auto dffeClock = SNLScalarTerm::create(dffe, SNLTerm::Direction::Input, NLName("C"));
+    auto dffeData = SNLScalarTerm::create(dffe, SNLTerm::Direction::Input, NLName("D"));
+    auto dffeEnable = SNLScalarTerm::create(dffe, SNLTerm::Direction::Input, NLName("E"));
+    auto dffeOutput = SNLScalarTerm::create(dffe, SNLTerm::Direction::Output, NLName("Q"));
+    SNLDesignModeling::addClockToOutputsArcs(dffeClock, {dffeOutput});
+    SNLDesignModeling::addInputsToClockArcs({dffeData, dffeEnable}, dffeClock);
+  }
+
+  void createDFFREPrimitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto dffre = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive, NLName("naja_dffre"));
+    auto dffreClock = SNLScalarTerm::create(dffre, SNLTerm::Direction::Input, NLName("C"));
+    auto dffreData = SNLScalarTerm::create(dffre, SNLTerm::Direction::Input, NLName("D"));
+    auto dffreEnable = SNLScalarTerm::create(dffre, SNLTerm::Direction::Input, NLName("E"));
+    auto dffreReset = SNLScalarTerm::create(dffre, SNLTerm::Direction::Input, NLName("R"));
+    auto dffreOutput = SNLScalarTerm::create(dffre, SNLTerm::Direction::Output, NLName("Q"));
+    SNLDesignModeling::addClockToOutputsArcs(dffreClock, {dffreOutput});
+    SNLDesignModeling::addInputsToClockArcs({dffreData, dffreEnable, dffreReset}, dffreClock);
+  }
+
+  void createDFFSEPrimitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto dffse = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive, NLName("naja_dffse"));
+    auto dffseClock = SNLScalarTerm::create(dffse, SNLTerm::Direction::Input, NLName("C"));
+    auto dffseData = SNLScalarTerm::create(dffse, SNLTerm::Direction::Input, NLName("D"));
+    auto dffseEnable = SNLScalarTerm::create(dffse, SNLTerm::Direction::Input, NLName("E"));
+    auto dffseSet = SNLScalarTerm::create(dffse, SNLTerm::Direction::Input, NLName("S"));
+    auto dffseOutput = SNLScalarTerm::create(dffse, SNLTerm::Direction::Output, NLName("Q"));
+    SNLDesignModeling::addClockToOutputsArcs(dffseClock, {dffseOutput});
+    SNLDesignModeling::addInputsToClockArcs({dffseData, dffseEnable, dffseSet}, dffseClock);
+  }
+
+  void createMux2Primitive(naja::NL::NLLibrary* rootLibrary) {
+    using namespace naja::NL;
+    auto mux2 = SNLDesign::create(rootLibrary, SNLDesign::Type::Primitive, NLName("naja_mux2"));
+    auto inA = SNLScalarTerm::create(mux2, SNLTerm::Direction::Input, NLName("A"));
+    auto inB = SNLScalarTerm::create(mux2, SNLTerm::Direction::Input, NLName("B"));
+    auto sel = SNLScalarTerm::create(mux2, SNLTerm::Direction::Input, NLName("S"));
+    auto out = SNLScalarTerm::create(mux2, SNLTerm::Direction::Output, NLName("Y"));
+    SNLDesignModeling::addCombinatorialArcs({inA, inB, sel}, {out});
+  }
+}
+
+namespace naja::NL {
+
+NLDB0::GateType::GateType(const GateTypeEnum& typeEnum):
+  gateTypeEnum_(typeEnum) 
+{}
+
+NLDB0::GateType::GateType(const std::string& name):
+  gateTypeEnum_(GateType::Unknown) {
+  if (name == "and") {
+    gateTypeEnum_ = GateType::And;
+  } else if (name == "nand") {
+    gateTypeEnum_ = GateType::Nand;
+  } else if (name == "or") {
+    gateTypeEnum_ = GateType::Or;
+  } else if (name == "nor") {
+    gateTypeEnum_ = GateType::Nor;
+  } else if (name == "xor") {
+    gateTypeEnum_ = GateType::Xor;
+  } else if (name == "xnor") {
+    gateTypeEnum_ = GateType::Xnor;
+  } else if (name == "buf") {
+    gateTypeEnum_ = GateType::Buf;
+  } else if (name == "not") {
+    gateTypeEnum_ = GateType::Not;
+  }
+}
+
+bool NLDB0::GateType::isNInput() const {
+  return gateTypeEnum_ == GateType::And
+    or gateTypeEnum_ == GateType::Nand
+    or gateTypeEnum_ == GateType::Or
+    or gateTypeEnum_ == GateType::Nor
+    or gateTypeEnum_ == GateType::Xor
+    or gateTypeEnum_ == GateType::Xnor;
+}
+
+bool NLDB0::GateType::isNOutput() const {
+  return gateTypeEnum_ == GateType::Buf
+    or gateTypeEnum_ == GateType::Not;
+}
+
+std::string NLDB0::GateType::getString() const {
+  switch (gateTypeEnum_) {
+    case GateType::And:
+      return "and";
+    case GateType::Nand:
+      return "nand";
+    case GateType::Or:
+      return "or";
+    case GateType::Nor:
+      return "nor";
+    case GateType::Xor:
+      return "xor";
+    case GateType::Xnor:
+      return "xnor";
+    case GateType::Buf:
+      return "buf";
+    case GateType::Not:
+      return "not";
+    case GateType::Unknown:
+      return "UNKNOWN";
+  }
+  return "Bug"; //LCOV_EXCL_LINE
+}
+
+NLDB* NLDB0::create(NLUniverse* universe) {
+  NLDB* db = NLDB::create(universe);
+  assert(db->getID() == 0);
+
+  auto rootLibrary =
+    NLLibrary::create(db, NLLibrary::Type::Primitives, NLName(RootLibraryName));
+
+  createAssignPrimitive(rootLibrary);
+  createFAPrimitive(rootLibrary);
+  createMux2Primitive(rootLibrary);
+  createDFFPrimitive(rootLibrary);
+  createDFFRNPrimitive(rootLibrary);
+  createDFFEPrimitive(rootLibrary);
+  createDFFREPrimitive(rootLibrary);
+  createDFFSEPrimitive(rootLibrary);
+
+  return db;
+}
+
+NLDB* NLDB0::getDB0() {
+  return NLUniverse::getDB0();
+}
+
+bool NLDB0::isDB0(const NLDB* db) {
+  return db and db == getDB0();
+}
+
+NLLibrary* NLDB0::getDB0RootLibrary() {
+  auto db0 = NLDB0::getDB0();
+  if (db0) {
+    return db0->getLibrary(NLName(RootLibraryName));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isDB0Library(const NLLibrary* library) {
+  auto topLibrary = getDB0RootLibrary();
+  if (library == topLibrary) {
+    return true;
+  }
+  if (library->isRoot()) {
+    return false;
+  }
+  return isDB0Library(library->getParentLibrary());
+}
+
+bool NLDB0::isDB0Primitive(const SNLDesign* design) {
+  return design and isDB0Library(design->getLibrary());
+}
+
+SNLTruthTable NLDB0::getPrimitiveTruthTable(const SNLDesign* design) {
+  if (isAssign(design)) {
+    return SNLTruthTable::Buf();
+  }
+  if (isFA(design)) {
+    throw NLException("NLDB0::getPrimitiveTruthTable: FA has two outputs, use getFASumTruthTable/getFACoutTruthTable");
+  }
+  if (isMux2(design)) {
+    uint64_t bits = 0;
+    for (uint64_t i = 0; i < 8; ++i) {
+      bool a = (i & 0x1) != 0;
+      bool b = (i & 0x2) != 0;
+      bool s = (i & 0x4) != 0;
+      bool y = s ? b : a;
+      if (y) {
+        bits |= (1ULL << i);
+      }
+    }
+    return SNLTruthTable(3, bits);
+  }
+
+  if (isNInputGate(design)) {
+    size_t size = design->getBusTerm(NLID::DesignObjectID(1))->getWidth();
+    if (size > 6) {
+      throw NLException("NLDB0::getPrimitiveTruthTable: gate with more than 6 inputs is not supported");
+    }
+    auto type = GateType(design->getLibrary()->getName().getString());
+    switch (type) {
+      case GateType::And: {
+
+        // Only input 11..1 produces output 1
+        uint64_t bits = 1ULL << ((1ULL << size) - 1);
+
+        SNLTruthTable tt(size, bits);
+        return tt;
+      }
+      case GateType::Or: {
+        // All combinations except 00..0 produce output 1
+        uint64_t bits = (1ULL << (1ULL << size)) - 1;
+        bits &= ~1ULL; // clear bit for input 00..0
+
+        SNLTruthTable tt(size, bits);
+        return tt;
+      }
+      case GateType::Nor: {
+        // Only input 00..0 produces output 1
+        uint64_t bits = 1ULL;
+
+        SNLTruthTable tt(size, bits);
+        return tt;
+      }
+      case GateType::Xor: {
+        uint64_t bits = 0;
+        const size_t combinations = (1ULL << size);
+        for (size_t i = 0; i < combinations; ++i) {
+          // XOR: output 1 if an odd number of input bits are set
+          if (parity64(i)) {
+            bits |= (1ULL << i);
+          }
+        }
+        SNLTruthTable tt(size, bits);
+        return tt;
+      }
+      case GateType::Xnor: {
+        uint64_t bits = 0;
+        const size_t combinations = (1ULL << size);
+        for (size_t i = 0; i < combinations; ++i) {
+          // XNOR: output 1 if an even number of input bits are set
+          if (not parity64(i)) {
+            bits |= (1ULL << i);
+          }
+        }
+        SNLTruthTable tt(size, bits);
+        return tt;  
+      }
+      // LCOV_EXCL_START
+      default:
+        break;
+      // LCOV_EXCL_STOP
+    }
+  }
+  throw NLException("NLDB0::getPrimitiveTruthTable: unsupported primitive type");
+}
+
+SNLDesign* NLDB0::getAssign() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created first in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(0));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isAssign(const SNLDesign* design) {
+  return design and design == getAssign();
+}
+
+SNLScalarTerm* NLDB0::getAssignInput() {
+  auto assign = getAssign();
+  if (assign) {
+    // Static term, created first in createAssignPrimitive().
+    return assign->getScalarTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getAssignOutput() {
+  auto assign = getAssign();
+  if (assign) {
+    // Static term, created second in createAssignPrimitive().
+    return assign->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLDesign* NLDB0::getFA() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created second in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(1));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isFA(const SNLDesign* design) {
+  return design and design == getFA();
+}
+
+SNLScalarTerm* NLDB0::getFAInputA() {
+  auto fa = getFA();
+  if (fa) { return fa->getScalarTerm(NLID::DesignObjectID(0)); }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getFAInputB() {
+  auto fa = getFA();
+  if (fa) { return fa->getScalarTerm(NLID::DesignObjectID(1)); }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getFAInputCI() {
+  auto fa = getFA();
+  if (fa) { return fa->getScalarTerm(NLID::DesignObjectID(2)); }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getFAOutputS() {
+  auto fa = getFA();
+  if (fa) { return fa->getScalarTerm(NLID::DesignObjectID(3)); }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getFAOutputCO() {
+  auto fa = getFA();
+  if (fa) { return fa->getScalarTerm(NLID::DesignObjectID(4)); }
+  return nullptr;
+}
+
+// Sum = A XOR B XOR CI: odd-parity of 3 inputs
+// Row encoding: bit i of 'bits' is the output for input combination i
+// i=0b000->0, 001->1, 010->1, 011->0, 100->1, 101->0, 110->0, 111->1
+// bits = 0b10010110 = 0x96
+SNLTruthTable NLDB0::getFASumTruthTable() {
+  return SNLTruthTable(3, 0x96ULL);
+}
+
+// Cout = majority(A,B,CI): output 1 when at least 2 inputs are 1
+// i=0b000->0, 001->0, 010->0, 011->1, 100->0, 101->1, 110->1, 111->1
+// bits = 0b11101000 = 0xE8
+SNLTruthTable NLDB0::getFACoutTruthTable() {
+  return SNLTruthTable(3, 0xE8ULL);
+}
+
+SNLDesign* NLDB0::getMux2() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created third in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(2));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isMux2(const SNLDesign* design) {
+  return design and design == getMux2();
+}
+
+SNLScalarTerm* NLDB0::getMux2InputA() {
+  auto mux2 = getMux2();
+  if (mux2) {
+    return mux2->getScalarTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getMux2InputB() {
+  auto mux2 = getMux2();
+  if (mux2) {
+    return mux2->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getMux2Select() {
+  auto mux2 = getMux2();
+  if (mux2) {
+    return mux2->getScalarTerm(NLID::DesignObjectID(2));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getMux2Output() {
+  auto mux2 = getMux2();
+  if (mux2) {
+    return mux2->getScalarTerm(NLID::DesignObjectID(3));
+  }
+  return nullptr;
+}
+
+SNLDesign* NLDB0::getDFF() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created fourth in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(3));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFClock() {
+  auto dff = getDFF();
+  if (dff) {
+    return dff->getScalarTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFData() {
+  auto dff = getDFF();
+  if (dff) {
+    return dff->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFOutput() {
+  auto dff = getDFF();
+  if (dff) {
+    return dff->getScalarTerm(NLID::DesignObjectID(2));
+  }
+  return nullptr;
+}
+
+SNLDesign* NLDB0::getDFFRN() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created fifth in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(4));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isDFFRN(const SNLDesign* design) {
+  return design and design == getDFFRN();
+}
+
+SNLScalarTerm* NLDB0::getDFFRNClock() {
+  auto dffrn = getDFFRN();
+  if (dffrn) {
+    return dffrn->getScalarTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFRNData() {
+  auto dffrn = getDFFRN();
+  if (dffrn) {
+    return dffrn->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFRNResetN() {
+  auto dffrn = getDFFRN();
+  if (dffrn) {
+    return dffrn->getScalarTerm(NLID::DesignObjectID(2));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFRNOutput() {
+  auto dffrn = getDFFRN();
+  if (dffrn) {
+    return dffrn->getScalarTerm(NLID::DesignObjectID(3));
+  }
+  return nullptr;
+}
+
+SNLDesign* NLDB0::getDFFE() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created sixth in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(5));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isDFFE(const SNLDesign* design) {
+  return design and design == getDFFE();
+}
+
+SNLScalarTerm* NLDB0::getDFFEClock() {
+  auto dffe = getDFFE();
+  if (dffe) {
+    return dffe->getScalarTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFEData() {
+  auto dffe = getDFFE();
+  if (dffe) {
+    return dffe->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFEEnable() {
+  auto dffe = getDFFE();
+  if (dffe) {
+    return dffe->getScalarTerm(NLID::DesignObjectID(2));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFEOutput() {
+  auto dffe = getDFFE();
+  if (dffe) {
+    return dffe->getScalarTerm(NLID::DesignObjectID(3));
+  }
+  return nullptr;
+}
+
+SNLDesign* NLDB0::getDFFRE() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created seventh in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(6));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isDFFRE(const SNLDesign* design) {
+  return design and design == getDFFRE();
+}
+
+SNLScalarTerm* NLDB0::getDFFREClock() {
+  auto dffre = getDFFRE();
+  if (dffre) {
+    return dffre->getScalarTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFREData() {
+  auto dffre = getDFFRE();
+  if (dffre) {
+    return dffre->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFREEnable() {
+  auto dffre = getDFFRE();
+  if (dffre) {
+    return dffre->getScalarTerm(NLID::DesignObjectID(2));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFREReset() {
+  auto dffre = getDFFRE();
+  if (dffre) {
+    return dffre->getScalarTerm(NLID::DesignObjectID(3));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFREOutput() {
+  auto dffre = getDFFRE();
+  if (dffre) {
+    return dffre->getScalarTerm(NLID::DesignObjectID(4));
+  }
+  return nullptr;
+}
+
+SNLDesign* NLDB0::getDFFSE() {
+  auto primitives = getDB0RootLibrary();
+  if (primitives) {
+    // Static primitive, created eighth in NLDB0::create().
+    return primitives->getSNLDesign(NLID::DesignID(7));
+  }
+  return nullptr;
+}
+
+bool NLDB0::isDFFSE(const SNLDesign* design) {
+  return design and design == getDFFSE();
+}
+
+SNLScalarTerm* NLDB0::getDFFSEClock() {
+  auto dffse = getDFFSE();
+  if (dffse) {
+    return dffse->getScalarTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFSEData() {
+  auto dffse = getDFFSE();
+  if (dffse) {
+    return dffse->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFSEEnable() {
+  auto dffse = getDFFSE();
+  if (dffse) {
+    return dffse->getScalarTerm(NLID::DesignObjectID(2));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFSESet() {
+  auto dffse = getDFFSE();
+  if (dffse) {
+    return dffse->getScalarTerm(NLID::DesignObjectID(3));
+  }
+  return nullptr;
+}
+
+SNLScalarTerm* NLDB0::getDFFSEOutput() {
+  auto dffse = getDFFSE();
+  if (dffse) {
+    return dffse->getScalarTerm(NLID::DesignObjectID(4));
+  }
+  return nullptr;
+}
+
+NLLibrary* NLDB0::getOrCreateGateLibrary(const GateType& type) {
+  auto gateLib = getGateLibrary(type);
+  if (gateLib) {
+    return gateLib;
+  }
+  auto rootLib = getDB0RootLibrary();
+  if (not rootLib) {
+    return nullptr;
+  }
+  return NLLibrary::create(getDB0RootLibrary(), NLLibrary::Type::Primitives, NLName(type.getString()));
+}
+
+NLLibrary* NLDB0::getGateLibrary(const GateType& type) {
+  auto rootLib = getDB0RootLibrary();
+  if (not rootLib) {
+    return nullptr;
+  }
+  auto gateLib = rootLib->getLibrary(NLName(type.getString()));
+  if (gateLib) {
+    return gateLib;
+  }
+  return nullptr;
+}
+
+bool NLDB0::isGateLibrary(const NLLibrary* library) {
+  if (library->isRoot()) {
+    return false;
+  }
+  auto rootLib = getDB0RootLibrary();
+  if (library->getParentLibrary() != rootLib) {
+    return false;
+  }
+  auto type = GateType(library->getName().getString());
+  return type != GateType::Unknown;
+}
+
+SNLDesign* NLDB0::getOrCreateNOutputGate(const GateType& type, size_t nbOutputs) {
+  if (not type.isNOutput()) {
+    throw NLException(
+      "NLDB0::getOrCreateNOutputGate: type " + type.getString() + " is not an NOutput gate" 
+    );
+  }
+  if (nbOutputs == 0) {
+    throw NLException("NLDB0::getOrCreateNOutputGate: nbOutputs is 0");
+  }
+  auto gateLibrary = getOrCreateGateLibrary(type);
+  if (not gateLibrary) {
+    throw NLException("NLDB0::getOrCreateNOutputGate: cannot create gate library");
+  }
+  std::string gateName(type.getString() + "_" + std::to_string(nbOutputs));
+  auto gate = gateLibrary->getSNLDesign(NLName(gateName));
+  if (not gate) {
+    gate = SNLDesign::create(gateLibrary, SNLDesign::Type::Primitive, NLName(gateName));
+    SNLBusTerm::create(gate, SNLTerm::Direction::Output, NLID::Bit(nbOutputs-1), 0);
+    SNLScalarTerm::create(gate, SNLTerm::Direction::Input);
+  }
+  return gate;
+}
+
+SNLDesign* NLDB0::getOrCreateNInputGate(const GateType& type, size_t nbInputs) {
+  if (not type.isNInput()) {
+    throw NLException("NLDB0::getOrCreateNInputGate: type is not an NInput gate");
+  }
+  if (nbInputs == 0) {
+    throw NLException("NLDB0::getOrCreateNInputGate: nbInputs is 0");
+  }
+  auto gateLibrary = getOrCreateGateLibrary(type);
+  if (not gateLibrary) {
+    throw NLException("NLDB0::getOrCreateNInputGate: cannot create gate library");
+  }
+  std::string gateName(type.getString() + "_" + std::to_string(nbInputs));
+  auto gate = gateLibrary->getSNLDesign(NLName(gateName));
+  if (not gate) {
+    gate = SNLDesign::create(gateLibrary, SNLDesign::Type::Primitive, NLName(gateName));
+    SNLScalarTerm::create(gate, SNLTerm::Direction::Output);
+    SNLBusTerm::create(gate, SNLTerm::Direction::Input, NLID::Bit(nbInputs-1), 0);
+  }
+  return gate;
+}
+
+std::string NLDB0::getGateName(const SNLDesign* design) {
+  if (not isGate(design)) {
+    return std::string();
+  }
+  auto lib = design->getLibrary();
+  auto type = GateType(lib->getName().getString());
+  return type.getString();
+}
+
+bool NLDB0::isNInputGate(const SNLDesign* design) {
+  if (not design) {
+    return false;
+  }
+  auto lib = design->getLibrary();
+  if (not isGateLibrary(lib)) {
+    return false;
+  }
+  auto type = GateType(lib->getName().getString());
+  return type.isNInput();
+}
+
+bool NLDB0::isNOutputGate(const SNLDesign* design) {
+  if (not design) {
+    return false;
+  }
+  auto lib = design->getLibrary();
+  if (not isGateLibrary(lib)) {
+    return false;
+  }
+  auto type = GateType(lib->getName().getString());
+  return type.isNOutput();
+}
+
+bool NLDB0::isGate(const SNLDesign* design) {
+  if (not design) {
+    return false;
+  }
+  auto lib = design->getLibrary();
+  if (not isGateLibrary(lib)) {
+    return false;
+  }
+  auto type = GateType(lib->getName().getString());
+  return type != GateType::Unknown;
+}
+
+SNLScalarTerm* NLDB0::getGateSingleTerm(const SNLDesign* gate) {
+  if (isNInputGate(gate)) {
+    return gate->getScalarTerm(NLID::DesignObjectID(0));
+  } else if (isNOutputGate(gate)) {
+    return gate->getScalarTerm(NLID::DesignObjectID(1));
+  }
+  return nullptr;
+}
+
+SNLBusTerm* NLDB0::getGateNTerms(const SNLDesign* gate) {
+  if (isNInputGate(gate)) {
+    return gate->getBusTerm(NLID::DesignObjectID(1));
+  } else if (isNOutputGate(gate)) {
+    return gate->getBusTerm(NLID::DesignObjectID(0));
+  }
+  return nullptr;
+}
+
+}  // namespace naja::NL

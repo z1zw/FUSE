@@ -1,0 +1,7 @@
+metric,platform,value,absolute,source
+Scheduling latency,Multi-core,100.0,0.15188313636363635,simulator_trace
+Scheduling latency,FUSE,78.94317072126925,0.11990136363636364,simulator_trace
+Idle ratio,Multi-core,100.0,67.34219999999999,simulator_metrics
+Idle ratio,FUSE,100.26595507720273,67.52130000000001,simulator_metrics
+Buffer ops,Multi-core,100.0,4271.0,simulator_metrics
+Buffer ops,FUSE,100.0,4271.0,simulator_metrics

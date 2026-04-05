@@ -1,0 +1,13 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+All Tasks_pair_zkp_0,pair_zkp,ZKP,Zp,0
+All Tasks_pair_zkp_1,pair_zkp,ZKP,Zp,180000
+All Tasks_pair_zkp_2,pair_zkp,ZKP,Zp,360000
+All Tasks_pair_zkp_3,pair_zkp,ZKP,Zp,540000
+All Tasks_pair_cnn_0,pair_cnn,CNN,R,720000
+All Tasks_pair_cnn_1,pair_cnn,CNN,R,899999
+All Tasks_pair_cnn_2,pair_cnn,CNN,R,1079999
+All Tasks_pair_cnn_3,pair_cnn,CNN,R,1259999
+All Tasks_pair_aes_0,pair_aes,AES,GF(2^8),1439999
+All Tasks_pair_aes_1,pair_aes,AES,GF(2^8),1619999
+All Tasks_pair_aes_2,pair_aes,AES,GF(2^8),1799999
+All Tasks_pair_aes_3,pair_aes,AES,GF(2^8),1979999

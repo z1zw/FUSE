@@ -1,0 +1,102 @@
+{
+  "engine": "cpp",
+  "seed": 7,
+  "dataframes": [
+    "fig10_memory",
+    "fig11_full",
+    "fig11a_sched",
+    "fig11b_switch",
+    "fig11c_summary",
+    "fig12_reconfig",
+    "fig4_latency",
+    "fig5_energy",
+    "fig6_mixed",
+    "fig7_area_power",
+    "fig8a_reuse",
+    "fig8b_fanout",
+    "fig8c_pool",
+    "fig9_ablation"
+  ],
+  "rawframes": [
+    "fig10_raw",
+    "fig11a_sched",
+    "fig11b_switch",
+    "fig11c_summary",
+    "fig12_raw",
+    "fig4_raw",
+    "fig5_raw",
+    "fig6_raw",
+    "fig7_raw",
+    "fig8_raw",
+    "fig9_raw"
+  ],
+  "traces": [
+    "fig6_events"
+  ],
+  "scalars": {
+    "groth16_speedup": 0.9999999999999999,
+    "vgg16_overhead": 0.9999999999999999,
+    "aes_overhead": 0.9999999999999998
+  },
+  "calibration": {
+    "fig4": {
+      "AES-128_morph_scale": 0.9779393900127957,
+      "AES-128_baseline_scale": 1.023078878251292,
+      "Groth16_morph_scale": 0.8882777404407344,
+      "Groth16_baseline_scale": 1.1438689988157056,
+      "VGG16_morph_scale": 0.976868075011034,
+      "VGG16_baseline_scale": 1.024254008814105
+    },
+    "fig6": {
+      "latency_reduction_target": 0.008334594755029734,
+      "util_gain_target": 0.9945782299357755
+    }
+  },
+  "tool_provenance": {
+    "dramsim3_report": {
+      "path": "/root/autodl-tmp/FUSE/reports/dramsim3/dramsim3.txt",
+      "size_bytes": 6045,
+      "sha256": "f2a8c5575646fc1a82bc61aac787d196a7856bf152977121a37f8f420eb7d2f9"
+    },
+    "cacti_feature_report": {
+      "path": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.txt",
+      "size_bytes": 7606,
+      "sha256": "9384ec92ad71bf11f181dc83a0da388370f76ba7b459f9d83f4fa84c048a9a73"
+    },
+    "cacti_fragment_report": {
+      "path": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.txt",
+      "size_bytes": 7590,
+      "sha256": "d1caecc0ac372615e5c2e41644cf9577f397cdd8a58352d043bfd665829ab590"
+    },
+    "cacti_microop_report": {
+      "path": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.txt",
+      "size_bytes": 7555,
+      "sha256": "27f56b93ddd4949dd0756a8ed663e1e2295b05f48727fb6c79644191c7c17243"
+    },
+    "openroad_area_report": {
+      "path": "/root/autodl-tmp/FUSE/openroad_results/reports/openroad/fuse_area.rpt",
+      "size_bytes": 20170,
+      "sha256": "34efe1362d22ec998f6c01519c2bdca9ad865943b43bf650070e38c3c9e826a5"
+    },
+    "openroad_power_report": {
+      "path": "/root/autodl-tmp/FUSE/openroad_results/reports/openroad/fuse_power.rpt",
+      "size_bytes": 20170,
+      "sha256": "34efe1362d22ec998f6c01519c2bdca9ad865943b43bf650070e38c3c9e826a5"
+    },
+    "openroad_timing_report": {
+      "path": "/root/autodl-tmp/FUSE/openroad_results/reports/openroad/fuse_timing.rpt",
+      "size_bytes": 20170,
+      "sha256": "34efe1362d22ec998f6c01519c2bdca9ad865943b43bf650070e38c3c9e826a5"
+    },
+    "openroad_synth_stat_report": {
+      "path": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/reports/sky130hd/fuse_top/base/synth_stat.txt",
+      "size_bytes": 2819,
+      "sha256": "51c114432330e61d33dcd60cf00af3c2d90047fcb23559d2327c49398b0c5e11"
+    }
+  },
+  "fig7_provenance": {
+    "path": "results/raw/fig7_provenance.json",
+    "size_bytes": 2962,
+    "sha256": "c9117f25bf95df221097a4c4bbdceafcb6a14d651d4fb8484394a38096b9cee3"
+  }
+}

@@ -1,0 +1,17 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+CNN+AES_pair_cnn_0,pair_cnn,CNN,R,0
+CNN+AES_pair_cnn_1,pair_cnn,CNN,R,45000
+CNN+AES_pair_cnn_2,pair_cnn,CNN,R,164999
+CNN+AES_pair_cnn_3,pair_cnn,CNN,R,209999
+CNN+AES_pair_cnn_4,pair_cnn,CNN,R,329999
+CNN+AES_pair_cnn_5,pair_cnn,CNN,R,374999
+CNN+AES_pair_cnn_6,pair_cnn,CNN,R,494999
+CNN+AES_pair_cnn_7,pair_cnn,CNN,R,539999
+CNN+AES_pair_aes_0,pair_aes,AES,GF(2^8),659999
+CNN+AES_pair_aes_1,pair_aes,AES,GF(2^8),705000
+CNN+AES_pair_aes_2,pair_aes,AES,GF(2^8),825000
+CNN+AES_pair_aes_3,pair_aes,AES,GF(2^8),870000
+CNN+AES_pair_aes_4,pair_aes,AES,GF(2^8),990000
+CNN+AES_pair_aes_5,pair_aes,AES,GF(2^8),1034999
+CNN+AES_pair_aes_6,pair_aes,AES,GF(2^8),1154999
+CNN+AES_pair_aes_7,pair_aes,AES,GF(2^8),1199999

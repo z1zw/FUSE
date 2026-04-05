@@ -1,0 +1,9 @@
+{
+  "dramsim3_report": "reports/dramsim3/dramsim3.txt",
+  "cacti_feature_report": "reports/cacti/feature_buffer.txt",
+  "cacti_fragment_report": "reports/cacti/fragment_cache.txt",
+  "cacti_microop_report": "reports/cacti/micro_op_buffer.txt",
+  "openroad_area_report": "openroad_results/reports/openroad/fuse_area.rpt",
+  "openroad_power_report": "openroad_results/reports/openroad/fuse_power.rpt",
+  "openroad_timing_report": "openroad_results/reports/openroad/fuse_timing.rpt"
+}

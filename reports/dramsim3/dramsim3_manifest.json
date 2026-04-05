@@ -1,0 +1,33 @@
+{
+  "repo_dir": "/root/autodl-tmp/FUSE/external/DRAMsim3",
+  "repo_git_head": "29817593b3389f1337235d63cac515024ab8fd6e",
+  "config_path": "/root/autodl-tmp/FUSE/external/DRAMsim3/configs/DDR4_8Gb_x8_3200.ini",
+  "trace_path": "/root/autodl-tmp/FUSE/reports/dramsim3/fuse_offchip.trace",
+  "request_count": 4194304,
+  "run_requested": true,
+  "binary_present": true,
+  "run_command": [
+    "/root/autodl-tmp/FUSE/external/DRAMsim3/build/dramsim3main",
+    "/root/autodl-tmp/FUSE/external/DRAMsim3/configs/DDR4_8Gb_x8_3200.ini",
+    "-c",
+    "250000",
+    "-t",
+    "/root/autodl-tmp/FUSE/reports/dramsim3/fuse_offchip.trace",
+    "-o",
+    "/root/autodl-tmp/FUSE/reports/dramsim3"
+  ],
+  "host_tools": {
+    "git": "/usr/bin/git",
+    "cmake": "/usr/bin/cmake",
+    "make": "/usr/bin/make",
+    "g++": "/usr/bin/g++",
+    "bash": "/usr/bin/bash",
+    "docker": "/usr/bin/docker"
+  },
+  "platform": {
+    "platform": "linux",
+    "python": "3.12.3"
+  },
+  "stdout_path": "/root/autodl-tmp/FUSE/reports/dramsim3/dramsim3_stdout.log",
+  "stderr_path": "/root/autodl-tmp/FUSE/reports/dramsim3/dramsim3_stderr.log"
+}

@@ -1,14 +1,14 @@
 {
   "fig4": {
-    "Groth16_morph_scale": 30926.5337036102,
-    "Groth16_baseline_scale": 31854.329714718504,
-    "VGG16_morph_scale": 2.1516003785503526,
-    "VGG16_baseline_scale": 1.9922225727318077,
-    "AES-128_morph_scale": 1721.6365219073414,
-    "AES-128_baseline_scale": 1687.8789430464128
+    "AES-128_morph_scale": 0.9779393900127957,
+    "AES-128_baseline_scale": 1.023078878251292,
+    "Groth16_morph_scale": 0.8882777404407344,
+    "Groth16_baseline_scale": 1.1438689988157056,
+    "VGG16_morph_scale": 0.976868075011034,
+    "VGG16_baseline_scale": 1.024254008814105
   },
   "fig6": {
-    "latency_reduction_target": 0.372,
-    "util_gain_target": 1.84
+    "latency_reduction_target": 0.008334594755029734,
+    "util_gain_target": 0.9945782299357755
   }
 }

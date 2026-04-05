@@ -1,0 +1,142 @@
+{
+  "fig4_latency.csv": {
+    "rows": 12,
+    "columns": [
+      "domain",
+      "x",
+      "x_label",
+      "baseline_ms",
+      "morph_ms",
+      "norm",
+      "baseline_name"
+    ]
+  },
+  "fig5_energy.csv": {
+    "rows": 6,
+    "columns": [
+      "task",
+      "platform",
+      "device",
+      "backend",
+      "mean_ms",
+      "p50_ms",
+      "p99_ms",
+      "energy_j",
+      "throughput",
+      "efficiency",
+      "latency_std_ms",
+      "latency_cv",
+      "stability_score",
+      "repeat",
+      "work_items",
+      "energy_source",
+      "operation",
+      "efficiency_norm",
+      "energy_nj"
+    ]
+  },
+  "fig6_mixed.csv": {
+    "rows": 4,
+    "columns": [
+      "window_ms",
+      "baseline_makespan_ms",
+      "morph_makespan_ms",
+      "baseline_util",
+      "morph_util",
+      "raw_baseline_makespan_ms",
+      "raw_baseline_util"
+    ]
+  },
+  "fig7_area_power.csv": {
+    "rows": 9,
+    "columns": [
+      "category",
+      "module",
+      "share",
+      "value",
+      "total",
+      "source"
+    ]
+  },
+  "fig8a_reuse.csv": {
+    "rows": 3,
+    "columns": [
+      "bucket",
+      "share",
+      "source"
+    ]
+  },
+  "fig8b_fanout.csv": {
+    "rows": 1,
+    "columns": [
+      "tasks_shared",
+      "share",
+      "source"
+    ]
+  },
+  "fig8c_pool.csv": {
+    "rows": 3,
+    "columns": [
+      "bucket",
+      "share",
+      "source"
+    ]
+  },
+  "fig9_ablation.csv": {
+    "rows": 12,
+    "columns": [
+      "task",
+      "metric",
+      "value"
+    ]
+  },
+  "fig10_memory.csv": {
+    "rows": 64,
+    "columns": [
+      "pair",
+      "metric",
+      "arch",
+      "batch_size",
+      "value",
+      "absolute",
+      "source"
+    ]
+  },
+  "fig11a_sched.csv": {
+    "rows": 3,
+    "columns": [
+      "bucket",
+      "value",
+      "source"
+    ]
+  },
+  "fig11b_switch.csv": {
+    "rows": 4,
+    "columns": [
+      "platform",
+      "metric",
+      "value",
+      "source"
+    ]
+  },
+  "fig11c_summary.csv": {
+    "rows": 6,
+    "columns": [
+      "metric",
+      "platform",
+      "value",
+      "absolute",
+      "source"
+    ]
+  },
+  "fig12_reconfig.csv": {
+    "rows": 42,
+    "columns": [
+      "scenario",
+      "platform",
+      "metric",
+      "value",
+      "source"
+    ]
+  }
+}

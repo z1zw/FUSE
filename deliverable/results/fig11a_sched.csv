@@ -1,0 +1,4 @@
+bucket,value,source
+Kappa-key,98.9906,simulator_metrics
+Template,99.3331,simulator_metrics
+Valid Fragments,39.9063,simulator_metrics

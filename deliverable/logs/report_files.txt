@@ -1,0 +1,10 @@
+deliverable/reports/dramsim3.json
+deliverable/reports/dramsim3.txt
+deliverable/reports/dramsim3_manifest.json
+deliverable/reports/feature_buffer.txt
+deliverable/reports/fragment_cache.txt
+deliverable/reports/fuse_area.rpt
+deliverable/reports/fuse_power.rpt
+deliverable/reports/fuse_timing.rpt
+deliverable/reports/micro_op_buffer.txt
+deliverable/reports/openroad_manifest.json

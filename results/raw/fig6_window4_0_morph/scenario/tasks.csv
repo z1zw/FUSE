@@ -1,0 +1,13 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+mix_4_0_0_groth16_mix,groth16_mix,ZKP,Zp,0
+mix_4_0_1_groth16_mix,groth16_mix,ZKP,Zp,179200
+mix_4_0_2_vgg_mix,vgg_mix,CNN,R,1363200
+mix_4_0_3_vgg_mix,vgg_mix,CNN,R,1542400
+mix_4_0_4_aes_mix,aes_mix,AES,GF(2^8),2726400
+mix_4_0_5_aes_mix,aes_mix,AES,GF(2^8),2905600
+mix_4_0_6_groth16_mix,groth16_mix,ZKP,Zp,4089600
+mix_4_0_7_vgg_mix,vgg_mix,CNN,R,5292800
+mix_4_0_8_aes_mix,aes_mix,AES,GF(2^8),6476800
+mix_4_0_9_groth16_mix,groth16_mix,ZKP,Zp,7680000
+mix_4_0_10_vgg_mix,vgg_mix,CNN,R,8864000
+mix_4_0_11_aes_mix,aes_mix,AES,GF(2^8),10067200

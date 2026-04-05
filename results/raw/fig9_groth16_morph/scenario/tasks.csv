@@ -1,0 +1,2 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+groth16_ablate_rt0,groth16_ablate,ZKP,Zp,0

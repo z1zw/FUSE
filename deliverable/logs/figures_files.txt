@@ -1,0 +1,11 @@
+figures/fig10_memory.png
+figures/fig11.png
+figures/fig12_reconfig.png
+figures/fig4_latency.png
+figures/fig5_energy.png
+figures/fig6_mixed.png
+figures/fig7_area_power.png
+figures/fig8_reuse.png
+figures/fig9_ablation.png
+figures/figure_audit.csv
+figures/figure_audit.json

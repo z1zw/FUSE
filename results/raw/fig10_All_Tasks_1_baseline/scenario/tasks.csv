@@ -1,0 +1,4 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+All Tasks_pair_zkp_0,pair_zkp,ZKP,Zp,0
+All Tasks_pair_cnn_0,pair_cnn,CNN,R,180000
+All Tasks_pair_aes_0,pair_aes,AES,GF(2^8),360000

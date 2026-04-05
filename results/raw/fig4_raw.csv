@@ -1,0 +1,25 @@
+domain,x,mode,baseline_name,latency_ms,energy_nj,rfu_util
+Groth16,2048,FUSE,Static ZKP Core,0.006681,9378.42,0.103858
+Groth16,2048,Static ZKP Core,Static ZKP Core,0.005103,5986.464,0.091821
+Groth16,4096,FUSE,Static ZKP Core,0.006814,15221.33,0.183437
+Groth16,4096,Static ZKP Core,Static ZKP Core,0.005237,8947.656,0.147317
+Groth16,8192,FUSE,Static ZKP Core,0.007084,26844.73,0.332572
+Groth16,8192,Static ZKP Core,Static ZKP Core,0.005505,14807.64,0.249024
+Groth16,16384,FUSE,Static ZKP Core,0.007692,50243.29,0.595481
+Groth16,16384,Static ZKP Core,Static ZKP Core,0.006109,26667.192,0.422676
+VGG16,8,FUSE,Eyeriss-style Accelerator,28.187317,27341723.89,0.0625
+VGG16,8,Eyeriss-style Accelerator,Eyeriss-style Accelerator,26.883968,23872976.784,0.0625
+VGG16,16,FUSE,Eyeriss-style Accelerator,56.362497,54671648.49,0.0625
+VGG16,16,Eyeriss-style Accelerator,Eyeriss-style Accelerator,53.755391,47734800.408,0.0625
+VGG16,32,FUSE,Eyeriss-style Accelerator,112.712857,109331497.69,0.0625
+VGG16,32,Eyeriss-style Accelerator,Eyeriss-style Accelerator,107.498266,95458473.408,0.0625
+VGG16,64,FUSE,Eyeriss-style Accelerator,225.413544,218651164.08,0.0625
+VGG16,64,Eyeriss-style Accelerator,Eyeriss-style Accelerator,214.983961,190905770.568,0.0625
+AES-128,1024,FUSE,AES Dedicated Engine,0.014151,35794.62,0.211867
+AES-128,1024,AES Dedicated Engine,AES Dedicated Engine,0.013798,35478.624,0.237485
+AES-128,2048,FUSE,AES Dedicated Engine,0.013993,62710.71,0.398981
+AES-128,2048,AES Dedicated Engine,AES Dedicated Engine,0.013069,61003.272,0.455477
+AES-128,4096,FUSE,AES Dedicated Engine,0.013777,110364.79,0.73713
+AES-128,4096,AES Dedicated Engine,AES Dedicated Engine,0.012852,109619.376,0.856953
+AES-128,8192,FUSE,AES Dedicated Engine,0.019818,166667.16,0.775167
+AES-128,8192,AES Dedicated Engine,AES Dedicated Engine,0.019296,165811.248,0.863084

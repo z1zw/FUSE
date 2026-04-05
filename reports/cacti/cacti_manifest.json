@@ -1,0 +1,121 @@
+{
+  "repo_dir": "/root/autodl-tmp/FUSE/external/cacti",
+  "repo_git_head": "1ffd8dfb10303d306ecd8d215320aea07651e878",
+  "binary_present": true,
+  "binary_meta": {
+    "path": "/root/autodl-tmp/FUSE/external/cacti/cacti",
+    "size_bytes": 3565208,
+    "sha256": "394b00d76c71276e3601256727eeb6b8f78bd3ea49db7a306d1638aca1dedcb9"
+  },
+  "run_requested": true,
+  "cwd": "/root/autodl-tmp/FUSE/external/cacti",
+  "host_tools": {
+    "git": "/usr/bin/git",
+    "cmake": "/usr/bin/cmake",
+    "make": "/usr/bin/make",
+    "g++": "/usr/bin/g++",
+    "bash": "/usr/bin/bash",
+    "docker": "/usr/bin/docker"
+  },
+  "platform": {
+    "platform": "linux",
+    "python": "3.12.3"
+  },
+  "artifacts": {
+    "feature_buffer": {
+      "config": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.cfg",
+      "report": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.txt",
+      "config_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.cfg",
+        "size_bytes": 10469,
+        "sha256": "f26f2c346e3f7bfe9ba02adb26fd9bc63456c428c4c289ba73240b2d6682fd5f"
+      },
+      "stdout": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.stdout.log",
+      "stderr": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.stderr.log",
+      "report_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.txt",
+        "size_bytes": 7606,
+        "sha256": "9384ec92ad71bf11f181dc83a0da388370f76ba7b459f9d83f4fa84c048a9a73"
+      },
+      "stdout_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.stdout.log",
+        "size_bytes": 7606,
+        "sha256": "9384ec92ad71bf11f181dc83a0da388370f76ba7b459f9d83f4fa84c048a9a73"
+      },
+      "stderr_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.stderr.log",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "fragment_cache": {
+      "config": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.cfg",
+      "report": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.txt",
+      "config_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.cfg",
+        "size_bytes": 10469,
+        "sha256": "40750772d9d87796ce3eb1940c3cc7ee9d63722f2c1e22a3f261cef9dd06860a"
+      },
+      "stdout": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.stdout.log",
+      "stderr": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.stderr.log",
+      "report_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.txt",
+        "size_bytes": 7590,
+        "sha256": "d1caecc0ac372615e5c2e41644cf9577f397cdd8a58352d043bfd665829ab590"
+      },
+      "stdout_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.stdout.log",
+        "size_bytes": 7590,
+        "sha256": "d1caecc0ac372615e5c2e41644cf9577f397cdd8a58352d043bfd665829ab590"
+      },
+      "stderr_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.stderr.log",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "micro_op_buffer": {
+      "config": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.cfg",
+      "report": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.txt",
+      "config_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.cfg",
+        "size_bytes": 10468,
+        "sha256": "2f9bb0712f9cbd3ee8807c886f82f3afca989fe12dde3a20a436ce8ad9db7aae"
+      },
+      "stdout": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.stdout.log",
+      "stderr": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.stderr.log",
+      "report_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.txt",
+        "size_bytes": 7555,
+        "sha256": "27f56b93ddd4949dd0756a8ed663e1e2295b05f48727fb6c79644191c7c17243"
+      },
+      "stdout_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.stdout.log",
+        "size_bytes": 7555,
+        "sha256": "27f56b93ddd4949dd0756a8ed663e1e2295b05f48727fb6c79644191c7c17243"
+      },
+      "stderr_meta": {
+        "path": "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.stderr.log",
+        "size_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "run_commands": {
+    "feature_buffer": [
+      "/root/autodl-tmp/FUSE/external/cacti/cacti",
+      "-infile",
+      "/root/autodl-tmp/FUSE/reports/cacti/feature_buffer.cfg"
+    ],
+    "fragment_cache": [
+      "/root/autodl-tmp/FUSE/external/cacti/cacti",
+      "-infile",
+      "/root/autodl-tmp/FUSE/reports/cacti/fragment_cache.cfg"
+    ],
+    "micro_op_buffer": [
+      "/root/autodl-tmp/FUSE/external/cacti/cacti",
+      "-infile",
+      "/root/autodl-tmp/FUSE/reports/cacti/micro_op_buffer.cfg"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+ZKP+CNN_pair_zkp_0,pair_zkp,ZKP,Zp,0
+ZKP+CNN_pair_zkp_1,pair_zkp,ZKP,Zp,45000
+ZKP+CNN_pair_zkp_2,pair_zkp,ZKP,Zp,164999
+ZKP+CNN_pair_zkp_3,pair_zkp,ZKP,Zp,209999
+ZKP+CNN_pair_cnn_0,pair_cnn,CNN,R,329999
+ZKP+CNN_pair_cnn_1,pair_cnn,CNN,R,374999
+ZKP+CNN_pair_cnn_2,pair_cnn,CNN,R,494999
+ZKP+CNN_pair_cnn_3,pair_cnn,CNN,R,539999

@@ -1,0 +1,5 @@
+window_ms,baseline_makespan_ms,morph_makespan_ms,baseline_redundant_reads,morph_redundant_reads,raw_baseline_makespan_ms,raw_baseline_redundant_reads
+0.25,59.235179,58.50365,2282.0,1749.0,59.235179,2282.0
+0.5,61.371667,60.64216,3409.0,3372.0,61.371667,3409.0
+1.0,65.669245,64.927797,5845.0,4712.0,65.669245,5845.0
+2.0,73.417454,72.628752,5253.0,5253.0,73.417454,5253.0

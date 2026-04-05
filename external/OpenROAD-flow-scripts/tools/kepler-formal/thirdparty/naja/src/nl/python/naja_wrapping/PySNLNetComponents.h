@@ -1,0 +1,34 @@
+// SPDX-FileCopyrightText: 2024 The Naja authors <https://github.com/najaeda/naja/blob/main/AUTHORS>
+//
+// SPDX-License-Identifier: Apache-2.0
+
+
+#pragma once
+#include <Python.h>
+#include "NajaCollection.h"
+#include "NajaPythonExport.h"
+
+namespace naja::NL {
+  class SNLNetComponent;
+}
+
+namespace PYNAJA {
+
+typedef struct {
+  PyObject_HEAD
+  naja::NajaCollection<naja::NL::SNLNetComponent*>* object_;
+} PySNLNetComponents;
+
+typedef struct {
+  PyObject_HEAD
+  naja::NajaCollection<naja::NL::SNLNetComponent*>::Iterator* object_;
+  PySNLNetComponents* container_;
+} PySNLNetComponentsIterator;
+
+NAJA_PY_EXPORT extern PyTypeObject PyTypeSNLNetComponents;
+NAJA_PY_EXPORT extern PyTypeObject PyTypeSNLNetComponentsIterator;
+
+extern void PySNLNetComponents_LinkPyType();
+
+} /* PYNAJA namespace */
+ 

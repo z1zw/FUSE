@@ -1,0 +1,2 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+vgg16_8_rt0,vgg16_8,CNN,R,0

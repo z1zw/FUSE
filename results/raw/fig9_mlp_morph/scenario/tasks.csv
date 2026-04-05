@@ -1,0 +1,9 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+mlp_ablate_rt0,mlp_ablate,CNN,R,0
+mlp_ablate_rt1,mlp_ablate,CNN,R,200000
+mlp_ablate_rt2,mlp_ablate,CNN,R,400000
+mlp_ablate_rt3,mlp_ablate,CNN,R,600000
+mlp_ablate_rt4,mlp_ablate,CNN,R,800000
+mlp_ablate_rt5,mlp_ablate,CNN,R,1000000
+mlp_ablate_rt6,mlp_ablate,CNN,R,1200000
+mlp_ablate_rt7,mlp_ablate,CNN,R,1400000

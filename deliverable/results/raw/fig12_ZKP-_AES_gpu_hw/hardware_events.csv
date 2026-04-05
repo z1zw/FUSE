@@ -1,0 +1,5 @@
+event,cycle,finish_cycle,runtime_micro_id,task_runtime_id,task_type,template_family,kernel,reused_result,structural_reuse,switch_cycles,rfu_id,backend
+dispatch,0,63762,ZKP->AES_0,ZKP->AES_0,ZKP,field_mul,field_mul,False,False,0,0,torch_cuda
+complete,63762,63762,ZKP->AES_0,ZKP->AES_0,ZKP,field_mul,field_mul,False,False,0,0,torch_cuda
+dispatch,2000000,2026975,ZKP->AES_1,ZKP->AES_1,AES,sbox_lookup,aes128_ecb_encrypt,False,False,0,0,cryptography_cpu
+complete,2026975,2026975,ZKP->AES_1,ZKP->AES_1,AES,sbox_lookup,aes128_ecb_encrypt,False,False,0,0,cryptography_cpu

@@ -1,0 +1,55 @@
+{
+  "engine": "cpp",
+  "seed": 7,
+  "dataframes": [
+    "fig10_memory",
+    "fig11_full",
+    "fig11a_sched",
+    "fig11b_switch",
+    "fig11c_summary",
+    "fig12_reconfig",
+    "fig4_latency",
+    "fig5_energy",
+    "fig6_mixed",
+    "fig7_area_power",
+    "fig8a_reuse",
+    "fig8b_fanout",
+    "fig8c_pool",
+    "fig9_ablation"
+  ],
+  "rawframes": [
+    "fig10_raw",
+    "fig11a_sched",
+    "fig11b_switch",
+    "fig11c_summary",
+    "fig12_raw",
+    "fig4_raw",
+    "fig5_raw",
+    "fig6_raw",
+    "fig7_raw",
+    "fig8_raw",
+    "fig9_raw"
+  ],
+  "traces": [
+    "fig6_events"
+  ],
+  "scalars": {
+    "groth16_speedup": 0.9999999999999999,
+    "vgg16_overhead": 0.9999999999999999,
+    "aes_overhead": 0.9999999999999998
+  },
+  "calibration": {
+    "fig4": {
+      "AES-128_morph_scale": 0.9779393900127957,
+      "AES-128_baseline_scale": 1.023078878251292,
+      "Groth16_morph_scale": 0.8882777404407344,
+      "Groth16_baseline_scale": 1.1438689988157056,
+      "VGG16_morph_scale": 0.976868075011034,
+      "VGG16_baseline_scale": 1.024254008814105
+    },
+    "fig6": {
+      "latency_reduction_target": 0.008334594755029734,
+      "util_gain_target": 0.9945782299357755
+    }
+  }
+}

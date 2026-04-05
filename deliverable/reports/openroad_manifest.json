@@ -1,0 +1,43 @@
+{
+  "flow_root": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts",
+  "flow_git_head": "f5b9c3f0e9387f5e72302f531aff3de8f61c0409",
+  "staged_design_dir": "/root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse",
+  "repo_design_dir": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/designs/sky130hd/fuse",
+  "platform": "sky130hd",
+  "mode": "local",
+  "docker_image": null,
+  "clock_period_ns": 20.0,
+  "place_density": 0.55,
+  "die_area": [
+    0,
+    0,
+    1600,
+    1600
+  ],
+  "core_area": [
+    20,
+    20,
+    1580,
+    1580
+  ],
+  "target": "",
+  "threads": null,
+  "run_requested": true,
+  "host_tools": {
+    "git": "/usr/bin/git",
+    "cmake": "/usr/bin/cmake",
+    "make": "/usr/bin/make",
+    "g++": "/usr/bin/g++",
+    "bash": "/usr/bin/bash",
+    "docker": "/usr/bin/docker"
+  },
+  "run_command": [
+    "bash",
+    "-lc",
+    "cd '/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow' && make DESIGN_CONFIG=designs/sky130hd/fuse/config.mk"
+  ],
+  "run_failed": true,
+  "error": "Command '['bash', '-lc', \"cd '/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow' && make DESIGN_CONFIG=designs/sky130hd/fuse/config.mk\"]' returned non-zero exit status 2.",
+  "stdout_path": "/root/autodl-tmp/FUSE/openroad_results/openroad_stdout.log",
+  "stderr_path": "/root/autodl-tmp/FUSE/openroad_results/openroad_stderr.log"
+}

@@ -1,0 +1,5 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+area_zkp_0,area_zkp,ZKP,Zp,0
+area_cnn_0,area_cnn,CNN,R,1200000
+area_aes_0,area_aes,AES,GF(2^8),2100000
+area_zkp_1,area_zkp,ZKP,Zp,3000000

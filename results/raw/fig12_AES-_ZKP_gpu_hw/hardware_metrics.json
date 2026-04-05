@@ -1,0 +1,35 @@
+{
+  "mode": "hardware_gpu",
+  "backend": "torch_cuda",
+  "device": "cuda:0",
+  "makespan_cycles": 404095,
+  "makespan_ms": 0.404095,
+  "dispatches": 2,
+  "result_reuse_hits": 0,
+  "structural_reuse_hits": 0,
+  "result_reuse_rate": 0.0,
+  "structural_reuse_rate": 0.0,
+  "switch_cycles_total": 0.0,
+  "rfu_utilization": 1.0,
+  "energy_nj": 18184275.0,
+  "task_latency_ms": {
+    "AES->ZKP_0": 0.035086,
+    "AES->ZKP_1": 0.054095
+  },
+  "task_type_mean_latency_ms": {
+    "AES": 0.035086,
+    "ZKP": 0.054095
+  },
+  "fvm_reads": 0.0,
+  "fvm_writes": 0.0,
+  "fvm_allocations": 0.0,
+  "fvm_frees": 0.0,
+  "fvm_avg_residency_bytes": 0.0,
+  "fvm_redundant_reads": 0.0,
+  "lrc_switch_events": 0.0,
+  "scheduler_decisions": 2.0,
+  "scheduler_pipeline_stall_cycles": 0.0,
+  "kappa_key_match_ratio": 0.0,
+  "template_hit_ratio": 0.0,
+  "valid_fragment_ratio": 0.0
+}

@@ -1,0 +1,65 @@
+pair,metric,arch,batch_size,value,absolute,source
+CNN+AES,On-chip Memory Residency,Fully Separated,BS2,1.0,6998072.794484,simulator_metrics
+CNN+AES,On-chip Memory Residency,FUSE,BS2,0.5981125180295622,4185634.940463,simulator_metrics
+CNN+AES,Redundant Accesses,Fully Separated,BS2,1.0,1307.0,simulator_metrics
+CNN+AES,Redundant Accesses,FUSE,BS2,0.991583779648049,1296.0,simulator_metrics
+CNN+AES,On-chip Memory Residency,Fully Separated,BS4,1.0,7295658.47287,simulator_metrics
+CNN+AES,On-chip Memory Residency,FUSE,BS4,0.4220876684909578,3079407.47492,simulator_metrics
+CNN+AES,Redundant Accesses,Fully Separated,BS4,1.0,1393.0,simulator_metrics
+CNN+AES,Redundant Accesses,FUSE,BS4,0.5506101938262742,767.0,simulator_metrics
+CNN+AES,On-chip Memory Residency,Fully Separated,BS8,1.0,4330747.947704,simulator_metrics
+CNN+AES,On-chip Memory Residency,FUSE,BS8,0.6533695962066175,2829579.037864,simulator_metrics
+CNN+AES,Redundant Accesses,Fully Separated,BS8,1.0,1543.0,simulator_metrics
+CNN+AES,Redundant Accesses,FUSE,BS8,0.524303305249514,809.0,simulator_metrics
+CNN+AES,On-chip Memory Residency,Fully Separated,BS16,1.0,2722054.70617,simulator_metrics
+CNN+AES,On-chip Memory Residency,FUSE,BS16,0.9216238626558755,2508710.572661,simulator_metrics
+CNN+AES,Redundant Accesses,Fully Separated,BS16,1.0,4224.0,simulator_metrics
+CNN+AES,Redundant Accesses,FUSE,BS16,0.4865056818181818,2055.0,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,Fully Separated,BS2,1.0,4183619.744917,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,FUSE,BS2,0.8619626370136426,3606123.907591,simulator_metrics
+ZKP+CNN,Redundant Accesses,Fully Separated,BS2,1.0,1082.0,simulator_metrics
+ZKP+CNN,Redundant Accesses,FUSE,BS2,0.5,541.0,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,Fully Separated,BS4,1.0,4176997.933349,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,FUSE,BS4,1.0129135822915651,4230937.939893,simulator_metrics
+ZKP+CNN,Redundant Accesses,Fully Separated,BS4,1.0,2127.0,simulator_metrics
+ZKP+CNN,Redundant Accesses,FUSE,BS4,0.306535025858016,652.0,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,Fully Separated,BS8,1.0,4063302.790534,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,FUSE,BS8,0.971225753464798,3946384.314292,simulator_metrics
+ZKP+CNN,Redundant Accesses,Fully Separated,BS8,1.0,4208.0,simulator_metrics
+ZKP+CNN,Redundant Accesses,FUSE,BS8,0.15779467680608364,664.0,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,Fully Separated,BS16,1.0,4095049.058255,simulator_metrics
+ZKP+CNN,On-chip Memory Residency,FUSE,BS16,0.9128300159614909,3738083.69721,simulator_metrics
+ZKP+CNN,Redundant Accesses,Fully Separated,BS16,1.0,8304.0,simulator_metrics
+ZKP+CNN,Redundant Accesses,FUSE,BS16,0.075626204238921,628.0,simulator_metrics
+ZKP+AES,On-chip Memory Residency,Fully Separated,BS2,1.0,2399647.032502,simulator_metrics
+ZKP+AES,On-chip Memory Residency,FUSE,BS2,1.000015184779889,2399683.470614,simulator_metrics
+ZKP+AES,Redundant Accesses,Fully Separated,BS2,1.0,2246.0,simulator_metrics
+ZKP+AES,Redundant Accesses,FUSE,BS2,0.5,1123.0,simulator_metrics
+ZKP+AES,On-chip Memory Residency,Fully Separated,BS4,1.0,2590640.100846,simulator_metrics
+ZKP+AES,On-chip Memory Residency,FUSE,BS4,1.0000070326464854,2590658.319902,simulator_metrics
+ZKP+AES,Redundant Accesses,Fully Separated,BS4,1.0,4492.0,simulator_metrics
+ZKP+AES,Redundant Accesses,FUSE,BS4,0.25,1123.0,simulator_metrics
+ZKP+AES,On-chip Memory Residency,Fully Separated,BS8,1.0,2686136.635018,simulator_metrics
+ZKP+AES,On-chip Memory Residency,FUSE,BS8,1.000003391312222,2686145.744546,simulator_metrics
+ZKP+AES,Redundant Accesses,Fully Separated,BS8,1.0,8984.0,simulator_metrics
+ZKP+AES,Redundant Accesses,FUSE,BS8,0.125,1123.0,simulator_metrics
+ZKP+AES,On-chip Memory Residency,Fully Separated,BS16,1.0,2733884.902104,simulator_metrics
+ZKP+AES,On-chip Memory Residency,FUSE,BS16,1.000001666040877,2733889.456868,simulator_metrics
+ZKP+AES,Redundant Accesses,Fully Separated,BS16,1.0,17968.0,simulator_metrics
+ZKP+AES,Redundant Accesses,FUSE,BS16,0.0625,1123.0,simulator_metrics
+All Tasks,On-chip Memory Residency,Fully Separated,BS2,1.0,6047472.883816,simulator_metrics
+All Tasks,On-chip Memory Residency,FUSE,BS2,0.5498652014916873,3325294.895775,simulator_metrics
+All Tasks,Redundant Accesses,Fully Separated,BS2,1.0,2331.0,simulator_metrics
+All Tasks,Redundant Accesses,FUSE,BS2,0.7854997854997855,1831.0,simulator_metrics
+All Tasks,On-chip Memory Residency,Fully Separated,BS4,1.0,4861922.61074,simulator_metrics
+All Tasks,On-chip Memory Residency,FUSE,BS4,0.5250721502994977,2552860.159811,simulator_metrics
+All Tasks,Redundant Accesses,Fully Separated,BS4,1.0,3414.0,simulator_metrics
+All Tasks,Redundant Accesses,FUSE,BS4,0.36731107205623903,1254.0,simulator_metrics
+All Tasks,On-chip Memory Residency,Fully Separated,BS8,1.0,3163963.672196,simulator_metrics
+All Tasks,On-chip Memory Residency,FUSE,BS8,0.7900697830244071,2499752.091989,simulator_metrics
+All Tasks,Redundant Accesses,Fully Separated,BS8,1.0,5493.0,simulator_metrics
+All Tasks,Redundant Accesses,FUSE,BS8,0.23866739486619334,1311.0,simulator_metrics
+All Tasks,On-chip Memory Residency,Fully Separated,BS16,1.0,2453564.491812,simulator_metrics
+All Tasks,On-chip Memory Residency,FUSE,BS16,0.9769933860041674,2397116.280635,simulator_metrics
+All Tasks,Redundant Accesses,Fully Separated,BS16,1.0,12045.0,simulator_metrics
+All Tasks,Redundant Accesses,FUSE,BS16,0.16961394769613947,2043.0,simulator_metrics

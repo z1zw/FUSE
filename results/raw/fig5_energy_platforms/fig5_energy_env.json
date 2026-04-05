@@ -1,0 +1,10 @@
+{
+  "device": "cuda:0",
+  "torch": "2.11.0+cu128",
+  "torch_geometric": null,
+  "dgl": null,
+  "pycryptodome": null,
+  "pynvml": null,
+  "cpu_package_w": 35.0,
+  "min_sample_s": 0.2
+}

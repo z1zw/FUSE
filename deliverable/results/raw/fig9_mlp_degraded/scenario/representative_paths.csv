@@ -1,0 +1,4 @@
+path_id,members,signature,template_families,reuse_count
+SINGLE000,mlp_ablate:gemm:0,716e729d1ac1f666:matmul_tile:IT:linear_map,linear_map,1
+SINGLE001,mlp_ablate:norm:0,aa29debb73eea644:layernorm:SC:reduction,reduction,1
+SINGLE002,mlp_ablate:gelu:0,d18386624b38fb05:gelu:SC:nonlinear_lookup,nonlinear_lookup,1

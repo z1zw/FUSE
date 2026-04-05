@@ -1,0 +1,96 @@
+{
+  "flow_root": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts",
+  "flow_git_head": "f5b9c3f0e9387f5e72302f531aff3de8f61c0409",
+  "staged_design_dir": "/root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse",
+  "repo_design_dir": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/designs/sky130hd/fuse",
+  "platform": "sky130hd",
+  "mode": "local",
+  "docker_image": null,
+  "clock_period_ns": 20.0,
+  "place_density": 0.55,
+  "die_area": [
+    0,
+    0,
+    1600,
+    1600
+  ],
+  "core_area": [
+    20,
+    20,
+    1580,
+    1580
+  ],
+  "target": "",
+  "threads": null,
+  "run_requested": true,
+  "host_tools": {
+    "git": "/usr/bin/git",
+    "cmake": "/usr/bin/cmake",
+    "make": "/usr/bin/make",
+    "g++": "/usr/bin/g++",
+    "bash": "/usr/bin/bash",
+    "docker": "/usr/bin/docker"
+  },
+  "design_files": {
+    "config_mk": {
+      "path": "/root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/config.mk",
+      "size_bytes": 811,
+      "sha256": "ff9b02f09ca239388b1316b69a0473f7a24c3351b752d060851b4c00f90ab13c"
+    },
+    "constraint_sdc": {
+      "path": "/root/autodl-tmp/FUSE/openroad_work/flow/designs/sky130hd/fuse/constraint.sdc",
+      "size_bytes": 166,
+      "sha256": "41fe519d2191ddf80ac7ef41996cefb63e522c790c467727df28da5a44a8619a"
+    },
+    "rtl_files": [
+      {
+        "path": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/designs/sky130hd/fuse/src/fuse_top.v",
+        "size_bytes": 1967,
+        "sha256": "9e5fd9bf6eed229c9bb1c1a63af6c18479e8c6db237b2e36716dd92305ba1541"
+      },
+      {
+        "path": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/designs/sky130hd/fuse/src/fvm.v",
+        "size_bytes": 1466,
+        "sha256": "9f0d245339955bf7d9d21885f8788d6d27b7d776fd353d66210f9f4f9fe7c4e2"
+      },
+      {
+        "path": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/designs/sky130hd/fuse/src/lrc.v",
+        "size_bytes": 1181,
+        "sha256": "dc518c738d12ddb53640c66eaf09b7a90b303641b7ef56766ef7f9aff66ba222"
+      },
+      {
+        "path": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/designs/sky130hd/fuse/src/rfu.v",
+        "size_bytes": 1146,
+        "sha256": "d2416be9db86d34cfeae9ae50f04ff141a46acd01e9858877d11f74bc8c0bd95"
+      },
+      {
+        "path": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/designs/sky130hd/fuse/src/tars.v",
+        "size_bytes": 1110,
+        "sha256": "2aedf83ebc8e2eaa42a77980535e45d97c296a908a37c5c40ac9a1fa9cb5490b"
+      }
+    ]
+  },
+  "run_command": [
+    "bash",
+    "-lc",
+    "cd '/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow' && make DESIGN_CONFIG=designs/sky130hd/fuse/config.mk"
+  ],
+  "reports": {},
+  "report_files": {},
+  "tool_config": "openroad_results/openroad_eval_tools.json",
+  "tool_config_meta": {
+    "path": "/root/autodl-tmp/FUSE/openroad_results/openroad_eval_tools.json",
+    "size_bytes": 192,
+    "sha256": "772937c9427e42b142a441c256750732ab59d78e8a3eb9234431528728f3feb4"
+  },
+  "parsed": null,
+  "tool_provenance": {
+    "openroad_synth_stat_report": {
+      "path": "/root/autodl-tmp/FUSE/external/OpenROAD-flow-scripts/flow/reports/sky130hd/fuse_top/base/synth_stat.txt",
+      "size_bytes": 2819,
+      "sha256": "51c114432330e61d33dcd60cf00af3c2d90047fcb23559d2327c49398b0c5e11"
+    }
+  },
+  "stdout_path": "openroad_results/openroad_stdout.log",
+  "stderr_path": "openroad_results/openroad_stderr.log"
+}

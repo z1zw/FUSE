@@ -1,0 +1,5 @@
+event,cycle,finish_cycle,runtime_micro_id,task_runtime_id,task_type,template_family,kernel,reused_result,structural_reuse,switch_cycles,rfu_id,backend
+dispatch,0,10229201,CNN->AES_0,CNN->AES_0,CNN,conv2d,vgg16_inference,False,False,0,0,torch_cpu
+complete,10229201,10229201,CNN->AES_0,CNN->AES_0,CNN,conv2d,vgg16_inference,False,False,0,0,torch_cpu
+dispatch,10229201,10253743,CNN->AES_1,CNN->AES_1,AES,sbox_lookup,aes128_ecb_encrypt,False,False,0,0,cryptography_cpu
+complete,10253743,10253743,CNN->AES_1,CNN->AES_1,AES,sbox_lookup,aes128_ecb_encrypt,False,False,0,0,cryptography_cpu

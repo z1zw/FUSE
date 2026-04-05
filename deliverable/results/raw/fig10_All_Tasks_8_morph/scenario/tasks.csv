@@ -1,0 +1,25 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+All Tasks_pair_zkp_0,pair_zkp,ZKP,Zp,0
+All Tasks_pair_zkp_1,pair_zkp,ZKP,Zp,180000
+All Tasks_pair_zkp_2,pair_zkp,ZKP,Zp,360000
+All Tasks_pair_zkp_3,pair_zkp,ZKP,Zp,540000
+All Tasks_pair_zkp_4,pair_zkp,ZKP,Zp,720000
+All Tasks_pair_zkp_5,pair_zkp,ZKP,Zp,899999
+All Tasks_pair_zkp_6,pair_zkp,ZKP,Zp,1079999
+All Tasks_pair_zkp_7,pair_zkp,ZKP,Zp,1259999
+All Tasks_pair_cnn_0,pair_cnn,CNN,R,1439999
+All Tasks_pair_cnn_1,pair_cnn,CNN,R,1619999
+All Tasks_pair_cnn_2,pair_cnn,CNN,R,1799999
+All Tasks_pair_cnn_3,pair_cnn,CNN,R,1979999
+All Tasks_pair_cnn_4,pair_cnn,CNN,R,2159999
+All Tasks_pair_cnn_5,pair_cnn,CNN,R,2340000
+All Tasks_pair_cnn_6,pair_cnn,CNN,R,2520000
+All Tasks_pair_cnn_7,pair_cnn,CNN,R,2700000
+All Tasks_pair_aes_0,pair_aes,AES,GF(2^8),2880000
+All Tasks_pair_aes_1,pair_aes,AES,GF(2^8),3060000
+All Tasks_pair_aes_2,pair_aes,AES,GF(2^8),3240000
+All Tasks_pair_aes_3,pair_aes,AES,GF(2^8),3420000
+All Tasks_pair_aes_4,pair_aes,AES,GF(2^8),3600000
+All Tasks_pair_aes_5,pair_aes,AES,GF(2^8),3780000
+All Tasks_pair_aes_6,pair_aes,AES,GF(2^8),3960000
+All Tasks_pair_aes_7,pair_aes,AES,GF(2^8),4140000

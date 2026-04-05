@@ -1,0 +1,47 @@
+Metadata-Version: 2.4
+Name: fuse-repro-full
+Version: 0.2.0
+Summary: FUSE reimplementation with Python front-end, C++ timing core, GPU benchmark path, and paper-oriented evaluation flow
+Author: OpenAI ChatGPT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.24
+Requires-Dist: networkx>=3.0
+Requires-Dist: pandas>=2.0
+Requires-Dist: matplotlib>=3.7
+Requires-Dist: Pillow>=10.0
+Requires-Dist: pytest>=7.4
+Requires-Dist: cryptography>=42.0
+
+# FUSE
+
+## Project Structure
+
+- `configs/`: calibration and tool configuration
+- `cpp/`: C++ backend
+- `rtl/`: RTL modules
+- `scripts/`: command-line entry points
+- `src/`: Python package
+- `tests/`: regression tests
+
+## Dependencies
+
+- Python packages in `requirements.txt`
+- `g++` for the C++ backend
+- PyTorch for hardware-oriented evaluation
+
+## Run Commands
+
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -e .
+python scripts/build_cpp.py
+python scripts/run_benchmarks.py --engine py
+pytest -q
+```
+
+## Environment Requirements
+
+- Python 3.10 or newer
+- Windows, Linux, or macOS
+- CUDA-capable GPU only if GPU evaluation is needed

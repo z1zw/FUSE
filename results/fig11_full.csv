@@ -1,0 +1,14 @@
+bucket,value,source,panel,panel_title,platform,metric,absolute,scenario,annotation
+Kappa-key,99.33619999999999,simulator_metrics,a,TARS fragment scheduling,,,,,
+Template,99.6745,simulator_metrics,a,TARS fragment scheduling,,,,,
+Valid Fragments,3.025,simulator_metrics,a,TARS fragment scheduling,,,,,
+,0.16582,simulator_trace,b,Task switch latency and idle ratio,Multi-core,Scheduling Latency (ms),,,
+,0.04751309090909091,simulator_trace,b,Task switch latency and idle ratio,FUSE,Scheduling Latency (ms),,,
+,75.8836,simulator_metrics,b,Task switch latency and idle ratio,Multi-core,Idle Ratio (%),,,
+,75.94460000000001,simulator_metrics,b,Task switch latency and idle ratio,FUSE,Idle Ratio (%),,,
+Latency Reduction,71.34658611199438,simulator_trace,c,Overall reduction summary,,,0.04751309090909091,,
+Idle Ratio Reduction,-0.08038627582244828,simulator_metrics,c,Overall reduction summary,,,75.94460000000001,,
+Redundant Read Reduction,34.63227222832053,simulator_metrics,c,Overall reduction summary,,,2382.0,,
+,0.0,simulator_metrics,d,ZKP -> CNN switch,,,,ZKP->CNN,Prefetch path
+,0.0,simulator_metrics,e,CNN -> AES switch,,,,CNN->AES,Pipeline handoff
+,18.79235016666667,aggregate,f,Full state inheritance,,,,Avg,Shared state / buffer / cache

@@ -1,0 +1,13 @@
+runtime_id,task_id,task_type,domain,arrival_cycle
+mix_1_0_0_sched_zkp,sched_zkp,ZKP,Zp,0
+mix_1_0_1_sched_zkp,sched_zkp,ZKP,Zp,44800
+mix_1_0_2_sched_cnn,sched_cnn,CNN,R,340800
+mix_1_0_3_sched_cnn,sched_cnn,CNN,R,385600
+mix_1_0_4_sched_aes,sched_aes,AES,GF(2^8),681600
+mix_1_0_5_sched_aes,sched_aes,AES,GF(2^8),726400
+mix_1_0_6_sched_zkp,sched_zkp,ZKP,Zp,1022400
+mix_1_0_7_sched_cnn,sched_cnn,CNN,R,1323200
+mix_1_0_8_sched_aes,sched_aes,AES,GF(2^8),1619200
+mix_1_0_9_sched_zkp,sched_zkp,ZKP,Zp,1920000
+mix_1_0_10_sched_cnn,sched_cnn,CNN,R,2216000
+mix_1_0_11_sched_aes,sched_aes,AES,GF(2^8),2516800

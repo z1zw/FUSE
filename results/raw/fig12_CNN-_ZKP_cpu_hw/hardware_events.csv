@@ -1,0 +1,5 @@
+event,cycle,finish_cycle,runtime_micro_id,task_runtime_id,task_type,template_family,kernel,reused_result,structural_reuse,switch_cycles,rfu_id,backend
+dispatch,0,10134899,CNN->ZKP_0,CNN->ZKP_0,CNN,conv2d,vgg16_inference,False,False,0,0,torch_cpu
+complete,10134899,10134899,CNN->ZKP_0,CNN->ZKP_0,CNN,conv2d,vgg16_inference,False,False,0,0,torch_cpu
+dispatch,10134899,10234301,CNN->ZKP_1,CNN->ZKP_1,ZKP,field_mul,field_mul,False,False,0,0,torch_cpu
+complete,10234301,10234301,CNN->ZKP_1,CNN->ZKP_1,ZKP,field_mul,field_mul,False,False,0,0,torch_cpu

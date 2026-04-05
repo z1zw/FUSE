@@ -1,0 +1,13 @@
+task,metric,value
+Groth16,latency_degraded,0.052315
+Groth16,latency_morph,0.007692
+Groth16,throughput_degraded,19.114976584153684
+Groth16,throughput_morph,130.00520020800832
+MLP,latency_degraded,1.44643
+MLP,latency_morph,1.402766
+MLP,throughput_degraded,5.530858734954336
+MLP,throughput_morph,5.703018179796203
+VGG16,latency_degraded,225.475558
+VGG16,latency_morph,225.413544
+VGG16,throughput_degraded,0.004435070518818718
+VGG16,throughput_morph,0.004436290660511508

@@ -12,7 +12,7 @@ SRC = ROOT / 'src'
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 from fuse.eval_tools import EvaluationToolkit
-from fuse.open_source_eval import clone_or_update_repo, host_build_tools
+from fuse.open_source_eval import clone_or_update_repo, file_metadata, host_build_tools
 PLATFORM_DEFAULT = 'sky130hd'
 DESIGN_NAME = 'fuse_top'
 DESIGN_ALIAS = 'fuse'
@@ -26,13 +26,38 @@ def stage_design(*, work_dir: Path, platform: str, clock_period_ns: float, place
     design_dir = work_dir / 'flow' / 'designs' / platform / DESIGN_ALIAS
     src_dir = design_dir / 'src'
     src_dir.mkdir(parents=True, exist_ok=True)
+    copied_rtls: list[Path] = []
     for rtl in RTL_FILES:
-        shutil.copy2(rtl, src_dir / rtl.name)
+        dest = src_dir / rtl.name
+        shutil.copy2(rtl, dest)
+        copied_rtls.append(dest.resolve())
     die_area_s = ' '.join((str(v) for v in die_area))
     core_area_s = ' '.join((str(v) for v in core_area))
-    config = '\n'.join([f'export DESIGN_NAME = {DESIGN_NAME}', f'export PLATFORM = {platform}', 'export VERILOG_FILES = $(sort $(wildcard $(DESIGN_HOME)/src/*.v))', 'export SDC_FILE = $(DESIGN_HOME)/constraint.sdc', f'export DIE_AREA = {die_area_s}', f'export CORE_AREA = {core_area_s}', 'export CLOCK_PORT = clk', f'export CLOCK_PERIOD = {clock_period_ns:.3f}', f'export PLACE_DENSITY = {place_density:.3f}', 'export MAX_FANOUT_CONSTRAINT = 12', 'export MAX_TRANSITION_CONSTRAINT = 0.75', 'export MAX_CAPACITANCE_CONSTRAINT = 0.20', ''])
+    verilog_files = ' '.join(path.as_posix() for path in copied_rtls)
+    constraint_path = (design_dir / 'constraint.sdc').resolve().as_posix()
+    config = '\n'.join([
+        f'export DESIGN_NAME = {DESIGN_NAME}',
+        f'export PLATFORM = {platform}',
+        f'export VERILOG_FILES = {verilog_files}',
+        f'export SDC_FILE = {constraint_path}',
+        f'export DIE_AREA = {die_area_s}',
+        f'export CORE_AREA = {core_area_s}',
+        'export CLOCK_PORT = clk',
+        f'export CLOCK_PERIOD = {clock_period_ns:.3f}',
+        f'export PLACE_DENSITY = {place_density:.3f}',
+        'export MAX_FANOUT_CONSTRAINT = 12',
+        'export MAX_TRANSITION_CONSTRAINT = 0.75',
+        'export MAX_CAPACITANCE_CONSTRAINT = 0.20',
+        '',
+    ])
     io_delay = max(clock_period_ns * 0.1, 1.0)
-    sdc = '\n'.join([f'create_clock -period {clock_period_ns:.3f} [get_ports clk]', f'set_input_delay {io_delay:.3f} -clock clk [remove_from_collection [all_inputs] [get_ports clk]]', f'set_output_delay {io_delay:.3f} -clock clk [all_outputs]', 'set_driving_cell -lib_cell sky130_fd_sc_hd__buf_4 [remove_from_collection [all_inputs] [get_ports clk]]', 'set_load 0.05 [all_outputs]', ''])
+    sdc = '\n'.join([
+        f'create_clock -period {clock_period_ns:.3f} [get_ports clk]',
+        f'set_input_delay {io_delay:.3f} -clock clk [all_inputs]',
+        f'set_output_delay {io_delay:.3f} -clock clk [all_outputs]',
+        'set_load 0.05 [all_outputs]',
+        '',
+    ])
     write_file(design_dir / 'config.mk', config)
     write_file(design_dir / 'constraint.sdc', sdc)
     return {'design_dir': design_dir, 'config_mk': design_dir / 'config.mk', 'constraint_sdc': design_dir / 'constraint.sdc'}
@@ -60,7 +85,7 @@ def copy_reports(flow_root: Path, output_dir: Path, platform: str) -> dict[str, 
     report_root = flow_root / 'flow' / 'reports' / platform / DESIGN_ALIAS / DESIGN_NAME
     logs_root = flow_root / 'flow' / 'logs' / platform / DESIGN_ALIAS / DESIGN_NAME
     results_root = flow_root / 'flow' / 'results' / platform / DESIGN_ALIAS / DESIGN_NAME
-    candidates = {'fuse_area.rpt': _candidate_files(report_root, ['6_finish.rpt', 'final.rpt', 'metrics.rpt']), 'fuse_power.rpt': _candidate_files(report_root, ['6_finish.rpt', '5_1_grt_sta.power.rpt', 'power.rpt']), 'fuse_timing.rpt': _candidate_files(report_root, ['6_finish.rpt', '5_1_grt_sta.summary.rpt', 'timing.rpt']), 'fuse_metrics.json': _candidate_files(logs_root, ['6_finish.json', 'metrics.json', 'metadata.json']), 'fuse_metrics.csv': _candidate_files(logs_root, ['metrics.csv']), 'fuse_final.def': _candidate_files(results_root, ['6_final.def', 'final.def']), 'fuse_final.v': _candidate_files(results_root, ['6_final.v', 'final.v']), 'fuse_final.sdc': _candidate_files(results_root, ['6_final.sdc', 'final.sdc']), 'fuse_final.gds': _candidate_files(results_root, ['6_final.gds', 'final.gds'])}
+    candidates = {'fuse_area.rpt': _candidate_files(report_root, ['6_finish.rpt', 'final.rpt', 'metrics.rpt']), 'fuse_power.rpt': _candidate_files(report_root, ['6_finish.rpt', '5_1_grt_sta.power.rpt', 'power.rpt']), 'fuse_timing.rpt': _candidate_files(report_root, ['6_finish.rpt', '5_1_grt_sta.summary.rpt', 'timing.rpt']), 'fuse_synth_stat.txt': _candidate_files(report_root, ['synth_stat.txt']), 'fuse_metrics.json': _candidate_files(logs_root, ['6_finish.json', 'metrics.json', 'metadata.json']), 'fuse_metrics.csv': _candidate_files(logs_root, ['metrics.csv']), 'fuse_final.def': _candidate_files(results_root, ['6_final.def', 'final.def']), 'fuse_final.v': _candidate_files(results_root, ['6_final.v', 'final.v']), 'fuse_final.sdc': _candidate_files(results_root, ['6_final.sdc', 'final.sdc']), 'fuse_final.gds': _candidate_files(results_root, ['6_final.gds', 'final.gds'])}
     copied: dict[str, Path] = {}
     for name, options in candidates.items():
         for option in options:
@@ -72,7 +97,7 @@ def copy_reports(flow_root: Path, output_dir: Path, platform: str) -> dict[str, 
     return copied
 
 def write_tool_config(output_dir: Path, copied: dict[str, Path]) -> Path:
-    config = {'openroad_area_report': str(copied.get('fuse_area.rpt', '')), 'openroad_power_report': str(copied.get('fuse_power.rpt', '')), 'openroad_timing_report': str(copied.get('fuse_timing.rpt', '')), 'openroad_metrics_json': str(copied.get('fuse_metrics.json', '')), 'openroad_metrics_csv': str(copied.get('fuse_metrics.csv', ''))}
+    config = {'openroad_area_report': str(copied.get('fuse_area.rpt', '')), 'openroad_power_report': str(copied.get('fuse_power.rpt', '')), 'openroad_timing_report': str(copied.get('fuse_timing.rpt', '')), 'openroad_metrics_json': str(copied.get('fuse_metrics.json', '')), 'openroad_metrics_csv': str(copied.get('fuse_metrics.csv', '')), 'openroad_synth_stat_report': str(copied.get('fuse_synth_stat.txt', ''))}
     config_path = output_dir / 'openroad_eval_tools.json'
     config_path.write_text(json.dumps(config, indent=2), encoding='utf-8')
     return config_path
@@ -142,7 +167,28 @@ def main() -> None:
     repo_design_dir = copy_design_into_repo(staged['design_dir'], flow_root, args.platform)
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
-    manifest = {'flow_root': str(flow_root), 'flow_git_head': git_head(flow_root), 'staged_design_dir': str(staged['design_dir']), 'repo_design_dir': str(repo_design_dir), 'platform': args.platform, 'mode': args.mode, 'docker_image': args.docker_image if args.mode == 'docker' else None, 'clock_period_ns': args.clock_period_ns, 'place_density': args.place_density, 'die_area': list(args.die_area), 'core_area': list(args.core_area), 'target': args.target, 'threads': args.threads, 'run_requested': bool(args.run), 'host_tools': host_build_tools()}
+    manifest = {
+        'flow_root': str(flow_root),
+        'flow_git_head': git_head(flow_root),
+        'staged_design_dir': str(staged['design_dir']),
+        'repo_design_dir': str(repo_design_dir),
+        'platform': args.platform,
+        'mode': args.mode,
+        'docker_image': args.docker_image if args.mode == 'docker' else None,
+        'clock_period_ns': args.clock_period_ns,
+        'place_density': args.place_density,
+        'die_area': list(args.die_area),
+        'core_area': list(args.core_area),
+        'target': args.target,
+        'threads': args.threads,
+        'run_requested': bool(args.run),
+        'host_tools': host_build_tools(),
+        'design_files': {
+            'config_mk': file_metadata(staged['config_mk']),
+            'constraint_sdc': file_metadata(staged['constraint_sdc']),
+            'rtl_files': [file_metadata(path) for path in sorted((repo_design_dir / 'src').glob('*.v'))],
+        },
+    }
     if args.run:
         manifest['run_command'] = docker_run_command(flow_root=flow_root, image=args.docker_image, platform=args.platform, threads=args.threads, target=args.target) if args.mode == 'docker' else local_run_command(flow_root=flow_root, platform=args.platform, threads=args.threads, target=args.target)
         try:
@@ -152,8 +198,11 @@ def main() -> None:
             toolkit = EvaluationToolkit(ROOT, config_path=config_path)
             parsed = toolkit.parse_openroad()
             manifest['reports'] = {k: str(v) for k, v in copied.items()}
+            manifest['report_files'] = {k: file_metadata(v) for k, v in copied.items()}
             manifest['tool_config'] = str(config_path)
+            manifest['tool_config_meta'] = file_metadata(config_path)
             manifest['parsed'] = parsed
+            manifest['tool_provenance'] = toolkit.provenance_summary()
             manifest['stdout_path'] = str(output_dir / 'openroad_stdout.log')
             manifest['stderr_path'] = str(output_dir / 'openroad_stderr.log')
             (output_dir / 'openroad_stdout.log').write_text(result.stdout or '', encoding='utf-8')
