@@ -1,0 +1,87 @@
+{
+  "datasets": [
+    "gsm8k",
+    "mmlu",
+    "humaneval"
+  ],
+  "corpus": "sciq",
+  "array_sizes": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32
+  ],
+  "security_levels": [
+    4
+  ],
+  "llm_requests": 2,
+  "span_ms": 20.0,
+  "tiling_width": 8,
+  "reference_rfus": 16,
+  "poseidon_constraints_per_level": 240,
+  "freshness_window_cycles": 600000000,
+  "models": [
+    {
+      "name": "gpt2",
+      "label": "GPT-2",
+      "layers": 12,
+      "hidden": 768,
+      "heads": 12,
+      "kv_heads": 12,
+      "ff_dim": 3072,
+      "params_b": 0.123532032
+    },
+    {
+      "name": "qwen2_5_0_5b",
+      "label": "Qwen2.5-0.5B",
+      "layers": 24,
+      "hidden": 896,
+      "heads": 14,
+      "kv_heads": 2,
+      "ff_dim": 4864,
+      "params_b": 0.493961216
+    },
+    {
+      "name": "tinyllama_1_1b",
+      "label": "TinyLlama-1.1B",
+      "layers": 22,
+      "hidden": 2048,
+      "heads": 32,
+      "kv_heads": 4,
+      "ff_dim": 5632,
+      "params_b": 1.099956224
+    },
+    {
+      "name": "mistral_7b",
+      "label": "Mistral-7B",
+      "layers": 32,
+      "hidden": 4096,
+      "heads": 32,
+      "kv_heads": 8,
+      "ff_dim": 14336,
+      "params_b": 7.241465856
+    },
+    {
+      "name": "qwen2_5_14b",
+      "label": "Qwen2.5-14B",
+      "layers": 48,
+      "hidden": 5120,
+      "heads": 40,
+      "kv_heads": 8,
+      "ff_dim": 13824,
+      "params_b": 14.76919296
+    },
+    {
+      "name": "qwen2_5_32b",
+      "label": "Qwen2.5-32B",
+      "layers": 64,
+      "hidden": 5120,
+      "heads": 40,
+      "kv_heads": 8,
+      "ff_dim": 27648,
+      "params_b": 32.76275712
+    }
+  ]
+}

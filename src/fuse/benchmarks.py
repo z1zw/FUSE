@@ -6,7 +6,9 @@ from typing import Any, Dict, List, Sequence, Tuple
 import hashlib
 import json
 import random
+import os
 import subprocess
+import sys
 import pandas as pd
 from .branding import ACCELERATOR_NAME, normalize_mode
 from .baselines import BASELINES
@@ -27,6 +29,20 @@ class BenchmarkArtifacts:
     traces: Dict[str, pd.DataFrame]
     scalars: Dict[str, float]
     calibration: Dict[str, Dict[str, float]]
+
+_WARNED_PYTHON_FALLBACK = False
+
+def _warn_python_fallback(exc: Exception) -> None:
+    """Say once, loudly, that the engine is not the published one."""
+    global _WARNED_PYTHON_FALLBACK
+    if _WARNED_PYTHON_FALLBACK:
+        return
+    _WARNED_PYTHON_FALLBACK = True
+    print(f'WARNING: the C++ engine is unavailable ({exc}); falling back '
+          'to the Python engine. The published results in results/raw were '
+          'produced by the C++ engine and the two do not agree numerically. '
+          'Build it with scripts/build_cpp.py, or set FUSE_REQUIRE_CPP=1 '
+          'to make this an error.', file=sys.stderr, flush=True)
 
 class BenchmarkSuite:
 
@@ -87,12 +103,19 @@ class BenchmarkSuite:
                     metrics_rows.to_csv(raw_dir / f'{safe_name}_metrics.csv', index=False)
                     if not events.empty:
                         events.to_csv(raw_dir / f'{safe_name}_events.csv', index=False)
+                result.metrics['engine'] = 'cpp'
                 return (result, events)
-            except (OSError, subprocess.SubprocessError):
-                pass
+            except (OSError, subprocess.SubprocessError) as exc:
+                if os.environ.get('FUSE_REQUIRE_CPP'):
+                    raise RuntimeError(
+                        'the C++ engine is required but unavailable: '
+                        f'{exc}. The published results were produced by '
+                        'it; build it with scripts/build_cpp.py.') from exc
+                _warn_python_fallback(exc)
         decomposer = MicrofragmentDecomposer()
         decomposition = decomposer.decompose_tasks(task_graphs)
         result = FuseSimulator(config=SimulationConfig(mode=mode)).run(runtime_tasks, decomposition.microfragments)
+        result.metrics.setdefault('engine', 'python')
         events = pd.DataFrame(result.traces.get('events', []))
         if raw_dir is not None:
             safe_name = self._safe_name(scenario_name)
@@ -492,7 +515,7 @@ class BenchmarkSuite:
             part = raw[raw['window_ms'] == window_ms]
             morph = part[part['mode'] == ACCELERATOR_NAME].iloc[0]
             base = part[part['mode'] == 'Multi-core'].iloc[0]
-            rows.append({'window_ms': window_ms, 'baseline_makespan_ms': base['makespan_ms'], 'morph_makespan_ms': morph['makespan_ms'], 'baseline_redundant_reads': base['redundant_reads'], 'morph_redundant_reads': morph['redundant_reads'], 'raw_baseline_makespan_ms': base['makespan_ms'], 'raw_baseline_redundant_reads': base['redundant_reads']})
+            rows.append({'window_ms': window_ms, 'baseline_makespan_ms': base['makespan_ms'], 'morph_makespan_ms': morph['makespan_ms'], 'baseline_util': base['rfu_util'], 'morph_util': morph['rfu_util'], 'baseline_redundant_reads': base['redundant_reads'], 'morph_redundant_reads': morph['redundant_reads'], 'raw_baseline_makespan_ms': base['makespan_ms'], 'raw_baseline_redundant_reads': base['redundant_reads']})
         return pd.DataFrame(rows)
 
     def _figure_fig9(self, raw: pd.DataFrame) -> pd.DataFrame:

@@ -166,10 +166,19 @@ def test_benchmark_suite_cpp_mixed_trace_aligns_with_python(tmp_path):
     cpp_fig12_dir.mkdir()
     py_fig12 = py_suite._raw_fig12(py_fig12_dir)
     cpp_fig12 = cpp_suite._raw_fig12(cpp_fig12_dir)
-    _assert_frame_numeric_alignment(py_fig12, cpp_fig12, ['scenario', 'platform', 'metric'], ['value'], rel=0.35, abs_tol=1e-06)
+    # fig12 mixes engine output with wall-clock CPU/GPU timings taken once per
+    # run (warmup=1, repeat=1). Those timings, and the energy ratios that divide
+    # by them, differ between the two suite runs by host jitter alone, so only
+    # the rows the engines produce are compared here.
+    py_sim12 = py_fig12[py_fig12['source'] == 'simulator_trace']
+    cpp_sim12 = cpp_fig12[cpp_fig12['source'] == 'simulator_trace']
+    assert not py_sim12.empty
+    _assert_frame_numeric_alignment(py_sim12, cpp_sim12, ['scenario', 'platform', 'metric'], ['value'], rel=0.35, abs_tol=1e-06)
 
-def test_eval_toolkit_requires_real_reports():
-    toolkit = EvaluationToolkit(Path(__file__).resolve().parents[1])
+def test_eval_toolkit_requires_real_reports(tmp_path):
+    # A toolkit with no reports behind it must refuse to estimate rather than
+    # invent a number. An empty directory has no configs/eval_tools.json.
+    toolkit = EvaluationToolkit(tmp_path)
     with pytest.raises(FileNotFoundError):
         toolkit.estimate_area_power(rfu_count=16, feature_bytes=8 * 1024 * 1024, fragment_bytes=2 * 1024 * 1024, microop_bytes=512 * 1024, utilization=0.6, fvm_reads=100, fvm_writes=50, scheduler_decisions=200, switch_events=40)
     with pytest.raises(FileNotFoundError):
@@ -202,7 +211,7 @@ def test_eval_toolkit_parses_openroad_reports(tmp_path):
     assert parsed['total_area_mm2'] == pytest.approx(0.245)
     assert parsed['total_power_w'] == pytest.approx(0.184)
     assert parsed['fmax_mhz'] == pytest.approx(1000.0 / 21.5)
-    assert estimate['source'] == 'openroad_sky130'
+    assert estimate['source'] == 'openroad_cacti_split'
 
 def test_fig9_is_derived_from_raw_results():
     suite = BenchmarkSuite(engine='py')

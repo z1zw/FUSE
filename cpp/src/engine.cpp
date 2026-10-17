@@ -31,6 +31,9 @@ struct CacheEntry {
     long long last_access_cycle = 0;
     long long bytes_used = 0;
     int hits = 0;
+    // C4: the request whose operands produced this result. A consumer may
+    // take the entry only when its own identity is the same.
+    std::string data_id;
 };
 
 struct PathCacheEntry {
@@ -77,6 +80,17 @@ struct RunningCompare {
 
 bool cache_fresh(const CacheEntry& entry, long long cycle) {
     return cycle - entry.created_cycle <= kFreshnessWindowCycles;
+}
+
+// C4: a cached result is returned only to the operands that produced it. The
+// identity is the originating request, which the request compiler qualifies
+// per prompt; an empty identity on either side is unconstrained, matching the
+// Python engine's FeatureVectorManager::_valid.
+bool cache_valid(const CacheEntry& entry, const MicroRow& micro) {
+    if (entry.data_id.empty() || micro.task_id.empty()) {
+        return true;
+    }
+    return entry.data_id == micro.task_id;
 }
 
 std::vector<std::string> parse_tile(const std::string& tile) {
@@ -159,7 +173,7 @@ double ready_score(
 ) {
     double score = 0.0;
     auto it = fvm.find(node.micro.semantic_hash);
-    if (it != fvm.end() && cache_fresh(it->second, cycle)) {
+    if (it != fvm.end() && cache_fresh(it->second, cycle) && cache_valid(it->second, node.micro)) {
         score += 12.0;
         valid_hits += 1.0;
     }
@@ -220,21 +234,32 @@ bool is_secure_elastic_mode(const std::string& mode) {
         mode == "secure_elastic_no_prefetch";
 }
 
+// Kept in step with FuseSimulator._baseline_speed_factor in
+// src/fuse/sim/simulator.py; the two engines must agree on what a baseline is.
 double baseline_speed_factor(const std::string& mode, const std::string& task_type) {
     if (mode == "static_zkp") {
         if (task_type == "ZKP") return 1.05;
+        if (task_type == "LLM") return 0.90;
         return 0.92;
     }
     if (mode == "eyeriss") {
         if (task_type == "CNN") return 1.08;
+        if (task_type == "LLM") return 0.95;
         return 0.90;
     }
     if (mode == "openaes") {
         if (task_type == "AES") return 1.03;
+        if (task_type == "LLM") return 0.90;
         return 0.94;
+    }
+    if (mode == "transformer_asic") {
+        if (task_type == "LLM") return 1.08;
+        if (task_type == "CNN") return 0.95;
+        return 0.88;
     }
     if (mode == "gpu_tensor") {
         if (task_type == "CNN") return 1.12;
+        if (task_type == "LLM") return 1.10;
         if (task_type == "AES") return 0.97;
         return 0.96;
     }
@@ -282,7 +307,7 @@ double compute_energy(
         fvm_write_coeff = 0.17;
         switch_coeff = 0.28;
         static_coeff = 0.028;
-    } else if (mode == "static_zkp" || mode == "eyeriss" || mode == "openaes") {
+    } else if (mode == "static_zkp" || mode == "eyeriss" || mode == "openaes" || mode == "transformer_asic") {
         compute_coeff = 0.60;
         fvm_read_coeff = 0.10;
         fvm_write_coeff = 0.12;
@@ -363,6 +388,7 @@ void write_cache(
     entry.created_cycle = cycle;
     entry.last_access_cycle = cycle;
     entry.bytes_used = bytes_used;
+    entry.data_id = micro.task_id;
     fvm[micro.semantic_hash] = entry;
     peak_bytes = std::max(peak_bytes, current_bytes);
     writes += 1.0;
@@ -569,7 +595,7 @@ SimulationResult run_simulation(
                 if (mode == "secure_ct" && rfus[rfu_id].loaded_template != node.micro.template_family) {
                     allow_result_reuse = false;
                 }
-                if (it != fvm.end() && cache_fresh(it->second, clock) && allow_result_reuse) {
+                if (it != fvm.end() && cache_fresh(it->second, clock) && cache_valid(it->second, node.micro) && allow_result_reuse) {
                     reused_result = mode != "secure_ct";
                     if (reused_result) {
                         result_reuse_hits += 1.0;
@@ -612,10 +638,13 @@ SimulationResult run_simulation(
                 base = std::max(1LL, static_cast<long long>(std::llround(static_cast<double>(base) / std::max(0.1, factor))));
                 mem += 6;
                 sw = rfus[rfu_id].loaded_template == node.micro.template_family ? 0LL : std::max(1LL, kBaseSwitchCycles / 2LL);
-            } else if (mode == "static_zkp" || mode == "eyeriss" || mode == "openaes") {
+            } else if (mode == "static_zkp" || mode == "eyeriss" || mode == "openaes" || mode == "transformer_asic") {
                 double factor = baseline_speed_factor(mode, node.micro.task_type);
                 base = std::max(1LL, static_cast<long long>(std::llround(static_cast<double>(base) / std::max(0.1, factor))));
                 if (node.micro.task_type == "CNN" && mode == "eyeriss") {
+                    mem = std::max(1LL, mem - 1LL);
+                }
+                if (node.micro.task_type == "LLM" && mode == "transformer_asic") {
                     mem = std::max(1LL, mem - 1LL);
                 }
                 sw = rfus[rfu_id].loaded_template == node.micro.template_family ? 0LL : std::max(1LL, kBaseSwitchCycles / 8LL);

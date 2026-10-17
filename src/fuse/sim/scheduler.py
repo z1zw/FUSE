@@ -95,7 +95,11 @@ class TaskAwareRuntimeScheduler:
     def finish(self, runtime_micro_id: str, cycle: int) -> None:
         node = self.runtime_micros[runtime_micro_id]
         node.finish_cycle = cycle
-        for succ_id in node.succs:
+        # ``succs`` is a set, and set iteration order over strings depends on
+        # the per-process hash seed.  The order decides how successors enter the
+        # ready queue and therefore how score ties are broken, so it is fixed
+        # here to keep a run reproducible.
+        for succ_id in sorted(node.succs):
             succ = self.runtime_micros[succ_id]
             succ.deps.discard(runtime_micro_id)
             if not succ.deps:

@@ -1,3 +1,4 @@
+# caches and temporaries
 .pytest_cache/
 .pytest_tmp/
 .pytest_tmp_openroad/
@@ -6,20 +7,19 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.so
-*.dll
-*.exe
-build/
-dist/
 tmp*/
 scenario_pytest_base/
 upload_bundle/
 upload_bundle_repo/
-results*/
-figures*/
-runs/
-reports/
 dashboards/
-openroad_results*/
-openroad_work*/
 fuse_eval_bundle*.zip
+
+# build output (python scripts/build_cpp.py rebuilds cpp/build/)
+build/
+dist/
+*.so
+*.dll
+*.exe
+
+# the paper source is not part of the code artifact
+sosp/

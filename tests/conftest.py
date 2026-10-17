@@ -8,4 +8,13 @@ if str(SRC) not in sys.path:
 
 
 def has_cpp_toolchain() -> bool:
-    return shutil.which('g++') is not None or shutil.which('cl') is not None
+    """True when the C++ engine can be run: a compiler is present, or a
+    prebuilt engine that is at least as new as its sources already sits in
+    cpp/build, which cpp_bridge.build() uses without compiling."""
+    if shutil.which('g++') is not None or shutil.which('cl') is not None:
+        return True
+    try:
+        from fuse.cpp_bridge import CppSimulatorBridge
+        return CppSimulatorBridge(ROOT).build().exists()
+    except Exception:
+        return False

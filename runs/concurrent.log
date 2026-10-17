@@ -1,0 +1,483 @@
+C:\Users\16320\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (6.0.0.post1)/charset_normalizer (3.4.7) doesn't match a supported version!
+  warnings.warn(
+W0920 03:21:38.224000 31184 site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+loading configuration file config.json from cache at C:\Users\16320\.cache\huggingface\hub\models--gpt2\snapshots\607a30d783dfa663caf39e06633721c8d4cfcd7e\config.json
+Model config GPT2Config {
+  "activation_function": "gelu_new",
+  "architectures": [
+    "GPT2LMHeadModel"
+  ],
+  "attn_pdrop": 0.1,
+  "bos_token_id": 50256,
+  "embd_pdrop": 0.1,
+  "eos_token_id": 50256,
+  "initializer_range": 0.02,
+  "layer_norm_epsilon": 1e-05,
+  "model_type": "gpt2",
+  "n_ctx": 1024,
+  "n_embd": 768,
+  "n_head": 12,
+  "n_inner": null,
+  "n_layer": 12,
+  "n_positions": 1024,
+  "reorder_and_upcast_attn": false,
+  "resid_pdrop": 0.1,
+  "scale_attn_by_inverse_layer_idx": false,
+  "scale_attn_weights": true,
+  "summary_activation": null,
+  "summary_first_dropout": 0.1,
+  "summary_proj_to_labels": true,
+  "summary_type": "cls_index",
+  "summary_use_proj": true,
+  "task_specific_params": {
+    "text-generation": {
+      "do_sample": true,
+      "max_length": 50
+    }
+  },
+  "transformers_version": "4.56.1",
+  "use_cache": true,
+  "vocab_size": 50257
+}
+
+loading configuration file config.json from cache at C:\Users\16320\.cache\huggingface\hub\models--Qwen--Qwen2.5-0.5B-Instruct\snapshots\7ae557604adf67be50417f59c2c2f167def9a775\config.json
+Model config Qwen2Config {
+  "architectures": [
+    "Qwen2ForCausalLM"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 151643,
+  "dtype": "bfloat16",
+  "eos_token_id": 151645,
+  "hidden_act": "silu",
+  "hidden_size": 896,
+  "initializer_range": 0.02,
+  "intermediate_size": 4864,
+  "layer_types": [
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention"
+  ],
+  "max_position_embeddings": 32768,
+  "max_window_layers": 21,
+  "model_type": "qwen2",
+  "num_attention_heads": 14,
+  "num_hidden_layers": 24,
+  "num_key_value_heads": 2,
+  "rms_norm_eps": 1e-06,
+  "rope_scaling": null,
+  "rope_theta": 1000000.0,
+  "sliding_window": null,
+  "tie_word_embeddings": true,
+  "transformers_version": "4.56.1",
+  "use_cache": true,
+  "use_sliding_window": false,
+  "vocab_size": 151936
+}
+
+loading configuration file config.json from cache at C:\Users\16320\.cache\huggingface\hub\models--TinyLlama--TinyLlama-1.1B-Chat-v1.0\snapshots\fe8a4ea1ffedaf415f4da2f062534de366a451e6\config.json
+Model config LlamaConfig {
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "dtype": "bfloat16",
+  "eos_token_id": 2,
+  "head_dim": 64,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 5632,
+  "max_position_embeddings": 2048,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 22,
+  "num_key_value_heads": 4,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "transformers_version": "4.56.1",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+loading configuration file config.json from cache at C:\Users\16320\.cache\huggingface\hub\models--mistralai--Mistral-7B-Instruct-v0.2\snapshots\63a8b081895390a26e140280378bc85ec8bce07a\config.json
+Model config MistralConfig {
+  "architectures": [
+    "MistralForCausalLM"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "dtype": "bfloat16",
+  "eos_token_id": 2,
+  "head_dim": null,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 14336,
+  "max_position_embeddings": 32768,
+  "model_type": "mistral",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 8,
+  "rms_norm_eps": 1e-05,
+  "rope_theta": 1000000.0,
+  "sliding_window": null,
+  "tie_word_embeddings": false,
+  "transformers_version": "4.56.1",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+loading configuration file config.json from cache at C:\Users\16320\.cache\huggingface\hub\models--Qwen--Qwen2.5-14B-Instruct\snapshots\cf98f3b3bbb457ad9e2bb7baf9a0125b6b88caa8\config.json
+Model config Qwen2Config {
+  "architectures": [
+    "Qwen2ForCausalLM"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 151643,
+  "dtype": "bfloat16",
+  "eos_token_id": 151645,
+  "hidden_act": "silu",
+  "hidden_size": 5120,
+  "initializer_range": 0.02,
+  "intermediate_size": 13824,
+  "layer_types": [
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention"
+  ],
+  "max_position_embeddings": 32768,
+  "max_window_layers": 70,
+  "model_type": "qwen2",
+  "num_attention_heads": 40,
+  "num_hidden_layers": 48,
+  "num_key_value_heads": 8,
+  "rms_norm_eps": 1e-06,
+  "rope_scaling": null,
+  "rope_theta": 1000000.0,
+  "sliding_window": null,
+  "tie_word_embeddings": false,
+  "transformers_version": "4.56.1",
+  "use_cache": true,
+  "use_sliding_window": false,
+  "vocab_size": 152064
+}
+
+loading configuration file config.json from cache at C:\Users\16320\.cache\huggingface\hub\models--Qwen--Qwen2.5-32B-Instruct\snapshots\5ede1c97bbab6ce5cda5812749b4c0bdf79b18dd\config.json
+Model config Qwen2Config {
+  "architectures": [
+    "Qwen2ForCausalLM"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 151643,
+  "dtype": "bfloat16",
+  "eos_token_id": 151645,
+  "hidden_act": "silu",
+  "hidden_size": 5120,
+  "initializer_range": 0.02,
+  "intermediate_size": 27648,
+  "layer_types": [
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention"
+  ],
+  "max_position_embeddings": 32768,
+  "max_window_layers": 70,
+  "model_type": "qwen2",
+  "num_attention_heads": 40,
+  "num_hidden_layers": 64,
+  "num_key_value_heads": 8,
+  "rms_norm_eps": 1e-06,
+  "rope_scaling": null,
+  "rope_theta": 1000000.0,
+  "sliding_window": null,
+  "tie_word_embeddings": false,
+  "transformers_version": "4.56.1",
+  "use_cache": true,
+  "use_sliding_window": false,
+  "vocab_size": 152064
+}
+
+reusing measured answer lengths from runs\concurrent2\answer_lengths.json
+[concurrent] GPT-2 x GSM8K: prompt=55 tok, AES=179 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=   79.62 ms  partitioned=  154.74 (2/1/1)  speedup=1.94x
+    sec x4   RFUs=  8  FUSE=   48.46 ms  partitioned=   61.69 (6/1/1)  speedup=1.27x
+    sec x4   RFUs= 12  FUSE=   39.20 ms  partitioned=   40.10 (10/1/1)  speedup=1.02x
+    sec x4   RFUs= 16  FUSE=   37.95 ms  partitioned=   38.27 (14/1/1)  speedup=1.01x
+    sec x4   RFUs= 24  FUSE=   37.14 ms  partitioned=   37.14 (18/1/5)  speedup=1.00x
+    sec x4   RFUs= 32  FUSE=   37.14 ms  partitioned=   37.14 (18/1/13)  speedup=1.00x
+[concurrent] GPT-2 x MMLU: prompt=62 tok, AES=313 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=   89.11 ms  partitioned=  174.00 (2/1/1)  speedup=1.95x
+    sec x4   RFUs=  8  FUSE=   53.65 ms  partitioned=   66.69 (6/1/1)  speedup=1.24x
+    sec x4   RFUs= 12  FUSE=   44.71 ms  partitioned=   44.97 (10/1/1)  speedup=1.01x
+    sec x4   RFUs= 16  FUSE=   41.17 ms  partitioned=   43.01 (14/1/1)  speedup=1.04x
+    sec x4   RFUs= 24  FUSE=   40.60 ms  partitioned=   40.60 (20/1/3)  speedup=1.00x
+    sec x4   RFUs= 32  FUSE=   40.60 ms  partitioned=   40.60 (20/1/11)  speedup=1.00x
+[concurrent] GPT-2 x HumanEval: prompt=111 tok, AES=406 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=  156.90 ms  partitioned=  309.53 (2/1/1)  speedup=1.97x
+    sec x4   RFUs=  8  FUSE=   92.31 ms  partitioned=  112.70 (6/1/1)  speedup=1.22x
+    sec x4   RFUs= 12  FUSE=   70.24 ms  partitioned=   72.32 (10/1/1)  speedup=1.03x
+    sec x4   RFUs= 16  FUSE=   66.30 ms  partitioned=   68.36 (14/1/1)  speedup=1.03x
+    sec x4   RFUs= 24  FUSE=   65.70 ms  partitioned=   65.70 (18/1/5)  speedup=1.00x
+    sec x4   RFUs= 32  FUSE=   65.70 ms  partitioned=   65.70 (18/1/13)  speedup=1.00x
+[concurrent] Qwen2.5-0.5B x GSM8K: prompt=55 tok, AES=179 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=  320.35 ms  partitioned=  639.87 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=  161.10 ms  partitioned=  217.64 (6/1/1)  speedup=1.35x
+    sec x4   RFUs= 12  FUSE=  113.77 ms  partitioned=  135.85 (10/1/1)  speedup=1.19x
+    sec x4   RFUs= 16  FUSE=   87.60 ms  partitioned=  109.44 (14/1/1)  speedup=1.25x
+    sec x4   RFUs= 24  FUSE=   70.61 ms  partitioned=   79.55 (22/1/1)  speedup=1.13x
+    sec x4   RFUs= 32  FUSE=   67.53 ms  partitioned=   67.53 (26/1/5)  speedup=1.00x
+[concurrent] Qwen2.5-0.5B x MMLU: prompt=62 tok, AES=313 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=  360.15 ms  partitioned=  719.32 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=  181.14 ms  partitioned=  244.62 (6/1/1)  speedup=1.35x
+    sec x4   RFUs= 12  FUSE=  127.33 ms  partitioned=  152.62 (10/1/1)  speedup=1.20x
+    sec x4   RFUs= 16  FUSE=   98.09 ms  partitioned=  122.08 (14/1/1)  speedup=1.24x
+    sec x4   RFUs= 24  FUSE=   78.92 ms  partitioned=   87.78 (22/1/1)  speedup=1.11x
+    sec x4   RFUs= 32  FUSE=   74.40 ms  partitioned=   75.47 (26/1/5)  speedup=1.01x
+[concurrent] Qwen2.5-0.5B x HumanEval: prompt=111 tok, AES=406 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=  640.91 ms  partitioned= 1279.66 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=  322.15 ms  partitioned=  432.53 (6/1/1)  speedup=1.34x
+    sec x4   RFUs= 12  FUSE=  222.62 ms  partitioned=  267.87 (10/1/1)  speedup=1.20x
+    sec x4   RFUs= 16  FUSE=  170.39 ms  partitioned=  212.29 (14/1/1)  speedup=1.25x
+    sec x4   RFUs= 24  FUSE=  131.61 ms  partitioned=  149.82 (22/1/1)  speedup=1.14x
+    sec x4   RFUs= 32  FUSE=  124.16 ms  partitioned=  125.20 (28/1/3)  speedup=1.01x
+[concurrent] TinyLlama-1.1B x GSM8K: prompt=55 tok, AES=179 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=  855.63 ms  partitioned= 1709.87 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=  428.76 ms  partitioned=  575.77 (6/1/1)  speedup=1.34x
+    sec x4   RFUs= 12  FUSE=  291.95 ms  partitioned=  346.26 (10/1/1)  speedup=1.19x
+    sec x4   RFUs= 16  FUSE=  233.42 ms  partitioned=  272.78 (14/1/1)  speedup=1.17x
+    sec x4   RFUs= 24  FUSE=  183.66 ms  partitioned=  201.18 (22/1/1)  speedup=1.10x
+    sec x4   RFUs= 32  FUSE=  165.31 ms  partitioned=  165.31 (26/1/5)  speedup=1.00x
+[concurrent] TinyLlama-1.1B x MMLU: prompt=62 tok, AES=313 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=  962.94 ms  partitioned= 1924.35 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=  482.52 ms  partitioned=  648.04 (6/1/1)  speedup=1.34x
+    sec x4   RFUs= 12  FUSE=  328.44 ms  partitioned=  389.88 (10/1/1)  speedup=1.19x
+    sec x4   RFUs= 16  FUSE=  262.35 ms  partitioned=  307.03 (14/1/1)  speedup=1.17x
+    sec x4   RFUs= 24  FUSE=  204.92 ms  partitioned=  226.45 (22/1/1)  speedup=1.11x
+    sec x4   RFUs= 32  FUSE=  183.23 ms  partitioned=  183.92 (27/1/4)  speedup=1.00x
+[concurrent] TinyLlama-1.1B x HumanEval: prompt=111 tok, AES=406 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE= 1718.32 ms  partitioned= 3433.53 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=  861.30 ms  partitioned= 1152.08 (6/1/1)  speedup=1.34x
+    sec x4   RFUs= 12  FUSE=  584.93 ms  partitioned=  695.40 (10/1/1)  speedup=1.19x
+    sec x4   RFUs= 16  FUSE=  449.61 ms  partitioned=  543.54 (14/1/1)  speedup=1.21x
+    sec x4   RFUs= 24  FUSE=  365.34 ms  partitioned=  399.97 (22/1/1)  speedup=1.09x
+    sec x4   RFUs= 32  FUSE=  323.58 ms  partitioned=  328.63 (27/1/4)  speedup=1.02x
+[concurrent] Mistral-7B x GSM8K: prompt=55 tok, AES=179 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE= 6129.29 ms  partitioned=12252.16 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE= 3180.34 ms  partitioned= 4122.90 (6/1/1)  speedup=1.30x
+    sec x4   RFUs= 12  FUSE= 2190.82 ms  partitioned= 2651.12 (10/1/1)  speedup=1.21x
+    sec x4   RFUs= 16  FUSE= 1699.27 ms  partitioned= 1957.34 (14/1/1)  speedup=1.15x
+    sec x4   RFUs= 24  FUSE= 1307.97 ms  partitioned= 1496.63 (22/1/1)  speedup=1.14x
+    sec x4   RFUs= 32  FUSE= 1192.16 ms  partitioned= 1193.86 (29/1/2)  speedup=1.00x
+[concurrent] Mistral-7B x MMLU: prompt=62 tok, AES=313 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE= 6896.97 ms  partitioned=13786.36 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE= 3577.67 ms  partitioned= 4638.71 (6/1/1)  speedup=1.30x
+    sec x4   RFUs= 12  FUSE= 2465.23 ms  partitioned= 2982.62 (10/1/1)  speedup=1.21x
+    sec x4   RFUs= 16  FUSE= 1911.71 ms  partitioned= 2202.35 (14/1/1)  speedup=1.15x
+    sec x4   RFUs= 24  FUSE= 1471.58 ms  partitioned= 1684.02 (22/1/1)  speedup=1.14x
+    sec x4   RFUs= 32  FUSE= 1341.52 ms  partitioned= 1343.42 (29/1/2)  speedup=1.00x
+[concurrent] Mistral-7B x HumanEval: prompt=111 tok, AES=406 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=12280.09 ms  partitioned=24547.84 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE= 6156.44 ms  partitioned= 8247.08 (6/1/1)  speedup=1.34x
+    sec x4   RFUs= 12  FUSE= 4252.21 ms  partitioned= 5185.08 (10/1/1)  speedup=1.22x
+    sec x4   RFUs= 16  FUSE= 3399.55 ms  partitioned= 3912.58 (14/1/1)  speedup=1.15x
+    sec x4   RFUs= 24  FUSE= 2614.43 ms  partitioned= 2973.43 (22/1/1)  speedup=1.14x
+    sec x4   RFUs= 32  FUSE= 2382.26 ms  partitioned= 2393.21 (29/1/2)  speedup=1.00x
+[concurrent] Qwen2.5-14B x GSM8K: prompt=55 tok, AES=179 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=11619.27 ms  partitioned=23226.19 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE= 5831.63 ms  partitioned= 7746.51 (6/1/1)  speedup=1.33x
+    sec x4   RFUs= 12  FUSE= 4242.86 ms  partitioned= 4911.64 (10/1/1)  speedup=1.16x
+    sec x4   RFUs= 16  FUSE= 3164.40 ms  partitioned= 3714.02 (14/1/1)  speedup=1.17x
+    sec x4   RFUs= 24  FUSE= 2505.70 ms  partitioned= 2912.97 (22/1/1)  speedup=1.16x
+    sec x4   RFUs= 32  FUSE= 2233.48 ms  partitioned= 2233.88 (28/1/3)  speedup=1.00x
+[concurrent] Qwen2.5-14B x MMLU: prompt=62 tok, AES=313 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=13072.16 ms  partitioned=26129.96 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE= 6558.31 ms  partitioned= 8714.16 (6/1/1)  speedup=1.33x
+    sec x4   RFUs= 12  FUSE= 4479.70 ms  partitioned= 5320.56 (10/1/1)  speedup=1.19x
+    sec x4   RFUs= 16  FUSE= 3488.24 ms  partitioned= 3988.06 (14/1/1)  speedup=1.14x
+    sec x4   RFUs= 24  FUSE= 2812.67 ms  partitioned= 3247.85 (22/1/1)  speedup=1.15x
+    sec x4   RFUs= 32  FUSE= 2506.17 ms  partitioned= 2513.22 (28/1/3)  speedup=1.00x
+[concurrent] Qwen2.5-14B x HumanEval: prompt=111 tok, AES=406 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=23261.40 ms  partitioned=46498.96 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=11643.89 ms  partitioned=15502.92 (6/1/1)  speedup=1.33x
+    sec x4   RFUs= 12  FUSE= 7963.24 ms  partitioned= 9463.57 (10/1/1)  speedup=1.19x
+    sec x4   RFUs= 16  FUSE= 6194.91 ms  partitioned= 7078.38 (14/1/1)  speedup=1.14x
+    sec x4   RFUs= 24  FUSE= 5001.02 ms  partitioned= 5772.40 (22/1/1)  speedup=1.15x
+    sec x4   RFUs= 32  FUSE= 4454.48 ms  partitioned= 4473.89 (27/1/4)  speedup=1.00x
+[concurrent] Qwen2.5-32B x GSM8K: prompt=55 tok, AES=179 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=27375.33 ms  partitioned=54736.30 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=13714.44 ms  partitioned=18250.01 (6/1/1)  speedup=1.33x
+    sec x4   RFUs= 12  FUSE= 9276.26 ms  partitioned=11486.49 (10/1/1)  speedup=1.24x
+    sec x4   RFUs= 16  FUSE= 7129.59 ms  partitioned= 8910.17 (14/1/1)  speedup=1.25x
+    sec x4   RFUs= 24  FUSE= 5326.28 ms  partitioned= 6138.89 (22/1/1)  speedup=1.15x
+    sec x4   RFUs= 32  FUSE= 4953.09 ms  partitioned= 4968.98 (26/1/5)  speedup=1.00x
+[concurrent] Qwen2.5-32B x MMLU: prompt=62 tok, AES=313 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=30799.31 ms  partitioned=61581.11 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=15426.53 ms  partitioned=20531.37 (6/1/1)  speedup=1.33x
+    sec x4   RFUs= 12  FUSE=10429.47 ms  partitioned=12661.71 (10/1/1)  speedup=1.21x
+    sec x4   RFUs= 16  FUSE= 7991.51 ms  partitioned=10013.19 (14/1/1)  speedup=1.25x
+    sec x4   RFUs= 24  FUSE= 5991.89 ms  partitioned= 6888.71 (22/1/1)  speedup=1.15x
+    sec x4   RFUs= 32  FUSE= 5566.03 ms  partitioned= 5590.49 (26/1/5)  speedup=1.00x
+[concurrent] Qwen2.5-32B x HumanEval: prompt=111 tok, AES=406 blk, ZKP=2400 constraints
+    sec x4   RFUs=  4  FUSE=54790.64 ms  partitioned=109551.58 (2/1/1)  speedup=2.00x
+    sec x4   RFUs=  8  FUSE=27410.51 ms  partitioned=36520.80 (6/1/1)  speedup=1.33x
+    sec x4   RFUs= 12  FUSE=18544.14 ms  partitioned=22505.03 (10/1/1)  speedup=1.21x
+    sec x4   RFUs= 16  FUSE=14202.51 ms  partitioned=17796.58 (14/1/1)  speedup=1.25x
+    sec x4   RFUs= 24  FUSE=10654.74 ms  partitioned=12249.05 (22/1/1)  speedup=1.15x
+    sec x4   RFUs= 32  FUSE= 9897.78 ms  partitioned= 9948.16 (29/1/2)  speedup=1.01x
+
+wrote runs\concurrent2
+
+at the evaluated 16-RFU configuration:
+   model_label dataset_label  security_per_request      fuse_ms  partitioned_ms  speedup_vs_partitioned  speedup_vs_dedicated  security_tax
+         GPT-2         GSM8K                     4    37.947521       38.267358                1.008428              0.988093 -3.900108e-06
+         GPT-2          MMLU                     4    41.166693       43.014888                1.044895              0.968559 -5.587010e-06
+         GPT-2     HumanEval                     4    66.300136       68.362185                1.031102              0.955993 -6.606278e-06
+  Qwen2.5-0.5B         GSM8K                     4    87.602273      109.438847                1.249269              1.162279  4.406298e-06
+  Qwen2.5-0.5B          MMLU                     4    98.090166      122.077912                1.244548              1.161178  9.787010e-06
+  Qwen2.5-0.5B     HumanEval                     4   170.385876      212.286834                1.245918              1.154820 -1.367482e-06
+TinyLlama-1.1B         GSM8K                     4   233.416967      272.784716                1.168658              1.087858  2.754734e-06
+TinyLlama-1.1B          MMLU                     4   262.348454      307.025823                1.170298              1.085026  9.643672e-07
+TinyLlama-1.1B     HumanEval                     4   449.608225      543.537193                1.208913              1.120351  1.098736e-06
+    Mistral-7B         GSM8K                     4  1699.267367     1957.337698                1.151872              1.068141  1.176978e-09
+    Mistral-7B          MMLU                     4  1911.706751     2202.348543                1.152033              1.068119  5.230927e-10
+    Mistral-7B     HumanEval                     4  3399.548384     3912.575397                1.150910              1.066480 -6.912682e-08
+   Qwen2.5-14B         GSM8K                     4  3164.403569     3714.017960                1.173687              1.088415  3.160152e-10
+   Qwen2.5-14B          MMLU                     4  3488.237305     3988.060133                1.143288              1.110419 -6.593588e-08
+   Qwen2.5-14B     HumanEval                     4  6194.905956     7078.376037                1.142612              1.058845 -3.712728e-09
+   Qwen2.5-32B         GSM8K                     4  7129.591558     8910.172698                1.249745              1.158872  0.000000e+00
+   Qwen2.5-32B          MMLU                     4  7991.514708    10013.187914                1.252977              1.162912 -2.878053e-08
+   Qwen2.5-32B     HumanEval                     4 14202.511267    17796.579560                1.253059              1.161102 -1.196971e-09

@@ -15,5 +15,7 @@ BASELINES = {
     'Groth16': BaselineFamily('Static ZKP Core', 'static_zkp', 'ZKP', 'Static pipeline without fragment sharing'),
     'VGG16': BaselineFamily('Eyeriss-style Accelerator', 'eyeriss', 'CNN', 'CNN-specific dataflow accelerator'),
     'AES-128': BaselineFamily('AES Dedicated Engine', 'openaes', 'AES', 'OpenAES-like round engine'),
+    'LLM': BaselineFamily('Transformer ASIC', 'transformer_asic', 'LLM',
+                          'Decoder-only accelerator with a fixed attention/FFN pipeline and no cross-task reuse'),
     'Mixed': BaselineFamily('Multi-core', 'multicore', 'Mixed', 'Independent domain-specific engines without cross-task reuse'),
 }

@@ -1,0 +1,157 @@
+{
+  "models": [
+    "gpt-5.4",
+    "deepseek-v4-pro",
+    "kimi-k2.6",
+    "minimax-m3",
+    "gemini-3.1-pro-preview"
+  ],
+  "samples": 6,
+  "max_tokens": 2048,
+  "datasets": {
+    "gsm8k": {
+      "label": "GSM8K",
+      "per_model": {
+        "gpt-5.4": {
+          "mean": 106.16666666666667,
+          "median": 88.0,
+          "min": 66,
+          "max": 177,
+          "n": 6,
+          "truncated": 0
+        },
+        "deepseek-v4-pro": {
+          "mean": 299.8333333333333,
+          "median": 182.5,
+          "min": 49,
+          "max": 791,
+          "n": 6,
+          "truncated": 0
+        },
+        "kimi-k2.6": {
+          "mean": 165.83333333333334,
+          "median": 130.0,
+          "min": 82,
+          "max": 376,
+          "n": 6,
+          "truncated": 0
+        },
+        "minimax-m3": {
+          "mean": 258.1666666666667,
+          "median": 209.0,
+          "min": 164,
+          "max": 515,
+          "n": 6,
+          "truncated": 0
+        },
+        "gemini-3.1-pro-preview": {
+          "mean": 697.0,
+          "median": 670.0,
+          "min": 313,
+          "max": 1146,
+          "n": 6,
+          "truncated": 0
+        }
+      },
+      "median_of_models": 182.5,
+      "min_of_models": 88.0,
+      "max_of_models": 670.0
+    },
+    "mmlu": {
+      "label": "MMLU",
+      "per_model": {
+        "gpt-5.4": {
+          "mean": 152.83333333333334,
+          "median": 150.0,
+          "min": 124,
+          "max": 204,
+          "n": 6,
+          "truncated": 0
+        },
+        "deepseek-v4-pro": {
+          "mean": 1004.6666666666666,
+          "median": 710.5,
+          "min": 243,
+          "max": 2048,
+          "n": 6,
+          "truncated": 1
+        },
+        "kimi-k2.6": {
+          "mean": 437.1666666666667,
+          "median": 454.5,
+          "min": 250,
+          "max": 559,
+          "n": 6,
+          "truncated": 0
+        },
+        "minimax-m3": {
+          "mean": 777.3333333333334,
+          "median": 710.0,
+          "min": 548,
+          "max": 1176,
+          "n": 6,
+          "truncated": 0
+        },
+        "gemini-3.1-pro-preview": {
+          "mean": 1225.0,
+          "median": 1279.0,
+          "min": 890,
+          "max": 1602,
+          "n": 6,
+          "truncated": 0
+        }
+      },
+      "median_of_models": 710.0,
+      "min_of_models": 150.0,
+      "max_of_models": 1279.0
+    },
+    "humaneval": {
+      "label": "HumanEval",
+      "per_model": {
+        "gpt-5.4": {
+          "mean": 85.5,
+          "median": 72.5,
+          "min": 31,
+          "max": 150,
+          "n": 6,
+          "truncated": 0
+        },
+        "deepseek-v4-pro": {
+          "mean": 1236.1666666666667,
+          "median": 1291.0,
+          "min": 336,
+          "max": 2048,
+          "n": 6,
+          "truncated": 3
+        },
+        "kimi-k2.6": {
+          "mean": 492.0,
+          "median": 465.5,
+          "min": 271,
+          "max": 825,
+          "n": 6,
+          "truncated": 0
+        },
+        "minimax-m3": {
+          "mean": 1058.8333333333333,
+          "median": 1032.0,
+          "min": 501,
+          "max": 1567,
+          "n": 6,
+          "truncated": 0
+        },
+        "gemini-3.1-pro-preview": {
+          "mean": 1455.8333333333333,
+          "median": 1349.0,
+          "min": 1019,
+          "max": 2044,
+          "n": 6,
+          "truncated": 0
+        }
+      },
+      "median_of_models": 1032.0,
+      "min_of_models": 72.5,
+      "max_of_models": 1349.0
+    }
+  }
+}

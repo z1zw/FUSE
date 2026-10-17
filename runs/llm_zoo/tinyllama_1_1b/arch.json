@@ -1,0 +1,16 @@
+{
+  "name": "tinyllama_1_1b",
+  "label": "TinyLlama-1.1B",
+  "hf_id": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "family": "dense-GQA",
+  "layers": 22,
+  "hidden": 2048,
+  "heads": 32,
+  "kv_heads": 4,
+  "head_dim": 64,
+  "ff_dim": 5632,
+  "vocab": 32000,
+  "moe_experts": 0,
+  "moe_top_k": 0,
+  "parameter_count": 1099956224
+}

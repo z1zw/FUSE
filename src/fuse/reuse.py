@@ -139,22 +139,28 @@ class MicrofragmentDecomposer:
         return representative_paths
 
     def _annotate_path_bindings(self, all_microfragments: Sequence[MicroFragment], representative_paths: Dict[str, RepresentativePath]) -> List[MicroFragment]:
-        best_binding: Dict[str, Tuple[int, int, str, int]] = {}
+        """Bind each microfragment to one representative path.
+
+        A microfragment can be a member of several paths (an n-gram path and
+        a later one that overlaps it). The rule is the one the C++ engine
+        applies in ``build_path_bindings``: paths are taken in the order they
+        are listed, and the last path that names a member binds it. The two
+        engines must agree here, because the binding decides which path-cache
+        entry a dispatch sees, and in modes with a large switch cost that
+        moves the makespan by double-digit percentages. Every published result
+        was produced under this rule.
+        """
+        binding: Dict[str, Tuple[str, int, int]] = {}
         for path in representative_paths.values():
-            member_to_position = {member: idx for idx, member in enumerate(path.members)}
-            score = (len(path.structural_signature), path.reuse_count)
-            for member, position in member_to_position.items():
-                incumbent = best_binding.get(member)
-                if incumbent is not None and incumbent[:2] >= score:
-                    continue
-                best_binding[member] = (score[0], score[1], path.path_id, position)
+            for position, member in enumerate(path.members):
+                binding[member] = (path.path_id, position, path.reuse_count)
         annotated: List[MicroFragment] = []
         for micro in all_microfragments:
-            binding = best_binding.get(micro.micro_id)
-            if binding is None:
+            bound = binding.get(micro.micro_id)
+            if bound is None:
                 annotated.append(micro)
                 continue
-            _, reuse_count, path_id, position = binding
+            path_id, position, reuse_count = bound
             annotated.append(replace(micro, path_id=path_id, path_position=position, path_reuse_count=reuse_count))
         return annotated
 

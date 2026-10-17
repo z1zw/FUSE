@@ -1,0 +1,16 @@
+{
+  "name": "olmoe_1b_7b",
+  "label": "OLMoE-1B-7B",
+  "hf_id": "allenai/OLMoE-1B-7B-0924-Instruct",
+  "family": "MoE",
+  "layers": 16,
+  "hidden": 2048,
+  "heads": 16,
+  "kv_heads": 16,
+  "head_dim": 128,
+  "ff_dim": 1024,
+  "vocab": 50304,
+  "moe_experts": 64,
+  "moe_top_k": 8,
+  "parameter_count": 6919028736
+}

@@ -292,6 +292,42 @@ class EvaluationToolkit:
             out['openroad_synth_stat_report'] = synth_record
         return out
 
+    def parse_dc_ptpx(self) -> Dict[str, float] | None:
+        """Synopsys Design Compiler area and PrimeTime PX power, the flow 4.1
+        describes. Both reports are needed; either missing yields None."""
+        dc_path = self.config.dc_report
+        ptpx_path = self.config.ptpx_report
+        if dc_path is None or ptpx_path is None or not dc_path.exists() or not ptpx_path.exists():
+            return None
+        dc = dc_path.read_text(encoding='utf-8', errors='ignore')
+        ptpx = ptpx_path.read_text(encoding='utf-8', errors='ignore')
+        total_area = self._match_float(dc, [rf'total[_ ]cell[_ ]area[^0-9-]*{FLOAT_RE}', rf'total[_ ]area[^0-9-]*{FLOAT_RE}'])
+        total_power = self._match_float(ptpx, [rf'total[_ ]power[^0-9-]*{FLOAT_RE}'])
+        if total_area is None or total_power is None:
+            return None
+
+        def component(text: str, name: str) -> float:
+            value = self._match_float(text, [rf'(?im)^\s*{re.escape(name)}\b[^0-9-]*{FLOAT_RE}'])
+            return float(value) if value is not None else 0.0
+
+        rfu_area = component(dc, 'RFU')
+        tars_area = component(dc, 'TARS')
+        fvm_area = component(dc, 'FVM')
+        rfu_power = component(ptpx, 'RFU')
+        scheduler_fvm_power = component(ptpx, 'Scheduler+FVM')
+        static_power = component(ptpx, 'Static')
+        return {
+            'total_area_mm2': float(total_area),
+            'fvm_area_mm2': fvm_area,
+            'rfu_area_mm2': rfu_area,
+            'tars_area_mm2': tars_area,
+            'other_area_mm2': max(float(total_area) - rfu_area - tars_area - fvm_area, 0.0),
+            'total_power_w': float(total_power),
+            'rfu_dynamic_w': rfu_power,
+            'scheduler_fvm_dynamic_w': scheduler_fvm_power,
+            'static_w': static_power,
+        }
+
     def require_dram(self, total_bytes: float) -> Dict[str, float]:
         parsed = self.parse_dramsim3()
         if parsed is None:
@@ -319,6 +355,11 @@ class EvaluationToolkit:
         switch_events: float = 0.0,
         makespan_ms: float = 1.0,
     ) -> Dict[str, float]:
+        # Signed-off tool reports take precedence over the open-source estimate.
+        dc_ptpx = self.parse_dc_ptpx()
+        if dc_ptpx is not None:
+            return {**dc_ptpx, 'source': 'dc_ptpx_reports'}
+
         openroad = self.parse_openroad()
         if openroad is not None:
             synth = self.parse_openroad_synth_stat() or {}

@@ -1,0 +1,28 @@
+C:\Users\16320\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (6.0.0.post1)/charset_normalizer (3.4.7) doesn't match a supported version!
+  warnings.warn(
+W0920 03:03:45.790000 37124 site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+Using the latest cached version of the dataset since gsm8k couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'main' at C:\Users\16320\.cache\huggingface\datasets\gsm8k\main\0.0.0\740312add88f781978c0658806c59bc2815b9866 (last modified on Wed Jul 22 15:56:17 2026).
+    gpt-5.4                  GSM8K      median=    88 tok (n=6)
+    deepseek-v4-pro          GSM8K      median=   182 tok (n=6)
+    kimi-k2.6                GSM8K      median=   130 tok (n=6)
+    minimax-m3               GSM8K      median=   209 tok (n=6)
+    gemini-3.1-pro-preview   GSM8K      median=   670 tok (n=6)
+Using the latest cached version of the dataset since cais/mmlu couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'all' at C:\Users\16320\.cache\huggingface\datasets\cais___mmlu\all\0.0.0\c30699e8356da336a370243923dbaf21066bb9fe (last modified on Wed Jul 22 15:56:34 2026).
+    gpt-5.4                  MMLU       median=   150 tok (n=6)
+    deepseek-v4-pro          MMLU       median=   710 tok (n=6)
+    kimi-k2.6                MMLU       median=   454 tok (n=6)
+    minimax-m3               MMLU       median=   710 tok (n=6)
+    gemini-3.1-pro-preview   MMLU       median=  1279 tok (n=6)
+Using the latest cached version of the dataset since openai_humaneval couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'openai_humaneval' at C:\Users\16320\.cache\huggingface\datasets\openai_humaneval\openai_humaneval\0.0.0\7dce6050a7d6d172f3cc5c32aa97f52fa1a2e544 (last modified on Wed Jul 22 15:56:19 2026).
+    gpt-5.4                  HumanEval  median=    72 tok (n=6)
+    deepseek-v4-pro          HumanEval  median=  1291 tok (n=6)
+    kimi-k2.6                HumanEval  median=   466 tok (n=6)
+    minimax-m3               HumanEval  median=  1032 tok (n=6)
+    gemini-3.1-pro-preview   HumanEval  median=  1349 tok (n=6)
+wrote runs/concurrent2/answer_lengths.json
+  GSM8K      median-of-models=   182 tok  (range 88-670)
+  MMLU       median-of-models=   710 tok  (range 150-1279)
+  HumanEval  median-of-models=  1032 tok  (range 72-1349)

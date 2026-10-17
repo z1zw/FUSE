@@ -1,0 +1,16 @@
+{
+  "name": "mistral_7b",
+  "label": "Mistral-7B",
+  "hf_id": "mistralai/Mistral-7B-Instruct-v0.2",
+  "family": "dense-GQA",
+  "layers": 32,
+  "hidden": 4096,
+  "heads": 32,
+  "kv_heads": 8,
+  "head_dim": 128,
+  "ff_dim": 14336,
+  "vocab": 32000,
+  "moe_experts": 0,
+  "moe_top_k": 0,
+  "parameter_count": 7241465856
+}

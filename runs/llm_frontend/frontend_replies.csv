@@ -1,0 +1,500 @@
+model,kind,intent,prompt_index,prompt,latency_s,error,raw
+gpt-5.4,hosted,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",1.9004119000019273,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gpt-5.4,hosted,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",1.4396995999995852,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gpt-5.4,hosted,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",1.3958408000034979,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gpt-5.4,hosted,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",1.2640749999991385,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gpt-5.4,hosted,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",1.550984999994398,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+gpt-5.4,hosted,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",1.4101066000002902,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+gpt-5.4,hosted,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",1.3058985999959987,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+gpt-5.4,hosted,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",2.354953000001842,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+gpt-5.4,hosted,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",1.3090604999888455,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+gpt-5.4,hosted,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",1.3169631999917328,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+gpt-5.4,hosted,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",4.4986978999950225,,"{""tasks"":[{""type"":""cnn"",""batch"":8},{""type"":""aes"",""blocks"":512},{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12}]}"
+gpt-5.4,hosted,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",1.3217169999988982,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+deepseek-v4-pro,hosted,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",4.213000000003376,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+deepseek-v4-pro,hosted,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",4.694964700000128,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+deepseek-v4-pro,hosted,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",4.742672500011395,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+deepseek-v4-pro,hosted,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",5.57043479999993,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+deepseek-v4-pro,hosted,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",5.275558599998476,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+deepseek-v4-pro,hosted,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",5.143341999995755,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+deepseek-v4-pro,hosted,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",6.091432300003362,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+deepseek-v4-pro,hosted,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",4.416139699998894,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+deepseek-v4-pro,hosted,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",5.030099199997494,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+deepseek-v4-pro,hosted,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",4.313577399996575,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+deepseek-v4-pro,hosted,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",7.717172499993467,,"{""tasks"":[{""type"":""cnn"",""batch"":8},{""type"":""aes"",""blocks"":512},{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12}]}"
+deepseek-v4-pro,hosted,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",5.142294399993261,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+kimi-k2.6,hosted,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",4.6137545999954455,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+kimi-k2.6,hosted,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",4.4133074000128545,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+kimi-k2.6,hosted,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",5.837928799999645,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+kimi-k2.6,hosted,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",4.281498399999691,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+kimi-k2.6,hosted,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",8.598735199993826,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+kimi-k2.6,hosted,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",5.757920699994429,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+kimi-k2.6,hosted,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",4.1758108000067296,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+kimi-k2.6,hosted,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",8.185644500001217,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+kimi-k2.6,hosted,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",3.3926690999942366,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+kimi-k2.6,hosted,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",11.682702899997821,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+kimi-k2.6,hosted,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",4.654469599990989,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+kimi-k2.6,hosted,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",3.7591326999972807,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+minimax-m3,hosted,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",2.845608000003267,,"<think>The user wants a plan for a private RAG gateway with specific tasks:
+1. LLM prefill: 768 tokens, 3072 hidden size, 24 heads
+2. AES encryption: 1024 blocks
+3. ZKP: 2048 constraints
+
+The request mentions LLM, AES, and ZKP. No CNN or MLP mentioned.
+
+Let me construct the JSON accordingly.</think>
+
+{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+minimax-m3,hosted,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",2.8789919999981066,,"<think>The user is requesting a confidential retrieval service with specific parameters:
+1. LLM prefill: seq_len=768, hidden=3072, heads=24
+2. AES: 1024 blocks
+3. ZKP (Groth16): 2048 constraints
+
+No CNN or MLP tasks are mentioned, so I should only include llm, aes, and zkp tasks.
+
+Let me format the JSON exactly as specified.</think>
+
+{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+minimax-m3,hosted,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",1.9434438000025693,,"<think>The user wants me to compile a service request into an accelerator plan. The request includes:
+1. A transformer with 24 heads, 3072 dimension, over 768 tokens - this is an LLM task
+2. AES-128 on 1024 blocks - this is an AES task
+3. A zero-knowledge proof with 2048 constraints - this is a ZKP task
+
+I need to determine the seq_len and hidden for the LLM task:
+- seq_len = 768 (tokens)
+- hidden = 3072 (dimension)
+- heads = 24
+
+For AES:
+- blocks = 1024
+
+For ZKP:
+- constraints = 2048
+
+No CNN or MLP tasks are mentioned, so I should not include those.
+
+The response should be JSON only, no markdown fence, no prose.</think>
+
+{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+minimax-m3,hosted,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",1.8652215999900363,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+minimax-m3,hosted,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",2.2545672000123886,,"<think>The user wants a rollup sequencer that:
+1. Proves 4096 constraints (ZKP)
+2. Encrypts 2048 AES blocks (AES)
+3. Runs a transformer with seq 512, hidden 2048, heads 16 (LLM)
+
+The request mentions three specific tasks. I need to output JSON with only those three task types. The MLP, CNN tasks are not asked for, so I should exclude them.
+
+Let me construct the JSON:
+- zkp: constraints = 4096
+- aes: blocks = 2048
+- llm: seq_len = 512, hidden = 2048, heads = 16
+
+The format requires {""tasks"":[{""type"":""llm"",...},{""type"":""aes"",...},{""type"":""zkp"",...},...]}
+
+I'll order them logically.</think>
+
+{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+minimax-m3,hosted,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",2.2082712999981595,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+minimax-m3,hosted,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",1.748230400000466,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+minimax-m3,hosted,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",1.9529425000073388,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+minimax-m3,hosted,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",3.369039100012742,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+minimax-m3,hosted,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",2.1490567000000738,,"<think>The user wants a plan for an on-device assistant with specific tasks:
+1. LLM: 12 heads, 1536 wide (hidden), over 384 tokens (seq_len)
+2. AES encryption: 512 blocks
+3. CNN inference: batch size 8
+
+Let me construct the JSON accordingly. The format requires only the task types asked for, with integer values matching what the request states.
+
+- llm: seq_len=384, hidden=1536, heads=12
+- aes: blocks=512
+- cnn: batch=8
+
+No zkp or mlp tasks mentioned, so I'll exclude those.</think>
+
+{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+minimax-m3,hosted,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",1.6777354999940144,,"<think>The user wants an edge service with:
+1. Vision (VGG16, batch 8) - this maps to cnn with batch 8
+2. AES-128 on 512 blocks - this maps to aes with blocks 512
+3. Transformer with sequence 384, hidden 1536, heads 12 - this maps to llm with seq_len 384, hidden 1536, heads 12
+
+No zkp or mlp mentioned. So I'll omit those task types.
+
+Let me construct the JSON accordingly.</think>
+
+{""tasks"":[{""type"":""cnn"",""batch"":8},{""type"":""aes"",""blocks"":512},{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12}]}"
+minimax-m3,hosted,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",2.3092155999911483,,"<think>The user wants a private copilot on the edge with specific configurations:
+1. LLM prefill: 384 tokens, 1536 hidden dimensions, 12 heads
+2. AES encryption: 512 encrypted blocks
+3. CNN: batch 8
+
+Let me construct the JSON response according to the required format.</think>
+
+{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+gemini-3.1-pro-preview,hosted,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",106.98931319999974,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gemini-3.1-pro-preview,hosted,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",7.104386000006343,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gemini-3.1-pro-preview,hosted,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",8.068635200004792,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gemini-3.1-pro-preview,hosted,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",7.6107593000051565,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+gemini-3.1-pro-preview,hosted,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",6.7073638000001665,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+gemini-3.1-pro-preview,hosted,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",7.630216100005782,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+gemini-3.1-pro-preview,hosted,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",7.489010400007828,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+gemini-3.1-pro-preview,hosted,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",6.708883700004662,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+gemini-3.1-pro-preview,hosted,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",7.6859554999973625,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+gemini-3.1-pro-preview,hosted,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",8.01480740000261,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+gemini-3.1-pro-preview,hosted,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",7.153362400000333,,"{""tasks"":[{""type"":""cnn"",""batch"":8},{""type"":""aes"",""blocks"":512},{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12}]}"
+gemini-3.1-pro-preview,hosted,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",7.164689400000498,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+Qwen2.5-0.5B,local,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",3.061223800003063,,"{""tasks"":[{""type"":""llm"",""seq_len"":5,""hidden"":1024,""heads"":768},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":24},{""type"":""cnn"",""batch"":1024},{""type"":""mlp"",""batch"":1024,""hidden"":2048}]}"
+Qwen2.5-0.5B,local,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",1.3197482999967178,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+Qwen2.5-0.5B,local,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",1.5972054000012577,,"{""tasks"":[{""type"":""llm"",""seq_len"":5,""hidden"":24,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":768},{""type"":""cnn"",""batch"":1024},{""type"":""mlp"",""batch"":2048,""hidden"":3072}]}"
+Qwen2.5-0.5B,local,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",0.5580498000053922,,"{""task"":[{""type"":""mlp"",""batch"":768,""hidden"":3072,""heads"":24}]}"
+Qwen2.5-0.5B,local,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",1.2268581000098493,,"{""tasks"":[{""type"":""aes"",""seq_len"":4096,""hidden"":2048,""heads"":16},{""type"":""cnn"",""batch"":512},{""type"":""mlp"",""batch"":2048,""hidden"":2048}]}"
+Qwen2.5-0.5B,local,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",1.602058799995575,,"{""tasks"":[{""type"":""llm"",""seq_len"":3,""hidden"":16,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096},{""type"":""cnn"",""batch"":16},{""type"":""mlp"",""batch"":16,""hidden"":2048}]}"
+Qwen2.5-0.5B,local,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",1.5469525999942562,,"{""tasks"":[{""type"":""aes"",""seq_len"":4096,""hidden"":2048,""heads"":16},{""type"":""cnn"",""batch"":2048},{""type"":""mlp"",""batch"":512,""hidden"":2048}]}"
+Qwen2.5-0.5B,local,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",1.1834120999992592,,"{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16,""AES"":""blocks"":2048,""ZKP"":""constraints"":4096}"
+Qwen2.5-0.5B,local,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",1.2102105999947526,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""zkp"",""constraints"":8}]}"
+Qwen2.5-0.5B,local,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",1.6779427000001306,,"{""tasks"":[{""type"":""llm"",""seq_len"":0,""hidden"":0,""heads"":12},{""type"":""aes"",""blocks"":384},{""type"":""zkp"",""constraints"":8},{""type"":""cnn"",""batch"":8},{""type"":""mlp"",""batch"":512,""hidden"":1536}]}"
+Qwen2.5-0.5B,local,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",1.5785699999978533,,"{""tasks"":[{""type"":""llm"",""seq_len"":0,""hidden"":768,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""zkp"",""constraints"":384},{""type"":""cnn"",""batch"":8},{""type"":""mlp"",""batch"":1536,""hidden"":1536}]}"
+Qwen2.5-0.5B,local,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",1.388489600009052,,"{""tasks"":[{""type"":""llm"",""seq_len"":0,""hidden"":0,""heads"":384},{""type"":""aes"",""blocks"":1536},{""type"":""zkp"",""constraints"":12},{""type"":""cnn"",""batch"":8},{""type"":""mlp"",""batch"":8,""hidden"":512}]}"
+TinyLlama-1.1B,local,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",4.4573184000037145,,"I am not able to build or run a private rag gateway. However, I can provide you with a json-only format that you can use to build the rag gateway.
+
+here's a json-only format for a private rag gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 aes blocks, and proves 2048 constraints:
+
+```json
+{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 768,
+      ""hidden"": 32,
+      ""heads"": 24
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 1024,
+      ""constraints"": 2048
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 1024
+    },
+   "
+TinyLlama-1.1B,local,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",4.267431700005545,,"Here's a JSON-only response to the service request:
+
+{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 768,
+      ""hidden"": 3072,
+      ""heads"": 24
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 1024,
+      ""constraints"": 2048
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 2048
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 1024,
+      ""hidden"": 2048
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"": 1024,
+      ""hidden"": 2048,
+      ""hidden"": 1024
+    }
+  ]
+}"
+TinyLlama-1.1B,local,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",3.859249600005569,,"{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 10,
+      ""hidden"": 128,
+      ""heads"": 3
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 1024,
+      ""constraints"": 2048
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 2048
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 1024,
+      ""hidden"": 1024
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"": 1024,
+      ""hidden"": 1024,
+      ""hidden"": 1024
+    }
+  ]
+}
+
+This is a retrieval-augmented pipeline with a 24-"
+TinyLlama-1.1B,local,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",4.312163299997337,,"I am not able to compile a service request into an accelerator plan. However, I can provide you with a plan for a privacy-preserving rag endpoint using the given inputs.
+
+1. Task types:
+   a. Llm: input: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+   b. Aes: input: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+   c. Zkp: input: [1, 2, 3, 4, 5, 6,"
+TinyLlama-1.1B,local,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",3.837671000001137,,"Here's a JSON-only accelerator plan for the rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16:
+
+```
+{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 4096,
+      ""hidden"": 2048,
+      ""heads"": 16
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 2048
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 512
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 512,
+      ""hidden"": 2048
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"
+TinyLlama-1.1B,local,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",4.137715200005914,,"Here's a JSON-encoded accelerator plan for a blockchain sequencing service that meets the requirements:
+
+```json
+{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 4096,
+      ""hidden"": 2048,
+      ""heads"": 16
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 2048,
+      ""constraints"": 1000
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 1000
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 512,
+      ""hidden"": 16
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"": 512,
+      ""hidden"": 16,
+      ""hidden"": 16
+    }"
+TinyLlama-1.1B,local,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",4.383730799992918,,"Here's a JSON-only accelerator plan for a rollup batch pipeline with 4096-constraint proof, 2048 blocks of AES, and a 16-head 2048-wide model over a 512-token window:
+
+```
+{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 4096,
+      ""hidden"": 2048,
+      ""heads"": 16
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 2048,
+      ""constraints"": 16
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 512,
+      ""batch"": 16
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 16,
+      ""hidden"": 2048"
+TinyLlama-1.1B,local,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",3.8788389999972424,,"{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 512,
+      ""hidden"": 2048,
+      ""heads"": 16
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 2048
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 4096
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 2048,
+      ""hidden"": 2048
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"": 4096,
+      ""hidden"": 2048,
+      ""hidden"": 2048
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 4096,
+      ""hidden"": 204"
+TinyLlama-1.1B,local,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",4.501880199997686,,"{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 384,
+      ""hidden"": 1536,
+      ""heads"": 12
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 512
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 8
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 8,
+      ""hidden"": 512
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"": 8,
+      ""hidden"": 512,
+      ""hidden"": 1024,
+      ""hidden"": 2048,
+      ""hidden"": 512
+    }
+  ]
+}
+
+Note: The LLM prefill is 384 tokens, hidden "
+TinyLlama-1.1B,local,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",4.033110399992438,,"I am not capable of running on-device machine learning models or providing specific hardware specifications. However, I can provide you with a general plan for building such an assistant.
+
+1. Choose a hardware platform: the on-device assistant should run on a hardware platform that supports on-device machine learning. Some popular options include android, ios, and raspberry pi.
+
+2. Choose a model: the on-device assistant should run a 12-head 1536-wide model over 384 tokens. The model should be pre-trained on a large dataset and fine-tuned for the specific use case.
+
+3. Choose a hardware accelerator: the on-device assistant should use an accelerator that can efficiently perform the tasks required for the model. Some popular options include lsm, alexnet, and resnet.
+
+4. Choose a hardware configuration: the hardware configuration should be optimized for the specific tasks required by the model. For example, if the model requires 1"
+TinyLlama-1.1B,local,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",4.017106399987824,,"{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 100,
+      ""hidden"": 128,
+      ""heads"": 12
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 8,
+      ""batch"": 8
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 1000,
+      ""batch"": 1
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 8,
+      ""hidden"": 512
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"": 8,
+      ""hidden"": 1536,
+      ""heads"": 12
+    }
+  ]
+}
+
+Note: The task types are specified as integers, and the sizes of the batches and hidden layers are"
+TinyLlama-1.1B,local,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",4.693513400008669,,"Here's a private copilot request for a 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN:
+
+```
+{
+  ""tasks"": [
+    {
+      ""type"": ""llm"",
+      ""seq_len"": 100,
+      ""hidden"": 1024,
+      ""heads"": 12
+    },
+    {
+      ""type"": ""aes"",
+      ""blocks"": 1024
+    },
+    {
+      ""type"": ""zkp"",
+      ""constraints"": 1024
+    },
+    {
+      ""type"": ""cnn"",
+      ""batch"": 8,
+      ""hidden"": 512
+    },
+    {
+      ""type"": ""mlp"",
+      ""batch"": 8,
+      ""hidden"": 512,
+      """
+Mistral-7B,local,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",1.8603151000133948,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+Mistral-7B,local,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",1.7403689999919152,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}"
+Mistral-7B,local,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",2.06970690000162,,"{""tasks"":[{""type"":""llm"", ""seq_len"": 768, ""hidden"": 3072, ""heads"": 24},
+{""type"":""aes"", ""blocks"": 1024},
+{""type"":""zkp"", ""constraints"": 2048}]}"
+Mistral-7B,local,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",2.187711599995964,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072},{""type"":""aes"",""blocks"":1024},{""type"":""attn"",""seq_len"":768,""heads"":24},{""type"":""zkp"",""constraints"":2048}]}"
+Mistral-7B,local,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",2.0672650000051362,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"", ""seq_len"":512, ""hidden"":2048, ""heads"":16}]}"
+Mistral-7B,local,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",2.077304100006586,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+Mistral-7B,local,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",1.9269024999957765,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"", ""seq_len"":512, ""hidden"":16, ""heads"":16}]}"
+Mistral-7B,local,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",1.9238142000103835,,"{""tasks"":[{""type"":""llm"", ""seq_len"":512, ""hidden"":2048, ""heads"":16},
+         {""type"":""aes"", ""blocks"":2048},
+         {""type"":""zkp"", ""constraints"":4096}]}"
+Mistral-7B,local,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",2.588879100003396,,"{""tasks"":[{""type"":""llm"", ""seq_len"": 384, ""hidden"": 1536, ""heads"": 12},
+         {""type"":""aes"", ""blocks"": 512},
+         {""type"":""cnn"", ""batch"": 8},
+         {""type"":""mlp"", ""batch"": 8, ""hidden"": 1536}]}"
+Mistral-7B,local,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",2.1414513000054285,,"{""tasks"":[{""type"":""llm"", ""seq_len"": 384, ""hidden"": 1536, ""heads"": 12},
+{""type"":""aes"", ""blocks"": 512},
+{""type"":""cnn"", ""batch"": 8}]}"
+Mistral-7B,local,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",2.0930302999913692,,"{""tasks"":[{""type"":""cnn"",""batch"":8,""model"":""vgg16""},{""type"":""aes"",""blocks"":512},{""type"":""transformer"", ""seq_len"":384, ""hidden"":1536, ""heads"":12}]}"
+Mistral-7B,local,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",1.7676129000028595,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"", ""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+Qwen2.5-7B,local,private_rag,0,"Build a private RAG gateway that prefills 768 tokens on a 3072-wide 24-head model, encrypts 1024 AES blocks, and proves 2048 constraints.",1.6622285999910673,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}."
+Qwen2.5-7B,local,private_rag,1,"I need a confidential retrieval service: LLM prefill seq 768, hidden 3072, heads 24; AES over 1024 blocks; a Groth16 proof of 2048 constraints.",1.4921658000093885,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}."
+Qwen2.5-7B,local,private_rag,2,"Compile a retrieval-augmented pipeline with a 24-head 3072-dimension transformer over 768 tokens, AES-128 on 1024 blocks and a 2048-constraint zero-knowledge proof.",1.4619990000064718,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}."
+Qwen2.5-7B,local,private_rag,3,"Plan a privacy-preserving RAG endpoint: 768-token context, 3072 hidden units, 24 attention heads, 1024 encrypted blocks, 2048-gate proof.",1.5052028999925824,,"{""tasks"":[{""type"":""llm"",""seq_len"":768,""hidden"":3072,""heads"":24},{""type"":""aes"",""blocks"":1024},{""type"":""zkp"",""constraints"":2048}]}\n"
+Qwen2.5-7B,local,rollup_sequencer,0,"Compile a rollup sequencer that proves 4096 constraints, encrypts 2048 AES blocks, and runs a transformer with seq 512, hidden 2048, heads 16.",1.5265011000010418,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+Qwen2.5-7B,local,rollup_sequencer,1,"Set up a blockchain sequencing service: Groth16 over 4096 gates, AES-128 on 2048 blocks, and an LLM step of 512 tokens at 2048 hidden with 16 heads.",1.6332992000097875,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+Qwen2.5-7B,local,rollup_sequencer,2,"I want a rollup batch pipeline: 4096-constraint proof, 2048 blocks of AES, plus a 16-head 2048-wide model over a 512-token window.",1.6226611999882152,,"{""tasks"":[{""type"":""zkp"",""constraints"":4096},{""type"":""aes"",""blocks"":2048},{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16}]}"
+Qwen2.5-7B,local,rollup_sequencer,3,"Build a sequencer: transformer seq_len 512 hidden 2048 heads 16, AES blocks 2048, zero-knowledge constraints 4096.",1.6506074000062654,,"{""tasks"":[{""type"":""llm"",""seq_len"":512,""hidden"":2048,""heads"":16},{""type"":""aes"",""blocks"":2048},{""type"":""zkp"",""constraints"":4096}]}"
+Qwen2.5-7B,local,edge_copilot,0,"Build a confidential edge copilot: LLM prefill 384 tokens, hidden 1536, 12 heads; AES over 512 blocks; a VGG16 vision pass at batch 8.",1.373715199995786,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}][]}"
+Qwen2.5-7B,local,edge_copilot,1,"Plan an on-device assistant that runs a 12-head 1536-wide model over 384 tokens, encrypts 512 AES blocks, and does CNN inference with batch size 8.",1.3750719999952707,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"
+Qwen2.5-7B,local,edge_copilot,2,"Compile an edge service combining vision (VGG16, batch 8), AES-128 on 512 blocks, and a transformer of sequence 384, hidden 1536, heads 12.",2.3143379999964964,,"{""tasks"":[{""type"":""cnn"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""mlp"",""batch"":8,""hidden"":512}]}`note: Adjusted the MLP batch size to match the given vision task batch size and assumed hidden layer size based on common transformer architectures.`"
+Qwen2.5-7B,local,edge_copilot,3,"I need a private copilot on the edge: 384-token prefill at 1536 dimensions with 12 heads, 512 encrypted blocks, and a batch-8 CNN.",1.4177262000011979,,"{""tasks"":[{""type"":""llm"",""seq_len"":384,""hidden"":1536,""heads"":12},{""type"":""aes"",""blocks"":512},{""type"":""cnn"",""batch"":8}]}"

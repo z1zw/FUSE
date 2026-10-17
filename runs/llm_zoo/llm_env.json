@@ -1,0 +1,40 @@
+{
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.9",
+  "torch": "2.11.0+cu128",
+  "device": "cuda:0",
+  "device_name": "NVIDIA GeForce RTX 5080",
+  "dataset": "gsm8k",
+  "sample_count": 8,
+  "gen_tokens": 64,
+  "repeat": 3,
+  "warmup": 1,
+  "seed": 7,
+  "freshness_window_cycles": 600000000,
+  "tiling_width": 8,
+  "baseline_modes": [
+    "transformer_asic",
+    "gpu_tensor",
+    "multicore"
+  ],
+  "serving_baseline_modes": [
+    "multicore"
+  ],
+  "zkp_circuit_size": 65536,
+  "aes_kib_per_request": 256.0,
+  "proofs_per_request": 2.0,
+  "crypto_scales": [
+    0.0,
+    1.0,
+    2.0,
+    4.0
+  ],
+  "models": [
+    "gpt2",
+    "Qwen/Qwen2.5-0.5B-Instruct",
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "allenai/OLMoE-1B-7B-0924-Instruct",
+    "mistralai/Mistral-7B-Instruct-v0.2",
+    "Qwen/Qwen2.5-7B-Instruct"
+  ]
+}

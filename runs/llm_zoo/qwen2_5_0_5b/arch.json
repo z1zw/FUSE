@@ -1,0 +1,16 @@
+{
+  "name": "qwen2_5_0_5b",
+  "label": "Qwen2.5-0.5B",
+  "hf_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "family": "dense-GQA",
+  "layers": 24,
+  "hidden": 896,
+  "heads": 14,
+  "kv_heads": 2,
+  "head_dim": 64,
+  "ff_dim": 4864,
+  "vocab": 151936,
+  "moe_experts": 0,
+  "moe_top_k": 0,
+  "parameter_count": 493961216
+}

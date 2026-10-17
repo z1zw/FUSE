@@ -47,10 +47,10 @@ class FuseSimulator:
         self.path_cache: Dict[str, PathCacheEntry] = {}
 
     def _reuse_enabled(self) -> bool:
-        return self.config.mode in {'fuse', 'secure_ct'} or self.config.mode.startswith('secure_elastic')
+        return self.config.mode in {'fuse', 'secure_ct', 'template_only'} or self.config.mode.startswith('secure_elastic')
 
     def _baseline_speed_factor(self, task_type: str) -> float:
-        factors = {'static_zkp': {'ZKP': 1.05, 'CNN': 0.92, 'AES': 0.92}, 'eyeriss': {'ZKP': 0.9, 'CNN': 1.08, 'AES': 0.9}, 'openaes': {'ZKP': 0.94, 'CNN': 0.94, 'AES': 1.03}, 'gpu_tensor': {'ZKP': 0.96, 'CNN': 1.12, 'AES': 0.97}, 'multicore': {'ZKP': 0.98, 'CNN': 0.98, 'AES': 0.98}}
+        factors = {'static_zkp': {'ZKP': 1.05, 'CNN': 0.92, 'AES': 0.92, 'LLM': 0.9}, 'eyeriss': {'ZKP': 0.9, 'CNN': 1.08, 'AES': 0.9, 'LLM': 0.95}, 'openaes': {'ZKP': 0.94, 'CNN': 0.94, 'AES': 1.03, 'LLM': 0.9}, 'transformer_asic': {'ZKP': 0.88, 'CNN': 0.95, 'AES': 0.88, 'LLM': 1.08}, 'gpu_tensor': {'ZKP': 0.96, 'CNN': 1.12, 'AES': 0.97, 'LLM': 1.1}, 'multicore': {'ZKP': 0.98, 'CNN': 0.98, 'AES': 0.98, 'LLM': 0.98}}
         return factors.get(self.config.mode, {}).get(task_type, 1.0)
 
     def run(self, runtime_tasks: Sequence[RuntimeTask], microfragments: Sequence[MicroFragment]) -> RunResult:
@@ -84,7 +84,7 @@ class FuseSimulator:
                 node.template_prefetched = meta['template_prefetched']
                 finish = rfu.assign(node.base_micro, clock, duration)
                 heappush(running_heap, (finish, runtime_micro_id, rfu.rfu_id))
-                self.trace_events.append({'event': 'dispatch', 'cycle': clock, 'finish_cycle': finish, 'runtime_micro_id': runtime_micro_id, 'task_runtime_id': node.task_runtime_id, 'task_type': node.base_micro.task_type, 'template_family': node.base_micro.template_family, 'reused_result': meta['reused_result'], 'structural_reuse': meta['structural_reuse'], 'switch_cycles': meta['switch_cycles'], 'path_id': node.base_micro.path_id, 'path_reuse_count': node.base_micro.path_reuse_count, 'rfu_id': rfu.rfu_id})
+                self.trace_events.append({'event': 'dispatch', 'cycle': clock, 'finish_cycle': finish, 'runtime_micro_id': runtime_micro_id, 'task_runtime_id': node.task_runtime_id, 'task_type': node.base_micro.task_type, 'template_family': node.base_micro.template_family, 'reused_result': meta['reused_result'], 'structural_reuse': meta['structural_reuse'], 'structural_reuse_hit': meta['structural_reuse_hit'], 'switch_cycles': meta['switch_cycles'], 'path_id': node.base_micro.path_id, 'path_reuse_count': node.base_micro.path_reuse_count, 'rfu_id': rfu.rfu_id})
                 if node.template_prefetched:
                     self.scheduler.prefetch_earliness_cycles.append(self.config.base_switch_cycles)
             if running_heap:
@@ -99,7 +99,10 @@ class FuseSimulator:
                     self.fvm.write(node.base_micro, finish_cycle)
                     if node.base_micro.path_id:
                         self.path_cache[node.base_micro.path_id] = PathCacheEntry(path_id=node.base_micro.path_id, context=node.base_micro.context, created_cycle=finish_cycle, last_access_cycle=finish_cycle, template_family=node.base_micro.template_family, reuse_count=node.base_micro.path_reuse_count)
-                    for succ_id in node.succs:
+                    # Sorted for the same reason as in the scheduler: set order
+                    # over strings is hash-seed dependent, and it decides what
+                    # lands in the bounded prefetch queue.
+                    for succ_id in sorted(node.succs):
                         succ = self.scheduler.runtime_micros[succ_id]
                         self.lrc.prefetch(succ.base_micro.template_family)
                     if self.scheduler.completed_for_task(node.task_runtime_id):
@@ -133,7 +136,7 @@ class FuseSimulator:
         micro = node.base_micro
         self.scheduler.ready_probe_count += 1
         score = 0.0
-        if self.fvm.peek(micro.semantic_hash, cycle, self.config.freshness_window_cycles) is not None:
+        if self.fvm.peek(micro.semantic_hash, cycle, self.config.freshness_window_cycles, micro.task_id) is not None:
             score += 12.0
             self.scheduler.ready_match_stats['valid_fragment'] += 1
         if micro.template_family in self.lrc.prefetch_queue:
@@ -165,8 +168,10 @@ class FuseSimulator:
         path_adapt_cost = None
         if path_entry is not None and cycle - path_entry.created_cycle <= self.config.freshness_window_cycles:
             path_adapt_cost = micro.context.adapt_cost(path_entry.context)
-        if self.config.mode != 'degraded' and (not self.lrc.blocked(micro.semantic_hash, cycle)):
-            cache_entry = self.fvm.lookup(micro.semantic_hash, cycle, self.config.freshness_window_cycles)
+        # 'template_only' keeps template and path reuse but never returns a
+        # cached value, which is what separates the two halves of the chain.
+        if self.config.mode not in {'degraded', 'template_only'} and (not self.lrc.blocked(micro.semantic_hash, cycle)):
+            cache_entry = self.fvm.lookup(micro.semantic_hash, cycle, self.config.freshness_window_cycles, micro.task_id)
         allow_result_reuse = self._reuse_enabled()
         if self.config.mode == 'secure_ct' and rfu.loaded_template != micro.template_family:
             allow_result_reuse = False
@@ -196,21 +201,31 @@ class FuseSimulator:
         elif self.config.mode == 'task_specific':
             switch_cycles = 0
             factor = self.config.task_specific_speedup.get(micro.task_type, 1.0)
-            base_cycles = max(1, int(base_cycles / max(factor, 1e-06)))
+            # Rounded to nearest, as the C++ engine's llround does; truncation
+            # here put the two engines a few tenths of a percent apart.
+            base_cycles = max(1, int(base_cycles / max(factor, 1e-06) + 0.5))
         elif self.config.mode == 'multicore':
             factor = self._baseline_speed_factor(micro.task_type)
-            base_cycles = max(1, int(base_cycles / max(factor, 1e-06)))
+            # Rounded to nearest, as the C++ engine's llround does; truncation
+            # here put the two engines a few tenths of a percent apart.
+            base_cycles = max(1, int(base_cycles / max(factor, 1e-06) + 0.5))
             mem_cycles += 3
             switch_cycles = 0 if rfu.loaded_template == micro.template_family else max(1, self.config.base_switch_cycles // 3)
         elif self.config.mode == 'gpu_tensor':
             factor = self._baseline_speed_factor(micro.task_type)
-            base_cycles = max(1, int(base_cycles / max(factor, 1e-06)))
+            # Rounded to nearest, as the C++ engine's llround does; truncation
+            # here put the two engines a few tenths of a percent apart.
+            base_cycles = max(1, int(base_cycles / max(factor, 1e-06) + 0.5))
             mem_cycles += 6
             switch_cycles = 0 if rfu.loaded_template == micro.template_family else max(1, self.config.base_switch_cycles // 2)
-        elif self.config.mode in {'static_zkp', 'eyeriss', 'openaes'}:
+        elif self.config.mode in {'static_zkp', 'eyeriss', 'openaes', 'transformer_asic'}:
             factor = self._baseline_speed_factor(micro.task_type)
-            base_cycles = max(1, int(base_cycles / max(factor, 1e-06)))
+            # Rounded to nearest, as the C++ engine's llround does; truncation
+            # here put the two engines a few tenths of a percent apart.
+            base_cycles = max(1, int(base_cycles / max(factor, 1e-06) + 0.5))
             if micro.task_type == 'CNN' and self.config.mode == 'eyeriss':
+                mem_cycles = max(1, mem_cycles - 1)
+            if micro.task_type == 'LLM' and self.config.mode == 'transformer_asic':
                 mem_cycles = max(1, mem_cycles - 1)
             switch_cycles = 0 if rfu.loaded_template == micro.template_family else max(1, self.config.base_switch_cycles // 8)
         else:
@@ -236,7 +251,14 @@ class FuseSimulator:
             base_cycles = max(base_cycles, max(2, estimate_latency_cycles(micro) // 2))
             mem_cycles = max(mem_cycles, 2)
         total = max(1, base_cycles + mem_cycles + switch_cycles)
-        return (total, {'reused_result': reused_result, 'structural_reuse': structural_reuse, 'template_prefetched': template_prefetched, 'switch_cycles': switch_cycles})
+        # The counted structural-reuse hit is the paper's definition and the
+        # C++ engine's: the instruction template was already resident on the
+        # RFU (or a result was reused under secure_elastic_no_mask). The
+        # structural_reuse flag above is wider, since it also marks the
+        # path-reuse discount, and is kept for the switch-cost rule and the
+        # event trace, where the C++ engine records the same wider flag.
+        structural_reuse_hit = (switch_cycles == 0 and rfu.loaded_template == micro.template_family) or (reused_result and self.config.mode == 'secure_elastic_no_mask')
+        return (total, {'reused_result': reused_result, 'structural_reuse': structural_reuse, 'structural_reuse_hit': structural_reuse_hit, 'template_prefetched': template_prefetched, 'switch_cycles': switch_cycles})
 
     def _collect_metrics(self, runtime_tasks, completed_tasks, makespan: int) -> Dict[str, Any]:
         per_task_latencies_ms = {}
@@ -249,7 +271,7 @@ class FuseSimulator:
         task_type_mean_latency_ms = {task_type: sum(values) / len(values) if values else 0.0 for task_type, values in task_type_latencies.items()}
         events = self.trace_events
         result_reuse = sum((1 for e in events if e['event'] == 'dispatch' and e['reused_result']))
-        structural_reuse = sum((1 for e in events if e['event'] == 'dispatch' and e['structural_reuse']))
+        structural_reuse = sum((1 for e in events if e['event'] == 'dispatch' and e.get('structural_reuse_hit', e['structural_reuse'])))
         dispatches = sum((1 for e in events if e['event'] == 'dispatch'))
         switch_cycles_total = sum((int(e.get('switch_cycles', 0)) for e in events if e['event'] == 'dispatch'))
         utilization = self.rfus.utilization(makespan)
@@ -283,7 +305,7 @@ class FuseSimulator:
             fvm_write_coeff = 0.17
             switch_coeff = 0.28
             static_coeff = 0.028
-        elif self.config.mode in {'static_zkp', 'eyeriss', 'openaes'}:
+        elif self.config.mode in {'static_zkp', 'eyeriss', 'openaes', 'transformer_asic'}:
             compute_coeff = 0.6
             fvm_read_coeff = 0.1
             fvm_write_coeff = 0.12

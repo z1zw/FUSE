@@ -1,0 +1,16 @@
+{
+  "name": "gpt2",
+  "label": "GPT-2",
+  "hf_id": "gpt2",
+  "family": "dense-MHA",
+  "layers": 12,
+  "hidden": 768,
+  "heads": 12,
+  "kv_heads": 12,
+  "head_dim": 64,
+  "ff_dim": 3072,
+  "vocab": 50257,
+  "moe_experts": 0,
+  "moe_top_k": 0,
+  "parameter_count": 123532032
+}

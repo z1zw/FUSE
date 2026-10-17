@@ -1,0 +1,4 @@
+dataset,label,shape,samples,prompt_tokens,gen_tokens,payload_bytes,retrieved_bytes,corpus_size,aes_blocks,zkp_constraints
+gsm8k,GSM8K,"reasoning: medium prompt, long answer",64,55,182,219,1915,884,179,2400
+mmlu,MMLU,"knowledge: short prompt, short answer",64,62,710,246,1915,884,313,2400
+humaneval,HumanEval,"code: long prompt, long answer",64,111,1032,443,1915,884,406,2400

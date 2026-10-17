@@ -1,0 +1,9 @@
+{
+  "resimulated_from_stored_replies": true,
+  "freshness_window_cycles": 50000000,
+  "intents": [
+    "private_rag",
+    "rollup_sequencer",
+    "edge_copilot"
+  ]
+}

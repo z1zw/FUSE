@@ -11,6 +11,7 @@ class CacheEntry:
     last_access_cycle: int
     bytes_used: int
     producer: str
+    data_id: str
     task_type: str
     context_repr: str
     hits: int = 0
@@ -30,19 +31,33 @@ class FeatureVectorManager:
         self.free_events = 0
         self.residency_samples: List[int] = []
 
-    def peek(self, semantic_hash: str, cycle: int, freshness_window: int) -> Optional[CacheEntry]:
+    def peek(self, semantic_hash: str, cycle: int, freshness_window: int, data_id: str='') -> Optional[CacheEntry]:
         entry = self.entries.get(semantic_hash)
         if entry is None:
+            return None
+        if not self._valid(entry, data_id):
             return None
         if freshness_window >= 0 and cycle - entry.created_cycle > freshness_window:
             return None
         return entry
 
-    def lookup(self, semantic_hash: str, cycle: int, freshness_window: int) -> Optional[CacheEntry]:
+    def _valid(self, entry: CacheEntry, data_id: str) -> bool:
+        """C4: a cached result is returned only to the operands that
+        produced it. The identity is the originating request, which the
+        request compiler qualifies per prompt; an empty identity is
+        unconstrained, for callers that supply none."""
+        if not data_id or not entry.data_id:
+            return True
+        return entry.data_id == data_id
+
+    def lookup(self, semantic_hash: str, cycle: int, freshness_window: int, data_id: str='') -> Optional[CacheEntry]:
         entry = self.entries.get(semantic_hash)
         self.total_reads += 1
         self.residency_samples.append(self.current_bytes)
         if entry is None:
+            self.total_redundant_reads += 1
+            return None
+        if not self._valid(entry, data_id):
             self.total_redundant_reads += 1
             return None
         if freshness_window >= 0 and cycle - entry.created_cycle > freshness_window:
@@ -55,7 +70,7 @@ class FeatureVectorManager:
     def write(self, micro: MicroFragment, cycle: int) -> None:
         bytes_used = max(32, micro.estimated_bytes or micro.estimated_ops * 4)
         self._ensure_capacity(bytes_used)
-        entry = CacheEntry(key=micro.semantic_hash, created_cycle=cycle, last_access_cycle=cycle, bytes_used=bytes_used, producer=micro.micro_id, task_type=micro.task_type, context_repr=str(micro.context))
+        entry = CacheEntry(key=micro.semantic_hash, created_cycle=cycle, last_access_cycle=cycle, bytes_used=bytes_used, producer=micro.micro_id, data_id=micro.task_id, task_type=micro.task_type, context_repr=str(micro.context))
         if micro.semantic_hash not in self.entries:
             self.eviction_queue.append(micro.semantic_hash)
             self.current_bytes += bytes_used
