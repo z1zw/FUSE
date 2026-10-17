@@ -3,12 +3,12 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fuse-repro-full"
+name = "fuse"
 version = "0.2.0"
-description = "FUSE reimplementation with Python front-end, C++ timing core, GPU benchmark path, and paper-oriented evaluation flow"
+description = "FUSE: compiling heterogeneous secure-computing task graphs onto one reconfigurable datapath"
 readme = "README.md"
 requires-python = ">=3.10"
-authors = [{name = "OpenAI ChatGPT"}]
+authors = [{name = "The FUSE authors"}]
 dependencies = [
   "numpy>=1.24",
   "networkx>=3.0",
